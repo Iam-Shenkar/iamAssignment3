@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa|Pacifico|Righteous|Teko" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="clientPublic/style.css" rel="stylesheet">
+    <title>Login and register</title>
+</head>
+<body>
+<section id="SelectButton" class="selectButtonArea">
+    <button id="SelectRegister" class="selectButton SelectRegister">Register</button>
+    <button id="SelectLogin" class="selectButton SelectLogin">Login</button>
+</section>
+<section id="RegisterForm" class="sectionForm RegisterForm">
+    <div class="formHeader">
+        <h1 class="formHeading">Register</h1>
+        <button class="backBtn backRegisterBtn" id="backRegisterBtn">&#10006;</button>
+    </div>
+    <form class="Register" action="#">
+        <div class="inputSection">
+            <label for="Username">Username: </label>
+            <input type="text" id="Username" class="inputText" required placeholder="username">
+            <span class="focus-border"></span>
+        </div>
+        <div class="inputSection">
+            <label for="Email">Email: </label>
+            <input type="email" id="Email" class="inputText" required placeholder="email">
+            <span class="focus-border"></span>
+        </div>
+        <div class="inputSection">
+            <label for="Password">Password: </label>
+            <input type="password" id="Password" class="inputText" required placeholder="password">
+            <span class="focus-border"></span>
+        </div>
+        <div class="inputSection">
+            <label for="C-Password">Confirm Password: </label>
+            <input type="password" id="C-Password" class="inputText" required placeholder="password"><br><br>
+            <span class="focus-border"></span>
+        </div>
+        <div class="formFooter">
+            <span class="message" id="message"></span>
+            <button class="submitButton" type="button" id="submitRegisterForm">Register</button>
+        </div>
+    </form>
+    <div class="optionalSection">
+        <span class="inputText sizeBack">Already have an account?</span>
+        <button class="changeButton" type="button" id="GoLogin">Login</button>
+    </div>
+
+</section>
+<section id="LoginForm" class="sectionForm reSize LoginForm">
+    <div class="formHeader">
+        <h1 class="formHeading">Login</h1>
+        <button class="backBtn backLoginBtn" id="backLoginBtn">&#10006;</button>
+    </div>
+    <form class="Register" action="#">
+        <div class="inputSection loginSection">
+            <label for="Email">Email:
+            <input type="email" id="L-Email" class="inputText" placeholder="email">
+            </label>
+        </div>
+        <div class="inputSection loginSection">
+            <label for="Password">Password:
+            <input type="password" id="L-Password" class="inputText" placeholder="password"><br><br>
+            </label>
+        </div>
+        <button class="submitButton" type="button" id="SubmitLoginForm">Login</button>
+        <div class="formFooter">
+            <button type="button" class="forgotPasswordBtn" id="forgotPassword" >Forgot Password ?</button>
+        </div>
+    </form>
+    <button class="loginByGoogle" type="button" id="googleLogIn">Continue with Google&nbsp;<img src="clientPublic/search.png" width="16px" height="16px" alt=""></button>
+    <div class="optionalSection">
+        <button class="changeButton" type="button" id="GoRegister">Register</button>
+    </div>
+</section>
+<section id="ForgotPasswordModel" class="sectionForm reSize ForgotPasswordModel">
+    <div class="formHeader">
+        <h1 class="formHeading forgotH1">Forgot Password</h1>
+        <button class="backBtn" id="backForgotBtn">&#10006;</button>
+    </div>
+    <form class="ForgotPasswordForm" action="#">
+        <div class="inputSection">
+            <label for="forgotEmail" class="emailLabel">Enter Your Email:
+                <input type="text" id="forgotEmail" class="inputEmail" placeholder="Email">
+            </label>
+        </div>
+        <div class="formFooter">
+            <button class="submitButton" type="button" id="SubmitEmailForm">Send</button>
+        </div>
+    </form>
+</section>
+<section id="VerifyByEmail" class="sectionForm reSize VerifyByEmail">
+    <div class="formHeader">
+        <h1 class="formHeading forgotH1">Verification by email</h1>
+    </div>
+    <form class="VerifyForm" action="#">
+        <div class="inputSection verifySection">
+            <label for="VerifyOTP" class="OTPLabel">Please enter the code sent to your email:
+                <input type="text" id="VerifyOTP" class="inputOTP" required placeholder="OTP">
+            </label>
+        </div>
+        <div class="formFooter">
+            <button class="submitButton" type="button" id="SubmitOTPForm">Send</button>
+        </div>
+    </form>
+</section>
+<div class="teamLogo">
+    <img src="BAMD%20IAM(1).png" alt="">
+</div>
+<script src="clientPublic/script.js"></script>
+</body>
+</html>

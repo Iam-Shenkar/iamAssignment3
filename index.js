@@ -13,6 +13,7 @@ const passport = require("passport");
 const SESSION_SECRET = process.env.secret;
 const port = process.env.PORT || 5000;
 const bodyParser = require('body-parser');
+const {jwtVerify} = require("./services/authService");
 
 
 mongoose.set('strictQuery', true);
@@ -32,10 +33,10 @@ app.use(express.static('clientPublic'));
 // app.get('/clientPublic/scriptsHome.js', function(req, res) {res.sendFile(path.join(__dirname , "../clientPublic/scriptsHome.js"));});
 
 
-app.use("/", authinticate, homePage)
+app.use("/", jwtVerify,homePage.homePageRouter)
 app.use("/login", login.loginRouter)
 app.use("/register", register.registerRoute)
 
-
+app.use("/*",'/')
 
 app.listen(port,() => console.log(`Express server is running on port ${port}`));

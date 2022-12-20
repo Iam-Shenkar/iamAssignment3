@@ -3,14 +3,13 @@ const googleService = require('../services/googleService');
 
 
 const googleControl = (req,res,next) => {
-    googleService.handleGoogleCookies()
+    googleService.handleGoogleCookies(req,res,next)
 }
 
 const loginControl = async (req, res, next) => {
     try{
         await loginService.handleLogin(req,res,next);
         await loginService.handleCookies(req, res, next);
-
         return res(200).json({'status':200, 'message': 'validation succeeded! welcome' })
 
     } catch (err){

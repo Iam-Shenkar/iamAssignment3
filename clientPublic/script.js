@@ -278,7 +278,7 @@ if (showUserBtn) {
         }
     })
 
-//update user details
+
     saveUser.addEventListener('click', async () => {
         const suspendedBut = document.querySelector('input[name="userStatus"]:checked').value;
         let suspensionTime = 0

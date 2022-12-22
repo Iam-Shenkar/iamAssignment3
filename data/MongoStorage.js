@@ -1,9 +1,9 @@
-const { EventEmitter } = require('events');
+const {EventEmitter} = require('events');
 const mongoose = require('mongoose');
 const Path = require('path');
-
-class MongoStorage extends EventEmitter {
-    constructor (entity) {
+mongoose.set('strictQuery', true);
+module.exports = class MongoStorage extends EventEmitter {
+    constructor(entity) {
         super();
 
         this.entityName = entity.charAt(0).toUpperCase() + entity.slice(1);
@@ -11,7 +11,7 @@ class MongoStorage extends EventEmitter {
         this.connect();
     }
 
-    connect () {
+    connect() {
         const connectionUrl = process.env.DB_HOST;
         mongoose
             .connect(connectionUrl)
@@ -19,26 +19,24 @@ class MongoStorage extends EventEmitter {
             .catch(err => console.log(`connection error: ${err}`));
     }
 
-    find () {
-        return this.Model.find({});
+    find() {
+        return this.Model.findOne({});
     }
 
-    retrieve (id) {
-        return this.Model.retrieve({ id });
+    retrieve(email) {
+        return this.Model.findOne({email: email});
     }
 
-    create (data) {
+    create(data) {
         const entity = new this.Model(data);
         entity.save();
     }
 
-    delete (id) {
-        return this.Model.deleteOne({ id });
+    delete(id) {
+        return this.Model.deleteOne({id});
     }
 
-    update (id, data) {
-        return this.Model.updateOne({ id }, data);
+    update(email, data) {
+        return this.Model.updateOne(email, data);
     }
 };
-
-module.exports = {MongoStorage}

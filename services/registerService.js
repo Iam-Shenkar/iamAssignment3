@@ -17,11 +17,11 @@ const createOneTimePass = async (email) => {
 
 const deleteFormOTP = async (data) => {
     const email = data.toLowerCase()
-    if (await ExistOneTimePassList(email))
+    if (await existCode(email))
         await oneTimePass.delete({'email': email});
 }
 
-const ExistOneTimePassList = async (email) => {
+const existCode = async (email) => {
     const userEmail = email.toLowerCase();
     const userCode = await oneTimePass.retrieve(userEmail);
     return userCode;
@@ -63,6 +63,6 @@ module.exports = {
     createUser,
     otpCompare,
     deleteFormOTP,
-    ExistOneTimePassList,
+    existCode,
     createOneTimePass
 }

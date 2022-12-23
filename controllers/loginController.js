@@ -38,5 +38,15 @@ const forgotPassControl = async (req, res, next) => {
     }
 }
 
+const getUserControl = async (req, res, next) => {
+    try {
+        await userExist(req.params.email);
+        res.status(200).json({message: "user exsist"})
+    } catch (e) {
+        res.status(500).json({message: e.message})
+    }
 
-module.exports = {loginControl, forgotPassControl};
+}
+
+
+module.exports = {loginControl, forgotPassControl, getUserControl};

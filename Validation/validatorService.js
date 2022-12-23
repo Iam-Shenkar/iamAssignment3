@@ -1,4 +1,4 @@
-const EmailValidator = require("email-validator");
+const mailValidator = require("email-validator");
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator();
 
@@ -10,13 +10,13 @@ const PasswordValidator = (password) => {
 }
 
 const emailValidator = (email) => {
-    if (!EmailValidator.validate(email))
+    if (!mailValidator.validate(email))
         throw new Error("email not valid");
 }
 
 const typeValidator = (userType) => {
     const type = userType.toLowerCase();
-    const validType = ['user', 'admin'];
+    const validType = ['user', 'admin', 'manager'];
     if (!validType.find(element => element === type))
         throw new Error("type not valid")
 }

@@ -8,5 +8,6 @@ loginRouter.use(cookieParser());
 
 loginRouter.post("/", validation, loginController.loginControl);
 loginRouter.put("/password", validation, loginController.forgotPassControl)
+loginRouter.get("/user/:email", loginController.getUserControl)
 
 module.exports = {loginRouter};

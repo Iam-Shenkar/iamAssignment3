@@ -14,6 +14,9 @@ const isAuthenticated = async (req, res, next) => {
         const user = await User.retrieve(Token.userEmail);
         req.user = user;
 
+        console.log()
+        res.header({authorization: authHeader});
+
         next();
     } catch (err) {
         res.status(403).json({

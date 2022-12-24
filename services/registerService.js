@@ -1,12 +1,11 @@
 const OTPRepository = require("../repositories/oneTimePass.repositories");
-const {typeUser} = require("../Validation/validatorService");
+const {typeUser} = require("../middleware/validatorService");
 const {sendEmail} = require("../sendEmail/sendEmail");
-
 const otpGenerator = require("otp-generator");
-const {User} = require("./authService");
-const bcrypt = require("bcrypt");
 
 const oneTimePass = new OTPRepository();
+const {User} = require("../services/authService");
+const bcrypt = require("bcrypt");
 
 const createOneTimePass = async (email) => {
     let sendCode = otpGenerator.generate(6, {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false})
@@ -32,11 +31,17 @@ const otpCompare = async (UserCode, userCode) => {
         throw new Error("Incorrect code");
 }
 
-const sendEmailOneTimePass = async (user, oneTimePass) => {
-    const path = "/sendEmail/oneTimePass.ejs"
-    const value = {name: `${user.name}`, code: oneTimePass}
-    const email = user.email;
-    await sendEmail({path, value, email});
+const sendEmailOneTimePass = async (user, newCode) => {
+    const mailData = {
+        path: "/sendEmail/oneTimePass.ejs",
+        subject: 'Please Verify you Account',
+        email: user.email
+    }
+    const details = {
+        name: `${user.name}`,
+        code: `${newCode.code}`
+    }
+    await sendEmail(mailData, details);
 }
 
 const createUser = async (user) => {

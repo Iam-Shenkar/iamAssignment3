@@ -1,20 +1,25 @@
 const {sendEmail} = require("../sendEmail/sendEmail");
+const generator = require('generate-password');
 
-function generatePassword() {
-    let length = 12,
-        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        retVal = "";
-    for (let i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.random() * n);
-    }
-    return retVal;
+const generatePassword = () => {
+    const password = generator.generate({
+        length: 10,
+        numbers: true
+    });
+    return password;
 }
 
 const sendEmailPassword = async (newPass, user) => {
-    const path = "/sendEmail/newPassMail.ejs"
-    const value = {name: `${user.name}`, code: newPass}
-    const email = user.email;
-    await sendEmail({path, value, email});
+    const mailData = {
+        path: "/sendEmail/newPassMail.ejs",
+        subject: 'New Password',
+        email: user.email
+    }
+    const details = {
+        name: `${user.name}`,
+        pass: `${newPass}`
+    }
+    await sendEmail(mailData, details);
 }
 
 module.exports = {generatePassword, sendEmailPassword}

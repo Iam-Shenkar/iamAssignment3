@@ -1,13 +1,6 @@
-// const homePageService = require('../services/homePageService');
-const path = require("path");
+const Organization = require("../repositories/organization.repositories");
+const organization = new Organization();
 
-
-const homePageHandle = (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "client", "homePage.html"));
-}
-
-
-
-module.exports= {homePageHandle}
+module.exports = {}
 
 

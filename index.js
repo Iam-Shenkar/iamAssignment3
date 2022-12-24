@@ -21,4 +21,5 @@ app.use("/login", login.loginRouter);
 app.use("/register", register.registerRoute);
 app.use("/homePage", isAuthenticated, homePage.homePageRouter);
 
+
 app.listen(port, () => console.log(`Express server is running on port ${port}`));

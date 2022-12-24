@@ -23,8 +23,8 @@ module.exports = class MongoStorage extends EventEmitter {
         return this.Model.findOne({});
     }
 
-    retrieve(email) {
-        return this.Model.findOne({email: email});
+    retrieve(param) {
+        return this.Model.findOne(param);
     }
 
     create(data) {
@@ -36,7 +36,7 @@ module.exports = class MongoStorage extends EventEmitter {
         return this.Model.deleteOne(email);
     }
 
-    update(email, data) {
-        return this.Model.updateOne(email, data);
+    update(param, data) {
+        return this.Model.findOneAndUpdate(param, data);
     }
 };

@@ -24,6 +24,7 @@ const loginControl = async (req, res, next) => {
     }
 }
 
+
 const forgotPassControl = async (req, res, next) => {
     try {
         const user = await userExist(req.body.email);

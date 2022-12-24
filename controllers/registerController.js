@@ -1,6 +1,6 @@
 const register = require("../services/registerService");
 const {userNotExist} = require("../services/authService");
-const {ExistOneTimePassList, sendEmailOneTimePass, codeTime} = require("../services/registerService");
+const {existCode, sendEmailOneTimePass, codeTime} = require("../services/registerService");
 
 const handleRegister = async (req, res, next) => {
     try {
@@ -20,7 +20,7 @@ const handleRegister = async (req, res, next) => {
 
 const handleConfirmCode = async (req, res, next) => {
     try {
-        const oneTimePassRecord = await ExistOneTimePassList(req.body.email);
+        const oneTimePassRecord = await existCode(req.body.email);
         await register.otpCompare(req.body.code, oneTimePassRecord.code);
         await register.createUser(req.body)
 

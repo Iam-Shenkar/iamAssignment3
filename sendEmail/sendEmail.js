@@ -10,16 +10,15 @@ const transporter = node.createTransport(smtp({
         pass: process.env.email
     }
 }));
-
-const sendEmail = async (dataMail) => {
-    const data = await ejs.renderFile(process.cwd() + dataMail.path, dataMail.value);
+const sendEmail = async (dataMail, details) => {
+    const data = await ejs.renderFile(process.cwd() + dataMail.path, details);
+    console.log(`${dataMail.code}`)
     const mainOptions = {
         from: process.env.emailShenkar,
         to: dataMail.email,
         subject: 'Please Verify you Account',
         html: data
     };
-
     // send the mail with the OTP to the client email
     await transporter.sendMail(mainOptions, (err, info) => {
         if (err) {

@@ -1,4 +1,4 @@
-const valid = require("../Validation/validatorService");
+const valid = require("./validatorService");
 
 const validation = (req, res, next) => {
     try {
@@ -8,7 +8,7 @@ const validation = (req, res, next) => {
         if (req.body.password)
             valid.PasswordValidator(req.body.password);
 
-        if (req.body.name)
+        if (req.body.name || req.body.name === "")
             valid.nameValidator(req.body.name);
 
         if (req.body.code)

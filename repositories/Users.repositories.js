@@ -13,16 +13,16 @@ module.exports = class UsersRepository {
         return this.storage.find();
     }
 
-    retrieve(email) {
-        return this.storage.retrieve(email);
+    retrieve(param) {
+        return this.storage.retrieve(param);
     }
 
     create(obj) {
         return this.storage.create(obj);
     }
 
-    update(email, param) {
-        return this.storage.update(email, param);
+    update(param,data) {
+        return this.storage.update(param,data);
     }
 
     delete(email) {

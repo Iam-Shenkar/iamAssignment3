@@ -16,7 +16,7 @@ const homePageRouter = new express.Router();
 })*/
 
 homePageRouter.post("/", (req, res) => {
-    console.log(req.body)
+    console.log("homePage")
 
     return res.sendStatus(200)
 })

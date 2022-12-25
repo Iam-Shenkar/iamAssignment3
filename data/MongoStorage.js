@@ -40,3 +40,4 @@ module.exports = class MongoStorage extends EventEmitter {
         return this.Model.findOneAndUpdate(param, data);
     }
 };
+

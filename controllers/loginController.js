@@ -6,21 +6,24 @@ const bcrypt = require("bcrypt");
 const axios = require('axios')
 const jwt = require("jsonwebtoken");
 
+
 const loginControl = async (req, res, next) => {
     try {
         const user = await userExist(req.body.email);
         await validPassword(req.body.password, user.password);
         await statusCheck(user);
-        const newRefreshToken = req.refreshToken;
+        await User.update(
+            {"email": user.email},
+            {
+                "loginDate": new Date(),
+                "refreshToken": req.token.refreshToken
+            })
 
-        await User.update({"email": user.email}, {"loginDate": new Date(), "refreshToken": newRefreshToken})
-
-        res.status(200).json({refreshToken: newRefreshToken})
+        res.status(200).json({refreshToken: req.token.refreshToken})
     } catch (err) {
         res.status(401).json({message: err.message})
     }
 }
-
 
 const forgotPassControl = async (req, res, next) => {
     try {

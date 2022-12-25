@@ -53,6 +53,14 @@ const codeValidator = (code) => {
         throw new Error("code not valid")
 }
 
+function generateAccessToken(email) {
+    return jwt.sign(email, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+}
+
+function generateRefreshToken(email) {
+    return jwt.sign(email, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'})
+}
+
 schema
     .is().min(8)        // Minimum length 8
     .is().max(100)      // Maximum length 100
@@ -63,6 +71,8 @@ schema
 
 module.exports = {
     suspensionTimeValidator,
+    generateAccessToken,
+    generateRefreshToken,
     statusValidator,
     typeValidator,
     codeValidator,

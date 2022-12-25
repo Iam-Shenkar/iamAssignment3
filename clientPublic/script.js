@@ -1,29 +1,34 @@
 //login
 const SubmitLoginForm = document.getElementById("loginBut");
-const smbitReq = document.getElementById("reqBut")
-let Db = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJka3JhY2hlbGkxMzVAZ21haWwuY29tIiwiaWF0IjoxNjcxOTAxNTQ5LCJleHAiOjE2NzE5ODc5NDl9.sl_4DpMTKh0Ncp4jEv9lm2Xiv5e0iQmDgx7uH0E9TBM"
-let token1
+const SubmitReq = document.getElementById("reqBut")
+
 SubmitLoginForm.addEventListener('click', async () => {
     const data = {
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJka3JhY2hlbGkxMzVAZ21haWwuY29tIiwiaWF0IjoxNjcxOTAxNTQ5LCJleHAiOjE2NzE5ODc5NDl9.sl_4DpMTKh0Ncp4jEv9lm2Xiv5e0iQmDgx7uH0E9TBM",
-        email: "dkracheli135@gmail.com",
-        password: "Sima9542",
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
     }
-    const response = await fetch("http://localhost:5000/auth/token", {
+    // const response =
+    await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "authorization": ""
         },
         body: JSON.stringify(data)
+    }, response => {
+        console.log("in fetch:" + response.headers)
+    }).then(response => {
+        console.log(response.headers.get('authorization'))
     })
-    const body = await response.json();
 
-    token1 = body.accessToken;
-    document.getElementById("Request-tokenAcss").value = Db.split(".")[2]
-    document.getElementById("Request-tokenRefrsh").value = token1.split(".")[2]
+
+    // const body = await response.json();
+    // console.log(response.headers)
+    document.getElementById("Request-tokenAcss").value = body.refreshToken
+    //document.getElementById("Request-tokenRefrsh").value = response.headers
 })
 
-smbitReq.addEventListener('click', async () => {
+SubmitReq.addEventListener('click', async () => {
     const data = {
 
         email: "dkracheli135@gmail.com",

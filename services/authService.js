@@ -19,7 +19,7 @@ const validPassword = async (pass, userPassword) => {
 
 const userExist = async (email) => {
     const userEmail = email.toLowerCase();
-    const user = await User.retrieve(userEmail);
+    const user = await User.retrieve({email: userEmail});
     if (!user) throw new Error("user doesn't exist");
     return user;
 }
@@ -56,20 +56,14 @@ const statusCheck = async (user) => {
     }
 }
 
-const getToken = async (userEmail) => {
-    const user = {userEmail};
-    const token = await jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE,
-        algorithm: 'HS256'
-    });
-    return token
-}
+// function generateAccessToken(user, time) {
+//     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "3600"});
+// }
 
 module.exports = {
     userNotExist,
     statusCheck,
     userExist,
     validPassword,
-    getToken,
     User
 }

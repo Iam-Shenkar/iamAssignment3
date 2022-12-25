@@ -1,24 +1,23 @@
-const {userExist, statusCheck, validPassword, getToken} = require("../services/authService");
+const {userExist, statusCheck, validPassword, generateAccessToken} = require("../services/authService");
 const {generatePassword, sendEmailPassword} = require("../services/forgotPassword");
 
 const {User} = require("../services/authService");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const axios = require('axios')
 
 const loginControl = async (req, res, next) => {
     try {
         const user = await userExist(req.body.email);
         await validPassword(req.body.password, user.password);
         await statusCheck(user);
+        await User.update(
+            {"email": user.email},
+            {
+                "loginDate": new Date(),
+                "refreshToken": req.token.refreshToken
+            })
 
-        User.update(user.email, {"loginDate": new Date()})
-        const accessToken = await getToken(user.email)
-
-        return res.status(200).header('authorization', accessToken).json({
-            message: 'validation succeeded! welcome',
-            accessToken: accessToken
-        })
-
+        res.status(200).json({refreshToken: req.token.refreshToken, accessToken: req.token.accessToken})
     } catch (err) {
         res.status(401).json({message: err.message})
     }

@@ -1,64 +1,32 @@
 const jwt = require('jsonwebtoken');
-const {User, generateToken} = require("../services/authService");
+const {User} = require("../services/authService");
+const express = require('express')
+const {header} = require("express-validator");
+const authJwt = new express.Router();
 
-const isAuthenticated = async (req, res, next) => {
-        try {
-                const token = req.headers.authorization;
-                //if (token.token)
+authJwt.post('/token', async (req, res) => {
+    const refreshToken = req.body.token
+    if (refreshToken == null) return res.sendStatus(401)
+    const user = await User.retrieve({refreshToken: refreshToken})
+    console.log(refreshToken)
+    if (!user) return res.sendStatus(403)
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403)
+        const accessToken = generateAccessToken({email: user.email})
+        res.set({"authorization": "Bearer" + " " + accessToken})
+        res.json({accessToken: accessToken})
+    })
+})
 
-                const tokenObj=verifyAccess(token,process.env.ACCESS_TOKEN_SECRET,process.env.JWT_EXPIRE_ACCESS)
-                if (tokenObj.expired===true){
-                        if (req.body.refreshToken) {
-                                const user = await User.retrieve({refreshToken: req.body.refreshToken});
-                                const newToken = refreshCheck(req.body.refreshToken, user)
-                                if (newToken)
-                                        res.header({authorization: token});
-                        }
-                        else {
-                                console.log("need to go to logout")
-                        }
+authJwt.delete('/logout', (req, res) => {
+    const refreshTokens = req.body.token
+    User.delete({refreshTokens: refreshTokens})
+    res.sendStatus(204)
+})
 
-                }
-
-                const user = await User.retrieve({'email': tokenObj.Token.userEmail});
-                req.user = user;
-                res.header({authorization: token});
-                next();
-
-        } catch (err) {
-/*                res.status(403).json({
-                        message: err.message*/
-                next();
-                }
-
+function generateAccessToken(user) {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
 }
 
-const verifyAccess= (token, secret, expiry)=>{
-        try {
-                const Token = jwt.verify(token, secret, {
-                        expiresIn: expiry,
-                        algorithm: 'HS256'
-                });
-                return {token: Token,expired:false}
-        }catch (err){
-                return {token: null,expired:true}
-        }
 
-}
-
- const refreshCheck = async (refreshToken,user)=>{
-                const refreshVerify = verifyAccess(refreshToken,process.env.REFRESH_TOKEN_SECRET,process.env.JWT_EXPIRE_REFRESH)
-                if (refreshVerify.expired===false){
-                        const newToken = await generateToken(user.email,process.env.ACCESS_TOKEN_SECRET,process.env.JWT_EXPIRE_ACCESS)
-                        return newToken;
-                }
-        return null;
-
-
-}
-
-const logout = ()=>{
-    console.log("logout")
-}
-
-module.exports = {isAuthenticated}
+module.exports = {authJwt};

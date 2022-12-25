@@ -18,9 +18,8 @@ const homePageRouter = new express.Router();
 homePageRouter.post("/", (req, res) => {
     console.log(req.body)
 
-   return res.status(200)
+    return res.sendStatus(200)
 })
-
 
 
 module.exports = {homePageRouter};

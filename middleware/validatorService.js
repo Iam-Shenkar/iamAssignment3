@@ -1,6 +1,6 @@
 const mailValidator = require("email-validator");
 const passwordValidator = require('password-validator');
-const validator = require('express-validator');
+const jwt = require("jsonwebtoken");
 const schema = new passwordValidator();
 
 const PasswordValidator = (password) => {

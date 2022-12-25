@@ -1,4 +1,5 @@
 const valid = require("./validatorService");
+const jwt = require("jsonwebtoken");
 
 const validation = (req, res, next) => {
     try {
@@ -37,5 +38,19 @@ const validation = (req, res, next) => {
     }
 }
 
+const token = (req, res, next) => {
+    try {
+        console.log("hi")
+        const newRefreshToken = generateAccessToken(req.body.email)
+        req.refreshToken = newRefreshToken
+        next()
+    } catch (e) {
+        return res.sendStatus(401);
+    }
+}
 
-module.exports = {validation}
+function generateAccessToken(user) {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'})
+}
+
+module.exports = {validation, token}

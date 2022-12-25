@@ -4,8 +4,6 @@ const {generatePassword, sendEmailPassword} = require("../services/forgotPasswor
 const {User} = require("../services/authService");
 const bcrypt = require("bcrypt");
 const axios = require('axios')
-const jwt = require("jsonwebtoken");
-
 
 const loginControl = async (req, res, next) => {
     try {
@@ -19,7 +17,7 @@ const loginControl = async (req, res, next) => {
                 "refreshToken": req.token.refreshToken
             })
 
-        res.status(200).json({refreshToken: req.token.refreshToken})
+        res.status(200).json({refreshToken: req.token.refreshToken, accessToken: req.token.accessToken})
     } catch (err) {
         res.status(401).json({message: err.message})
     }

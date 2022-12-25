@@ -7,7 +7,7 @@ const generateToken = (req, res, next) => {
         const accessToken = jwt.sign({
             email: req.body.email
         }, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: '10m'
+            expiresIn: '5s'
         });
 
         const refreshToken = jwt.sign({
@@ -20,7 +20,7 @@ const generateToken = (req, res, next) => {
         });
 
         res.set({"authorization": "Bearer" + " " + accessToken})
-        req.token = {refreshToken: refreshToken, accessToken: accessToken}
+        req.token = {refreshToken: refreshToken, accessToken: "Bearer" + " " + accessToken}
         next()
     } catch (e) {
         return res.sendStatus(401);
@@ -29,8 +29,7 @@ const generateToken = (req, res, next) => {
 
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-
+    let token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
     await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, userToken) => {
         if (err) {
@@ -38,7 +37,7 @@ async function authenticateToken(req, res, next) {
             if (res.statusCode !== 200) return res.send();
             next()
         } else {
-            req.token = userToken;
+            req.token = {refreshToken: req.body.refreshToken, accessToken: authHeader}
             next()
         }
     })
@@ -53,14 +52,15 @@ const refreshToken = async (req, res) => {
     await jwt.verify(user.refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) return res.status(403).json({message: err.message})
         const accessToken = generateAccessToken({email: user.email})
+
         res.set("authorization", "Bearer" + " " + accessToken)
-        req.token = {accessToken: accessToken};
+        req.token = {accessToken: "Bearer" + " " + accessToken};
         return
     })
 }
 
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '5s'})
 }
 
 const validation = (req, res, next) => {

@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 const UsersRepository = require("../repositories/Users.repositories");
-const jwt = require("jsonwebtoken");
-const User = new UsersRepository();
+const generator = require("generate-password");
+const {sendEmail} = require("../sendEmail/sendEmail");
 
+const User = new UsersRepository();
 
 const unSuspend = async (user) => {
     await User.update(user.email, {
@@ -56,14 +57,33 @@ const statusCheck = async (user) => {
     }
 }
 
-// function generateAccessToken(user, time) {
-//     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "3600"});
-// }
+const generatePassword = () => {
+    const password = generator.generate({
+        length: 10,
+        numbers: true
+    });
+    return password;
+}
+
+const sendEmailPassword = async (newPass, user) => {
+    const mailData = {
+        path: "/sendEmail/newPassMail.ejs",
+        subject: 'New Password',
+        email: user.email
+    }
+    const details = {
+        name: `${user.name}`,
+        pass: `${newPass}`
+    }
+    await sendEmail(mailData, details);
+}
 
 module.exports = {
     userNotExist,
     statusCheck,
     userExist,
     validPassword,
+    generatePassword,
+    sendEmailPassword,
     User
 }

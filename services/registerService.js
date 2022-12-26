@@ -1,11 +1,13 @@
 const OTPRepository = require("../repositories/oneTimePass.repositories");
 const {typeUser} = require("../middleware/validatorService");
 const {sendEmail} = require("../sendEmail/sendEmail");
-const otpGenerator = require("otp-generator");
 
-const oneTimePass = new OTPRepository();
+const otpGenerator = require("otp-generator");
 const {User} = require("../services/authService");
 const bcrypt = require("bcrypt");
+
+const oneTimePass = new OTPRepository();
+
 
 const createOneTimePass = async (email) => {
     let sendCode = otpGenerator.generate(6, {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false})
@@ -69,5 +71,6 @@ module.exports = {
     otpCompare,
     deleteFormOTP,
     existCode,
-    createOneTimePass
+    createOneTimePass,
+
 }

@@ -1,9 +1,8 @@
-const {userExist, statusCheck, validPassword, generateAccessToken} = require("../services/authService");
-const {generatePassword, sendEmailPassword} = require("../services/forgotPassword");
+const {userExist, statusCheck, validPassword} = require("../services/authService");
+const {generatePassword, sendEmailPassword} = require("../services/authService");
 
 const {User} = require("../services/authService");
 const bcrypt = require("bcrypt");
-const axios = require('axios')
 
 const loginControl = async (req, res, next) => {
     try {

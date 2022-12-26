@@ -31,7 +31,7 @@ async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
     let token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
-    await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, userToken) => {
+    await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err) => {
         if (err) {
             await refreshToken(req, res);
             if (res.statusCode !== 200) return res.send();
@@ -53,7 +53,7 @@ const refreshToken = async (req, res) => {
         if (err) return res.status(403).json({message: err.message})
         const accessToken = generateAccessToken({email: user.email})
 
-        res.set("authorization", "Bearer" + " " + accessToken)
+        res.set("authorization", accessToken)
         req.token = {accessToken: "Bearer" + " " + accessToken};
         return
     })

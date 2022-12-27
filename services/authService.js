@@ -34,13 +34,12 @@ const statusCheck = async (user) => {
   switch (user.status) {
     case 'active':
       break;
-
     case 'closed':
       throw new Error('User is closed');
       break;
 
     case 'suspended':
-      const suspendTime = parseInt(user.suspensionTime);
+      const suspendTime = parseInt(user.suspensionTime, 10);
       const suspendStartDate = user.suspensionDate;
       const dateExpired = suspendStartDate;
 

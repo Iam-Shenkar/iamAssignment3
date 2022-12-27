@@ -11,6 +11,7 @@ const userSchema = new Schema({
   suspensionDate: { type: Date, default: 0 },
   googleId: { type: String, default: null },
   refreshToken: { type: String, default: null },
+  accountId: { type: String },
 }, { collection: 'user' });
 
 const User = model('user', userSchema);

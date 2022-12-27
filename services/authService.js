@@ -26,7 +26,7 @@ const userExist = async (email) => {
 
 const userNotExist = async (email) => {
   const userEmail = email.toLowerCase();
-  const user = await User.retrieve(userEmail);
+  const user = await User.retrieve({ email: userEmail });
   if (user) throw new Error('User already exists');
 };
 
@@ -34,13 +34,12 @@ const statusCheck = async (user) => {
   switch (user.status) {
     case 'active':
       break;
-
     case 'closed':
       throw new Error('User is closed');
       break;
 
     case 'suspended':
-      const suspendTime = parseInt(user.suspensionTime);
+      const suspendTime = parseInt(user.suspensionTime, 10);
       const suspendStartDate = user.suspensionDate;
       const dateExpired = suspendStartDate;
 

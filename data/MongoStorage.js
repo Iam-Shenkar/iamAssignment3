@@ -21,7 +21,7 @@ module.exports = class MongoStorage extends EventEmitter {
   }
 
   find() {
-    return this.Model.findOne({});
+    return this.Model.find({});
   }
 
   retrieve(param) {

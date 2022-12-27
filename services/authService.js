@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
-const UsersRepository = require('../repositories/Users.repositories');
+const UsersRepository = require('../repositories/users.repositories');
 const { sendEmail } = require('../sendEmail/sendEmail');
 
 const User = new UsersRepository();

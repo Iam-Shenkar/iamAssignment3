@@ -45,13 +45,9 @@ const codeValidator = (code) => {
   if (code.length !== 6) throw new Error('code not valid');
 };
 
-function generateAccessToken(email) {
-  return jwt.sign(email, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-}
+const generateAccessToken = (email) => jwt.sign(email, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 
-function generateRefreshToken(email) {
-  return jwt.sign(email, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
-}
+const generateRefreshToken = (email) => jwt.sign(email, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
 
 schema
   .is().min(8) // Minimum length 8

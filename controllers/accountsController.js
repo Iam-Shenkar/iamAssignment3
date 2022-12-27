@@ -1,8 +1,7 @@
-const {User} = require("../services/authService");
+const { Account } = require('../services/accountService');
 
-const sendConfirmationEmail = (req, res, next) => {
+const addUser = async (req, res) => {
+  res.status(200).json({ message: 'add account' });
+};
 
-}
-
-
-module.exports = {sendConfirmationEmail}
+module.exports = { addUser, Account };

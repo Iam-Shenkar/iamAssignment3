@@ -9,14 +9,7 @@ const loginControl = async (req, res) => {
     const user = await userExist(req.body.email);
     await validPassword(req.body.password, user.password);
     await statusCheck(user);
-    await User.update(
-      { email: user.email },
-      {
-        loginDate: new Date(),
-        refreshToken: req.token.refreshToken,
-      },
-    );
-
+    await User.update({ email: user.email }, { loginDate: new Date(), refreshToken: req.token.refreshToken });
     res.status(200).json(
       { refreshToken: req.token.refreshToken, accessToken: req.token.accessToken },
     );

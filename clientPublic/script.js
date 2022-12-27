@@ -12,7 +12,7 @@ SubmitLoginForm.addEventListener('click', async () => {
     email: document.getElementById('email').value,
     password: document.getElementById('password').value,
   };
-  const response = await fetch('http://localhost:5000/login', {
+  const response = await fetch('http://localhost:5000/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ SubmitReq.addEventListener('click', async () => {
     refreshToken: document.getElementById('Request-tokenRefrsh').value,
   };
   console.log(JSON.stringify(data));
-  const response = await fetch('http://localhost:5000/homePage', {
+  const response = await fetch('http://localhost:5000/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

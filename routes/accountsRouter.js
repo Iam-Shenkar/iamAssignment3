@@ -1,7 +1,8 @@
-const express = require("express");
+const express = require('express');
+
 const accountsRouter = new express.Router();
-const usersController = require("../controllers/accountsController");
+const accountController = require('../controllers/accountsController');
 
-accountsRouter.post("/:account/users/confirmation", usersController.sendConfirmationEmail);
+accountsRouter.post('/:accountId', accountController.addUser);
 
-module.exports = {accountsRouter};
+module.exports = { accountsRouter };

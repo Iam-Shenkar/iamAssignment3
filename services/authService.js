@@ -26,7 +26,7 @@ const userExist = async (email) => {
 
 const userNotExist = async (email) => {
   const userEmail = email.toLowerCase();
-  const user = await User.retrieve(userEmail);
+  const user = await User.retrieve({ email: userEmail });
   if (user) throw new Error('User already exists');
 };
 

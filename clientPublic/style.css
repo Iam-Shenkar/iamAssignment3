@@ -42,11 +42,10 @@ h2 {
     -webkit-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
     background: #fff;
-    padding: 30px;
     width: 90%;
     max-width: 450px;
     position: relative;
-    padding: 0px;
+    padding: 0 0 20px;
     -webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
     box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
     text-align: center;
@@ -245,6 +244,18 @@ input[type=text]:placeholder {
     -webkit-animation-delay: 1s;
     -moz-animation-delay: 1s;
     animation-delay: 1s;
+}
+
+.loginByGoogle{
+    display: flex;
+    margin: -10px auto;
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 7px;
+    background: rgba(255, 255, 255, 0.28);
+    font-family: 'Comfortaa', cursive;
+    cursor: pointer;
 }
 
 /* Simple CSS3 Fade-in Animation */

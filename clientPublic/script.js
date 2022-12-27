@@ -5,6 +5,7 @@ let refreshToken;
 const SubmitLoginForm = document.getElementById('loginBut');
 const SubmitReq = document.getElementById('reqBut');
 const logout = document.getElementById('logout');
+const googleLogIn = document.getElementById('googleLogIn');
 
 SubmitLoginForm.addEventListener('click', async () => {
   const data = {
@@ -67,4 +68,7 @@ logout.addEventListener('click', async () => {
   document.getElementById('Request-tokenAcss').value = 'Unauthorized';
   document.getElementById('Request-tokenRefrsh').value = 'Unauthorized';
   document.getElementById('textarea').value = 'logout';
+});
+googleLogIn.addEventListener('click', () => {
+  window.location.href = 'http://localhost:5000/auth/google';
 });

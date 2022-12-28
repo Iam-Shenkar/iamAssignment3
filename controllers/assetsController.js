@@ -24,5 +24,4 @@ module.exports = {
   getSeats,
   getCredit,
   getUser,
-  genericAsset,
 };

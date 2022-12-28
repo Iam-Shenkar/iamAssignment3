@@ -32,6 +32,7 @@ const genericAsset = (wantedAsset, req) => {
     const remainAsset = currentAsset - req.params;
     if (remainAsset < 0) {
       result = { status: 200, message: `OK, remain ${wantedAsset}: ${remainAsset}`, data: remainAsset };
+      accountService.Account.update({ _id: req.user.accountId }, { wantedAsset: remainAsset });
     } else {
       result = { status: 200, message: `No seats  ${wantedAsset}`, data: 0 };
     }

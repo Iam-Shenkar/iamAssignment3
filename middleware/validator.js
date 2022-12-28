@@ -22,7 +22,6 @@ const generateToken = (req, res, next) => {
 
     res.set({ authorization: `Bearer ${accessToken}` });
     req.token = { refreshToken, accessToken: `Bearer ${accessToken}` };
-    next();
   } catch (e) {
     return res.sendStatus(401);
   }
@@ -33,7 +32,7 @@ function generateAccessToken(user) {
 }
 
 const refreshTokenVerify = async (req, res) => {
-  const { refreshToken } = req.body;
+  const refreshToken = req.cookies.jwt;
   if (refreshToken == null) return res.status(403).json({ message: 'Unauthorized' });
 
   const user = await User.retrieve({ refreshToken });
@@ -43,11 +42,15 @@ const refreshTokenVerify = async (req, res) => {
     const accessToken = generateAccessToken({ email: user.email });
 
     res.set('authorization', accessToken);
+    req.user = user;
+
     req.token = { accessToken: `Bearer ${accessToken}` };
   });
 };
 
 const authenticateToken = async (req, res, next) => {
+  console.log(req.cookies.jwt);
+
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) return res.sendStatus(401);
@@ -57,6 +60,8 @@ const authenticateToken = async (req, res, next) => {
       if (res.statusCode !== 200) return res.send();
       next();
     } else {
+      const user = await User.retrieve({ refreshToken: req.cookies.jwt });
+      req.user = user;
       req.token = { refreshToken: req.body.refreshToken, accessToken: authHeader };
       next();
     }

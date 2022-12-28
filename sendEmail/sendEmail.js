@@ -12,7 +12,6 @@ const transporter = node.createTransport(smtp({
 }));
 const sendEmail = async (dataMail, details) => {
   const data = await ejs.renderFile(process.cwd() + dataMail.path, details);
-  console.log(`${dataMail.code}`);
   const mainOptions = {
     from: process.env.emailShenkar,
     to: dataMail.email,

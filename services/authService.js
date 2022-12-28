@@ -20,14 +20,8 @@ const validPassword = async (pass, userPassword) => {
 const userExist = async (email) => {
   const userEmail = email.toLowerCase();
   const user = await User.retrieve({ email: userEmail });
-  if (!user) throw new Error("user doesn't exist");
+  if (!user) return null;
   return user;
-};
-
-const userNotExist = async (email) => {
-  const userEmail = email.toLowerCase();
-  const user = await User.retrieve({ email: userEmail });
-  if (user) throw new Error('User already exists');
 };
 
 const statusCheck = async (user) => {
@@ -76,7 +70,6 @@ const sendEmailPassword = async (newPass, user) => {
 };
 
 module.exports = {
-  userNotExist,
   statusCheck,
   userExist,
   validPassword,

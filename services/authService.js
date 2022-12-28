@@ -20,14 +20,8 @@ const validPassword = async (pass, userPassword) => {
 const userExist = async (email) => {
   const userEmail = email.toLowerCase();
   const user = await User.retrieve({ email: userEmail });
-  if (!user) throw new Error("user doesn't exist");
+  if (!user) return null;
   return user;
-};
-
-const userNotExist = async (email) => {
-  const userEmail = email.toLowerCase();
-  const user = await User.retrieve({ email: userEmail });
-  if (user) throw new Error('User already exists');
 };
 
 const statusCheck = async (user) => {
@@ -36,7 +30,6 @@ const statusCheck = async (user) => {
       break;
     case 'closed':
       throw new Error('User is closed');
-      break;
 
     case 'suspended':
       const suspendTime = parseInt(user.suspensionTime, 10);
@@ -51,6 +44,7 @@ const statusCheck = async (user) => {
         await unSuspend(user);
       }
       break;
+    default:
   }
 };
 
@@ -76,7 +70,6 @@ const sendEmailPassword = async (newPass, user) => {
 };
 
 module.exports = {
-  userNotExist,
   statusCheck,
   userExist,
   validPassword,

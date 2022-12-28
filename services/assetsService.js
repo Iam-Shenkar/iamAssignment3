@@ -2,42 +2,59 @@ const authService = require('./authService');
 const accountService = require('./accountService');
 
 const getAssetsByUser = async (email) => {
-  const user = authService.userExist(email);
+  const user = await authService.userExist(email);
   if (!user) {
     throw new Error("user doesn't exist");
   }
   const account = user.accountId;
   const assets = await accountService.Account.retrieve({ _id: account });
-  return assets;
+  return assets.assets;
 };
 
-const checkFeatures = (assets, currentAsset, params) => {
-  const isFeatureExists = currentAsset.filter(params);
+const checkFeatures = async (req) => {
+  const { email, feature } = req.params;
+  const assets = await getAssetsByUser(email);
+  const currentFeatures = assets.features;
+  console.log(JSON.parse(JSON.stringify(currentFeatures)));
+  const isFeatureExists = currentFeatures.includes(feature);
   let result;
   if (isFeatureExists) {
-    result = { status: 200, message: `OK, feature ${params} exists and available`, data: params };
+    result = { status: 200, message: `OK, feature ${feature} exists and available`, data: feature };
   } else {
-    result = { status: 200, message: `No s feature ${params} doesn't exist`, data: 0 };
+    result = { status: 200, message: `No feature ${feature} doesn't exist`, data: 0 };
   }
   return result;
 };
 
-const genericAsset = (wantedAsset, req) => {
-  const assets = getAssetsByUser(req.user.email);
-  const currentAsset = assets.wantedAsset;
+const seatsCheck = async (req) => {
+  const wantedSeats = req.params.seat;
+  const { email } = req.params;
+  const assets = await getAssetsByUser(email);
+  const currentSeats = assets.seats;
+  const remainSeats = currentSeats - wantedSeats;
   let result;
-  if (wantedAsset === 'features') {
-    result = checkFeatures(assets, currentAsset, req.params);
+  if (remainSeats < 0) {
+    result = { status: 200, message: 'No seats remain', data: 0 };
   } else {
-    const remainAsset = currentAsset - req.params;
-    if (remainAsset < 0) {
-      result = { status: 200, message: `OK, remain ${wantedAsset}: ${remainAsset}`, data: remainAsset };
-      accountService.Account.update({ _id: req.user.accountId }, { wantedAsset: remainAsset });
-    } else {
-      result = { status: 200, message: `No seats  ${wantedAsset}`, data: 0 };
-    }
+    result = { status: 200, message: `OK, remain seats: ${remainSeats}`, data: remainSeats };
+    await accountService.Account.update({ _id: '63ac25971f7170edcb4e6d4e' }, { 'assets.seats': remainSeats });
   }
   return result;
 };
 
-module.exports = { getAssetsByUser, genericAsset };
+const creditCheck = async (req) => {
+  const wantedCredit = req.params.credit;
+  const assetsAccount = await getAssetsByUser(req.params.email);
+  const currentCredit = assetsAccount.credits;
+  const remainCredit = currentCredit - wantedCredit;
+  let result;
+  if (remainCredit < 0) {
+    result = { status: 200, message: `OK, remain seats: ${remainCredit}`, data: remainCredit };
+    accountService.Account.update({ _id: '63ac25971f7170edcb4e6d4e' }, { 'assets.credits': remainCredit });
+  } else {
+    result = { status: 200, message: 'No remain credit', data: 0 };
+  }
+  return result;
+};
+
+module.exports = { checkFeatures, seatsCheck, creditCheck };

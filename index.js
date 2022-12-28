@@ -12,6 +12,7 @@ const passport = require('passport');
 const path = require('path');
 const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');
+const assets = require('./routes/assetsRoute');
 
 const accounts = require('./routes/accountsRouter');
 const { authenticateToken, validation } = require('./middleware/validator');
@@ -32,6 +33,7 @@ app.use(passport.session());
 
 app.use('/auth', validation, auth.authRouter);
 app.use('/users', authenticateToken, users.usersRouter);
+app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 
 app.all('/', (req, res) => {

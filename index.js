@@ -14,7 +14,8 @@ const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');
 
 const accounts = require('./routes/accountsRouter');
-const { authenticateToken, validation } = require('./middleware/validator');
+const { validation } = require('./middleware/validator');
+const { authenticateToken } = require('./middleware/authenticate');
 
 const app = express();
 const port = process.env.PORT || 5000;

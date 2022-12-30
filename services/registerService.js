@@ -1,82 +1,73 @@
-const dbHandler = require('../data/dbHandler');
-const OTP = require('../models/OTPPass');
-const node = require("nodemailer")
-const smtp = require("nodemailer-smtp-transport")
-const otpGenerator = require('otp-generator')
-const ejs = require("ejs");
-const USERS = require('../models/users')
+const otpGenerator = require('otp-generator');
+const bcrypt = require('bcrypt');
+const OTPRepository = require('../repositories/oneTimePass.repositories');
+const { typeUser } = require('../middleware/validatorService');
+const { sendEmail } = require('../sendEmail/sendEmail');
 
+const { User } = require('./authService');
 
-const emailSMTP = process.env.email;
+const oneTimePass = new OTPRepository();
 
-// the transport metadata
-const transporter = node.createTransport(smtp({
-    service: 'gmail',
-    host: 'smtp.gmail.com',
-    auth: {
-        user: 'IamTeamShenkar@gmail.com',
-        pass: emailSMTP
-    }
-}));
+const createOneTimePass = async (email) => {
+  // eslint-disable-next-line max-len
+  const sendCode = otpGenerator.generate(6, { upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false });
+  const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
+  await oneTimePass.create(newOneTimePass);
+  return newOneTimePass;
+};
 
-const isConfirmed = async (req, res)=>{
-    const user = findUser(req, res);
-    await OTP.findOneAndDelete({'email': user.email});
-}
+const deleteFormOTP = async (data) => {
+  const email = data.toLowerCase();
+  if (await existCode(email)) await oneTimePass.delete({ email });
+};
 
-const sendEmail= async (user) => {
-    //create an OTP Code
-    let OTPcode = otpGenerator.generate(6, {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false})
-    const data = await ejs.renderFile(process.cwd() + "/data/otpEmail.ejs", {name: `${user.name}`, code: OTPcode});
+const existCode = async (email) => {
+  const userEmail = email.toLowerCase();
+  const userCode = await oneTimePass.retrieve(userEmail);
+  return userCode;
+};
 
-    //the mailing metadata
-    const mainOptions = {
-        from: 'IamTeamShenkar@gmail.com',
-        to: user.email,
-        subject: 'Please Verify you Account',
-        html: data
-    };
+const otpCompare = async (UserCode, userCode) => {
+  if (userCode !== UserCode) throw new Error('Incorrect code');
+};
 
-    const newOTP = new OTP({"email": mainOptions.to, "code": OTPcode, "creationDate": new Date()});
-    await dbHandler.addDoc(newOTP);
+const sendEmailOneTimePass = async (user, newCode) => {
+  const mailData = {
+    path: '/sendEmail/oneTimePass.ejs',
+    subject: 'Please Verify you Account',
+    email: user.email,
+  };
+  const details = {
+    name: `${user.name}`,
+    code: `${newCode.code}`,
+  };
+  await sendEmail(mailData, details);
+};
 
-    // send the mail with the OTP to the client email
-    await transporter.sendMail(mainOptions, (err, info) => {
-        if (err) {
-            throw new Error("transporter error: mail was not sent")
-        } else {
-            console.log(`message sent to ${mainOptions.to}`)
-        }
-    });
-}
+const createUser = async (user) => {
+  user.password = await bcrypt.hash(user.password, 12);
+  const domain = typeUser(user.email);
+  const newUser = {
+    name: user.name,
+    email: user.email,
+    password: user.password,
+    type: domain,
+  };
+  User.create(newUser);
+};
 
+const codeTime = async (user, timeCode) => {
+  const time = Math.abs(new Date().getMinutes() - user.creationDate.getMinutes());
+  if (time < timeCode) return true;
+};
 
-const findUser = async (req, res) => {
-    const user = dbHandler.getUserByEmail(req.body.email)
-    if (user) {
-         return res.status(401).json({massege: 'User already exists'})
-    } else {
-        return user
-    }
-}
+module.exports = {
+  codeTime,
+  sendEmailOneTimePass,
+  createUser,
+  otpCompare,
+  deleteFormOTP,
+  existCode,
+  createOneTimePass,
 
-
-const otpCompare = async (user) => {
-    user.email = user.email.toLowerCase();
-    const findUser = await OTP.findOne({'email': user.email});
-    if (user.email === findUser.email) {
-        if (user.code === findUser.code && Math.abs(new Date().getMinutes() - findUser.creationDate.getMinutes()) < 15) {
-            await dbHandler.addUser(user);
-        } else {
-            await OTP.findOneAndDelete({'email': user.email});
-            throw new Error("code is expired");
-        }
-    } else {
-        throw new Error("user doesn't exist");
-    }
-}
-
-
-
-
-module.exports = {otpCompare, findUser, sendEmail, isConfirmed}
+};

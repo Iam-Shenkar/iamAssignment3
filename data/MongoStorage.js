@@ -2,43 +2,42 @@ const { EventEmitter } = require('events');
 const mongoose = require('mongoose');
 const Path = require('path');
 
-class MongoStorage extends EventEmitter {
-    constructor (entity) {
-        super();
+mongoose.set('strictQuery', true);
+module.exports = class MongoStorage extends EventEmitter {
+  constructor(entity) {
+    super();
 
-        this.entityName = entity.charAt(0).toUpperCase() + entity.slice(1);
-        this.Model = require(Path.join(__dirname, `../models/${this.entityName}.model.js`));
-        this.connect();
-    }
+    this.entityName = entity.charAt(0).toUpperCase() + entity.slice(1);
+    this.Model = require(Path.join(__dirname, `../models/${this.entityName}.model.js`));
+    this.connect();
+  }
 
-    connect () {
-        const connectionUrl = process.env.DB_HOST;
-        mongoose
-            .connect(connectionUrl)
-            .then(() => console.log(`connected to ${this.entityName} collection`))
-            .catch(err => console.log(`connection error: ${err}`));
-    }
+  connect() {
+    const connectionUrl = process.env.DB_HOST;
+    mongoose
+      .connect(connectionUrl)
+      .then(() => console.log(`connected to ${this.entityName} collection`))
+      .catch((err) => console.log(`connection error: ${err}`));
+  }
 
-    find () {
-        return this.Model.find({});
-    }
+  find() {
+    return this.Model.find({});
+  }
 
-    retrieve (id) {
-        return this.Model.retrieve({ id });
-    }
+  retrieve(param) {
+    return this.Model.findOne(param);
+  }
 
-    create (data) {
-        const entity = new this.Model(data);
-        entity.save();
-    }
+  create(data) {
+    const entity = new this.Model(data);
+    entity.save();
+  }
 
-    delete (id) {
-        return this.Model.deleteOne({ id });
-    }
+  delete(email) {
+    return this.Model.deleteOne(email);
+  }
 
-    update (id, data) {
-        return this.Model.updateOne({ id }, data);
-    }
+  update(param, data) {
+    return this.Model.findOneAndUpdate(param, data);
+  }
 };
-
-module.exports = {MongoStorage}

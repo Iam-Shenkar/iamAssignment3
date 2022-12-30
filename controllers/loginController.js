@@ -1,28 +1,46 @@
-const loginService = require('../services/loginService');
-const googleService = require('../services/googleService');
+const bcrypt = require('bcrypt');
+const { userExist, statusCheck, validPassword } = require('../services/authService');
+const { generatePassword, sendEmailPassword } = require('../services/authService');
 
+const { User } = require('../services/authService');
 
-const googleControl = (req,res,next) => {
-    googleService.handleGoogleCookies(req,res,next)
-}
+const loginControl = async (req, res) => {
+  try {
+    const user = await userExist(req.body.email);
+    await validPassword(req.body.password, user.password);
+    await statusCheck(user);
+    await User.update(
+      { email: user.email },
+      {
+        loginDate: new Date(),
+        refreshToken: req.token.refreshToken,
+      },
+    );
 
-const loginControl = async (req, res, next) => {
-    try{
-        await loginService.handleLogin(req,res,next);
-        await loginService.handleCookies(req, res, next);
-        return res(200).json({'status':200, 'message': 'validation succeeded! welcome' })
+    res.status(200).json(
+      { refreshToken: req.token.refreshToken, accessToken: req.token.accessToken },
+    );
+  } catch (err) {
+    res.status(401).json({ message: err.message });
+  }
+};
 
-    } catch (err){
-        console.log(err)
-        return res.status(401).json({message: err.message})
-    }
+const forgotPassControl = async (req, res) => {
+  try {
+    const user = await userExist(req.body.email);
+    await statusCheck(user);
+    const newPass = generatePassword();
 
-}
+    const hashedPassword = await bcrypt.hash(newPass, 12);
+    await sendEmailPassword(newPass, user);
+    await User.update({ email: user.email }, { password: hashedPassword });
 
-const forgotPassControl = async (req, res, next) => {
+    return res.status(200)
+      .json({ message: 'A new password has been sent to the email' });
+  } catch (e) {
+    console.log(e);
+    return res.status(401).json({ message: e.message });
+  }
+};
 
-}
-
-
-
-module.exports = {loginControl, googleControl, forgotPassControl};
+module.exports = { loginControl, forgotPassControl };

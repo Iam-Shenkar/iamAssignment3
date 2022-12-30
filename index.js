@@ -1,42 +1,35 @@
-require('dotenv').config({ path: path.join(process.cwd(),".env") });
-require('./config/dbConnection');
-const login = require("./routes/loginRoute");
-const register = require("./routes/registerRoute");
-const homePage = require("./routes/homePageRoute");
-const path = require("path");
-const express = require("express");
-const app = express();
-const mongoose = require("mongoose");
-const cors = require("cors");
-const session = require('express-session');
-const passport = require("passport");
-const SESSION_SECRET = process.env.secret;
-const port = process.env.PORT || 5000;
+require('dotenv').config({ path: '.env' });
+
 const bodyParser = require('body-parser');
-const {jwtVerify} = require("./services/authService");
+require('./services/googleStrategy');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const express = require('express');
+const cors = require('cors');
+const passport = require('passport');
+const path = require('path');
+const auth = require('./routes/authRoute');
+const users = require('./routes/usersRoute');
+const { authenticateToken, validation } = require('./middleware/validator');
 
+const app = express();
+const port = process.env.PORT || 5000;
 
-mongoose.set('strictQuery', true);
+app.use(express.static('clientPublic'));
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors())
-app.use(express.urlencoded({ extended: true }));
-
-app.use(session({secret: SESSION_SECRET,resave:false, saveUninitialized: true}))
+app.use(cors());
+app.use(session({ secret: process.env.secret, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(logger(" :method :url :status :res[content-length] - :response-time ms :date[web]", {stream: accessLogStream}));
-app.use(express.static('clientPublic'));
-// app.get('*.html',function (req, res, next) {res.redirect('/homePage');});
-// app.get('/clientPublic/script.js', function(req, res) {res.sendFile(path.join(__dirname , "../clientPublic/script.js"));});
-// app.get('/clientPublic/style.css', function(req, res) {res.sendFile(path.join(__dirname , "../clientPublic/style.css"));});
-// app.get('/clientPublic/scriptsHome.js', function(req, res) {res.sendFile(path.join(__dirname , "../clientPublic/scriptsHome.js"));});
 
+app.use('/auth', validation, auth.authRouter);
+app.use('/users', users.usersRouter);
+// authenticateToken
 
-app.use("/", jwtVerify,homePage.homePageRouter)
-app.use("/login", login.loginRouter)
-app.use("/register", register.registerRoute)
+app.all('/', (req, res) => {
+  res.sendFile(path.join(__dirname, './clientPublic/POC.html'));
+}); // res.redirect('homePage.html')
 
-app.use("/*",'/')
-
-app.listen(port,() => console.log(`Express server is running on port ${port}`));
+app.listen(port, () => console.log(`Express server is running on port ${port}`));

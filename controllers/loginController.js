@@ -4,16 +4,19 @@ const { generatePassword, sendEmailPassword } = require('../services/authService
 
 const { User } = require('../services/authService');
 
-const loginControl = async (req, res) => {
+const loginControl = async (req, res, next) => {
   try {
     const user = await userExist(req.body.email);
+    if (!user) throw new Error('user not exist');
     await validPassword(req.body.password, user.password);
     await statusCheck(user);
+    next();
     await User.update({ email: user.email }, { loginDate: new Date(), refreshToken: req.token.refreshToken });
     res.status(200).json(
       { refreshToken: req.token.refreshToken, accessToken: req.token.accessToken },
     );
   } catch (err) {
+    // redirect logout
     res.status(401).json({ message: err.message });
   }
 };
@@ -21,6 +24,7 @@ const loginControl = async (req, res) => {
 const forgotPassControl = async (req, res) => {
   try {
     const user = await userExist(req.body.email);
+    if (!user) throw new Error('user not exist');
     await statusCheck(user);
     const newPass = generatePassword();
 

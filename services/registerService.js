@@ -60,7 +60,7 @@ const createUser = async (user, accountID) => {
     type: domain,
     accountId: accountID,
   };
-  User.create(newUser);
+  await User.create(newUser);
 };
 
 const codeTime = async (user, timeCode) => {

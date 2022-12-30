@@ -68,8 +68,6 @@ schema
 
 module.exports = {
   suspensionTimeValidator,
-  generateAccessToken,
-  generateRefreshToken,
   statusValidator,
   typeValidator,
   codeValidator,

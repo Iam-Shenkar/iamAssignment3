@@ -3,6 +3,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+.brand-logo span{
+    font-size: 30px;
+    font-weight: bolder;
+    color: black;
+}
 
 .ps__rail-x{
     left: 0;

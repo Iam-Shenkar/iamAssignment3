@@ -1,3 +1,4 @@
+const path = require('path');
 const { User } = require('../services/authService');
 const { oneTimePass } = require('../services/registerService');
 
@@ -5,7 +6,7 @@ const getUsers = async (req, res) => res.sendStatus(200);
 
 async function handleGetUsers(req, res) {
   const showAllUser = await User.find({});
-  return res.send(JSON.stringify(showAllUser));
+  res.send(JSON.stringify(showAllUser));
 }
 
 async function handleGetUser(req, res) {

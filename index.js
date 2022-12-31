@@ -33,7 +33,7 @@ app.use(passport.session());
 
 app.use('/auth', validation, auth.authRouter);
 
-app.use('/users', authenticateToken, users.usersRouter);
+app.use('/users', users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 
 app.all('/', (req, res) => {

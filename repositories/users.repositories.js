@@ -7,8 +7,8 @@ module.exports = class UsersRepository {
     }
   }
 
-  find() {
-    return this.storage.find();
+  find(param) {
+    return this.storage.find(param);
   }
 
   retrieve(param) {

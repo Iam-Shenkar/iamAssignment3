@@ -1,4 +1,10 @@
+
 const runningPath = 'http://localhost:5000';
+
+
+const table = document.querySelector('table');
+const data = Object.keys(Accounts[0]);
+
 
 // start bilding table
 const generateTableHead = (table, data) => {
@@ -76,6 +82,7 @@ const buttonOption = () => {
 };
 // End table
 
+
 const allUsers = async () => {
   const response = await fetch(`${runningPath}/users`, {
     method: 'GET',
@@ -90,3 +97,4 @@ const allUsers = async () => {
   generateTableHead(table, data);
   generateTable(table, body);
 };
+

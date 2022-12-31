@@ -12,7 +12,7 @@ SubmitLoginForm.addEventListener('click', async () => {
     email: document.getElementById('email').value,
     password: document.getElementById('password').value,
   };
-  const response = await fetch('http://localhost:5000/login', {
+  const response = await fetch('http://localhost:5000/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -34,21 +34,16 @@ SubmitLoginForm.addEventListener('click', async () => {
 });
 
 SubmitReq.addEventListener('click', async () => {
-  const data = {
-    email: 'dkracheli135@gmail.com',
-    password: 'Sima9542',
-    refreshToken: document.getElementById('Request-tokenRefrsh').value,
-  };
-  console.log(JSON.stringify(data));
-  const response = await fetch('http://localhost:5000/homePage', {
-    method: 'POST',
+  const response = await fetch('http://localhost:5000/accounts/invite/ofirpeleg2111@gmail.com', {
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      authorization: document.getElementById('Request-tokenAcss').value,
+      authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRrcmFjaGVsaTEzNUBnbWFpbC5jb20iLCJpYXQiOjE2NzIxNzEwODYsImV4cCI6MTY3MjE3MTA5MX0.hTMRcRpnYXarczopuXTSZcUOD_tFnG50djLANyEKpcE',
     },
-    body: JSON.stringify(data),
+    // body: JSON.stringify(data),
   });
   const body = await response.json();
+  console.log(body);
   if (accessToken === document.getElementById('Request-tokenAcss').value) {
     document.getElementById('textarea').value = 'token is valid';
   } else {

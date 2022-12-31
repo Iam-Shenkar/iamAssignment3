@@ -48,7 +48,7 @@ const confirmPassword = document.getElementById('confirmPassword');
 
 if (matchPass) {
   matchPass.addEventListener('click', () => {
-    if (newPassword.value == confirmPassword.value) {
+    if (newPassword.value === confirmPassword.value) {
       return true;
     }
     alert('Password must be same!');
@@ -63,7 +63,7 @@ $(document).ready(() => {
 });
 
 $('#pass, #repass').on('keyup', () => {
-  if ($('#pass').val() == $('#repass').val()) {
+  if ($('#pass').val() === $('#repass').val()) {
     $('#message').html('Matching').css('color', 'green');
     $('#openEmailConfirmation').prop('disabled', false);
   } else {

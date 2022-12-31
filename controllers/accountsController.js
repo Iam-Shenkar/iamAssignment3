@@ -29,10 +29,7 @@ const inviteUser = async (req, res) => {
 };
 
 const getAccount = async (req, res) => {
-  const user = await User.retrieve({ email: req.params.email });
-  const acc = await Account.retrieve({ id: req.params.accountId });
-  console.log(`acc: ${acc}`);
-  // eslint-disable-next-line no-underscore-dangle
+  const acc = await Account.retrieve({ _id: req.params.accountId });
   const users = await User.find({ accountId: req.params.accountId });
   const outputArray = users.reduce((accumulator, currentValue) => [
     ...accumulator,
@@ -41,9 +38,13 @@ const getAccount = async (req, res) => {
       email: currentValue.email,
       Role: currentValue.type,
       Status: currentValue.status,
+      Edit: '',
     },
   ], []);
-  outputArray.push({ Plan: acc.plan, Assets: acc.assets });
+  const { features } = acc.assets;
+  outputArray.unshift({
+    Plan: acc.plan, Seats: acc.assets.seats, Credits: acc.assets.credits, Features: features,
+  });
   res.status(200).json(outputArray);
 };
 

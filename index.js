@@ -32,6 +32,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', validation, auth.authRouter);
+
 app.use('/users', authenticateToken, users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 

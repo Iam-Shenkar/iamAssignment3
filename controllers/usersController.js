@@ -5,8 +5,21 @@ const { oneTimePass } = require('../services/registerService');
 const getUsers = async (req, res) => res.sendStatus(200);
 
 async function handleGetUsers(req, res) {
-  const showAllUser = await User.find({});
-  res.send(JSON.stringify(showAllUser));
+  // const showAllUser = await User.find({});
+  //
+  const users = await User.find({});
+
+  const outputArray = users.reduce((accumulator, currentValue) => [
+    ...accumulator,
+    {
+      Name: currentValue.name,
+      email: currentValue.email,
+      Role: currentValue.type,
+      Status: currentValue.status,
+      Edit: '',
+    },
+  ], []);
+  res.status(200).json(outputArray);
 }
 
 async function handleGetUser(req, res) {

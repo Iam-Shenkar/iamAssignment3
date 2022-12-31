@@ -48,8 +48,17 @@ const getAccount = async (req, res) => {
   res.status(200).json(outputArray);
 };
 
+const getAccounts = async (req, res) => {
+  // name plan credit how many people status
+  const user = await User.find({});
+  console.log(user);
+  await user.countDocuments((err, count) => {
+    console.log(count);
+  });
+  res.status(200).json('test');
+};
+
 const editAccount = async (req, res) => {};
-const getAccounts = async (req, res) => {};
 const disableAccount = async (req, res) => {};
 
 module.exports = {

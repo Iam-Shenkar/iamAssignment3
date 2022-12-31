@@ -12,6 +12,7 @@ const passport = require('passport');
 const path = require('path');
 const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');
+const assets = require('./routes/assetsRoute');
 
 const accounts = require('./routes/accountsRouter');
 const { validation } = require('./middleware/validator');
@@ -20,7 +21,7 @@ const { authenticateToken } = require('./middleware/authenticate');
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(express.static('client'));
+app.use(express.static(path.join('client')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 
@@ -32,7 +33,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', validation, auth.authRouter);
-
+app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 

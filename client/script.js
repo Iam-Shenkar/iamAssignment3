@@ -7,6 +7,7 @@ const forgot = document.getElementById('forgot');
 const closeForgot = document.getElementById('closeForgot');
 const openEmailCon = document.getElementById('openEmailConfirmation');
 const closeEmailCon = document.getElementById('closeEmailCon');
+const runningPath = window.location.origin;
 
 if (signUpButton) {
   signUpButton.addEventListener('click', () => {
@@ -48,7 +49,7 @@ const confirmPassword = document.getElementById('confirmPassword');
 
 if (matchPass) {
   matchPass.addEventListener('click', () => {
-    if (newPassword.value == confirmPassword.value) {
+    if (newPassword.value === confirmPassword.value) {
       return true;
     }
     alert('Password must be same!');
@@ -63,7 +64,7 @@ $(document).ready(() => {
 });
 
 $('#pass, #repass').on('keyup', () => {
-  if ($('#pass').val() == $('#repass').val()) {
+  if ($('#pass').val() === $('#repass').val()) {
     $('#message').html('Matching').css('color', 'green');
     $('#openEmailConfirmation').prop('disabled', false);
   } else {
@@ -77,7 +78,7 @@ const loginData = async () => {
     email: document.getElementById('userEmail').value,
     password: document.getElementById('userPass').value,
   };
-  const response = await fetch('http://localhost:5000/auth/login', {
+  const response = await fetch(`${runningPath}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -96,7 +97,7 @@ const signUpData = async () => {
     password: document.getElementById('repass').value,
     name: document.getElementById('newUsername').value,
   };
-  const response = await fetch('http://localhost:5000/auth/register', {
+  const response = await fetch(`${runningPath}/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ const forgotPassweord = async () => {
   const data = {
     email,
   };
-  const response = await fetch(`http://localhost:5000/auth/password/${email}`, {
+  const response = await fetch(`${runningPath}/auth/password/${email}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -130,7 +131,7 @@ const emailConfirmation = async () => {
     name: document.getElementById('newUsername').value,
     code: document.getElementById('OTPtext').value,
   };
-  const response = await fetch('http://localhost:5000/auth//register/code', {
+  const response = await fetch(`${runningPath}/auth//register/code`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

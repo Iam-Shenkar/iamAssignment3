@@ -20,7 +20,7 @@ module.exports = class AccountRepository {
   }
 
   update(email, param) {
-    return this.storage.updateOne(email, param);
+    return this.storage.update(email, param);
   }
 
   delete(email) {

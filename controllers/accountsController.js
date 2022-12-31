@@ -3,7 +3,6 @@ const { User } = require('../services/authService');
 
 const inviteUser = async (req, res) => {
   try {
-    console.log('hi');
     checkPermission(req.user);
     const account = await Account.retrieve({ _id: req.user.accountId });
 
@@ -29,4 +28,13 @@ const inviteUser = async (req, res) => {
   }
 };
 
-module.exports = { inviteUser, Account };
+const getAccount = async (req, res) => {
+  req;
+};
+
+const editAccount = async (req, res) => {};
+const disableAccount = async (req, res) => {};
+
+module.exports = {
+  inviteUser, Account, getAccount, editAccount, disableAccount,
+};

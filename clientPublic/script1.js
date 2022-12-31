@@ -1,3 +1,4 @@
+const runningPath = window.location.origin;
 // login
 let accessToken;
 let refreshToken;
@@ -12,7 +13,7 @@ SubmitLoginForm.addEventListener('click', async () => {
     email: document.getElementById('email').value,
     password: document.getElementById('password').value,
   };
-  const response = await fetch('http://localhost:5000/auth/login', {
+  const response = await fetch(`${runningPath}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -34,7 +35,7 @@ SubmitLoginForm.addEventListener('click', async () => {
 });
 
 SubmitReq.addEventListener('click', async () => {
-  const response = await fetch('http://localhost:5000/accounts/invite/ofirpeleg2111@gmail.com', {
+  const response = await fetch(`${runningPath}/accounts/invite/ofirpeleg2111@gmail.com`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -65,5 +66,5 @@ logout.addEventListener('click', async () => {
   document.getElementById('textarea').value = 'logout';
 });
 googleLogIn.addEventListener('click', () => {
-  window.location.href = 'http://localhost:5000/auth/google';
+  window.location.href =`${runningPath}/auth/google`;
 });

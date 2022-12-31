@@ -1,6 +1,7 @@
 const mailValidator = require('email-validator');
 const passwordValidator = require('password-validator');
 const jwt = require('jsonwebtoken');
+const { User } = require('../services/authService');
 
 const schema = new passwordValidator();
 
@@ -45,13 +46,23 @@ const codeValidator = (code) => {
   if (code.length !== 6) throw new Error('code not valid');
 };
 
-function generateAccessToken(email) {
-  return jwt.sign(email, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-}
+const generateAccessToken = (email) => jwt.sign(email, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 
-function generateRefreshToken(email) {
-  return jwt.sign(email, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
-}
+const generateRefreshToken = (email) => jwt.sign(email, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+
+const checkPermission = async (req, res, next) => {
+  const user = await User.retrieve(req.body.mail);
+  if (user.type === 'user') throw new Error('Not authorized');
+  // check sit
+  next();
+};
+
+const checkPermissionAdmin = async (req, res, next) => {
+  const user = await User.retrieve(req.body.mail);
+  if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
+  // check sit
+  next();
+};
 
 schema
   .is().min(8) // Minimum length 8
@@ -75,4 +86,6 @@ module.exports = {
   emailValidator,
   PasswordValidator,
   typeUser,
+  checkPermission,
+  checkPermissionAdmin,
 };

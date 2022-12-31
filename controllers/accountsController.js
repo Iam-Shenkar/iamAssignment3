@@ -29,12 +29,28 @@ const inviteUser = async (req, res) => {
 };
 
 const getAccount = async (req, res) => {
-  req;
+  const user = await User.retrieve({ email: req.params.email });
+  const acc = await Account.retrieve({ id: req.params.accountId });
+  console.log(`acc: ${acc}`);
+  // eslint-disable-next-line no-underscore-dangle
+  const users = await User.find({ accountId: req.params.accountId });
+  const outputArray = users.reduce((accumulator, currentValue) => [
+    ...accumulator,
+    {
+      Name: currentValue.name,
+      email: currentValue.email,
+      Role: currentValue.type,
+      Status: currentValue.status,
+    },
+  ], []);
+  outputArray.push({ Plan: acc.plan, Assets: acc.assets });
+  res.status(200).json(outputArray);
 };
 
 const editAccount = async (req, res) => {};
+const getAccounts = async (req, res) => {};
 const disableAccount = async (req, res) => {};
 
 module.exports = {
-  inviteUser, Account, getAccount, editAccount, disableAccount,
+  inviteUser, Account, getAccount, getAccounts, editAccount, disableAccount,
 };

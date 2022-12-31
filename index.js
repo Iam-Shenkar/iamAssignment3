@@ -15,7 +15,8 @@ const users = require('./routes/usersRoute');
 const assets = require('./routes/assetsRoute');
 
 const accounts = require('./routes/accountsRouter');
-const { authenticateToken, validation } = require('./middleware/validator');
+const { validation } = require('./middleware/validator');
+const { authenticateToken } = require('./middleware/authenticate');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -32,8 +33,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', validation, auth.authRouter);
-app.use('/users', authenticateToken, users.usersRouter);
 app.use('/assets', authenticateToken, assets.assetsRoute);
+app.use('/users', users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 
 app.all('/', (req, res) => {

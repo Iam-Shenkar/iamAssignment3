@@ -8,16 +8,18 @@ const loginControl = async (req, res, next) => {
   try {
     const user = await userExist(req.body.email);
     if (!user) throw new Error('user not exist');
+
     await validPassword(req.body.password, user.password);
     await statusCheck(user);
-    next();
+
     await User.update(
       { email: user.email },
-      { loginDate: new Date(), refreshToken: req.token.refreshToken },
+      {
+        loginDate: new Date(),
+        refreshToken: req.token.refreshToken,
+      },
     );
-    res.status(200).json(
-      { refreshToken: req.token.refreshToken, accessToken: req.token.accessToken },
-    );
+    res.status(200).json({ message: 'login' });
   } catch (err) {
     // redirect logout
     res.status(401).json({ message: err.message });
@@ -33,7 +35,10 @@ const forgotPassControl = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(newPass, 12);
     await sendEmailPassword(newPass, user);
-    await User.update({ email: user.email }, { password: hashedPassword });
+    await User.update(
+      { email: user.email },
+      { password: hashedPassword },
+    );
 
     return res.status(200)
       .json({ message: 'A new password has been sent to the email' });

@@ -33,6 +33,8 @@ const handleRegister = async (req, res) => {
 
 const handleConfirmCode = async (req, res) => {
   try {
+    const user = await userExist(req.body.email);
+    if (user) throw new Error('user already exist');
     const oneTimePassRecord = await existCode(req.body.email);
     await register.otpCompare(req.body.code, oneTimePassRecord.code);
     const accountID = await createAccount(req.body.email);

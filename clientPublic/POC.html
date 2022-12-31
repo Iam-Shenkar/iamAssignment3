@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POC</title>
+    <link href="../client/style.css" rel="stylesheet"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" id="bootstrap-css" rel="stylesheet">
+</head>
+<body>
+
+<div class="wrapper fadeInDown">
+    <div class="contener">
+        <div class="formContent">
+            <!-- Tabs Titles -->
+
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <h1>login</h1>
+            </div>
+
+            <!-- Login Form -->
+            <form>
+                <input class="fadeIn second" id="email" name="login" placeholder="login" type="text" value="dkracheli135@gmail.com">
+                <input class="fadeIn third" id="password" name="login" placeholder="password" type="text" value="Sima9542">
+                <input class="fadeIn fourth" id="loginBut" type="button" value="Log In">
+            </form>
+            <button class="loginByGoogle" type="button" id="googleLogIn">Continue with Google&nbsp;<img src="search.png" width="16px" height="16px" alt=""></button>
+
+
+            <!-- Remind Passowrd -->
+            <div class="formFooter">
+
+            </div>
+            <div>
+            </div>
+        </div>
+        <div class="formContent">
+            <!-- Tabs Titles -->
+
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <h1>Request</h1>
+            </div>
+
+            <!-- Login Form -->
+            <form>
+                <input class="fadeIn second" id="Request-tokenAcss" name="Request-tokenAcss"  type="text">
+                <input class="fadeIn third" id="Request-tokenRefrsh" name="Request-tokenRefrsh"  type="text">
+                <input class="fadeIn fourth" id="reqBut" type="button" value="send Request">
+            </form>
+
+            <!-- Remind Passowrd -->
+            <div class="formFooter">
+
+            </div>
+            <div>
+            </div>
+        </div>
+        <div class="formContent">
+            <div class="fadeIn first">
+                <h1>logout</h1>
+            </div>
+            <form>
+                <input class="fadeIn second" id="loguot-tokenAcss" name="loguot-tokenAcss" readonly type="text">
+                <input class="fadeIn third" id="logout-tokenRefrsh" name="logout-tokenRefrsh" readonly type="text">
+                <input class="fadeIn fourth" id= "logout" type="button" value="Log Out">
+            </form>
+
+        </div>
+
+            </div>
+    <section>  <textarea id="textarea"></textarea ></section>
+        </div>
+
+    </div>
+</div>
+<script src="../client/script.js"></script>
+</body>
+</html>

@@ -52,12 +52,10 @@ const sendEmailOneTimePass = async (user, newCode) => {
 
 const createUser = async (user, accountID) => {
   user.password = await bcrypt.hash(user.password, 12);
-  const domain = typeUser(user.email);
   const newUser = {
     name: user.name,
     email: user.email,
     password: user.password,
-    type: domain,
     accountId: accountID,
   };
   await User.create(newUser);

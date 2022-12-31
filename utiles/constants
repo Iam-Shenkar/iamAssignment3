@@ -1,0 +1,3 @@
+maxAge = 24 * 60 * 60 * 1000
+refreshExpiresIn= '1d'
+accessExpiresIn= '5s'

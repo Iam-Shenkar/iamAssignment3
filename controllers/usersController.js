@@ -15,8 +15,22 @@ async function handleAddUser(req, res) {
 }
 
 async function handleGetUsers(req, res) {
-  const Users = await User.find({});
-  res.send(JSON.stringify(Users));
+
+  // const showAllUser = await User.find({});
+  //
+  const users = await User.find({});
+
+  const outputArray = users.reduce((accumulator, currentValue) => [
+    ...accumulator,
+    {
+      Name: currentValue.name,
+      email: currentValue.email,
+      Role: currentValue.type,
+      Status: currentValue.status,
+      Edit: '',
+    },
+  ], []);
+  res.status(200).json(outputArray);
 }
 
 async function handleGetUser(req, res) {

@@ -12,6 +12,7 @@ const passport = require('passport');
 const path = require('path');
 const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');
+const assets = require('./routes/assetsRoute');
 
 const accounts = require('./routes/accountsRouter');
 const { validation } = require('./middleware/validator');
@@ -32,9 +33,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', validation, auth.authRouter);
-
+app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', users.usersRouter);
-app.use('/accounts', authenticateToken, accounts.accountsRouter);
+app.use('/accounts'/* ,  authenticateToken */, accounts.accountsRouter);
 
 app.all('/', (req, res) => {
   res.sendFile(path.join(__dirname, './client/index.html'));

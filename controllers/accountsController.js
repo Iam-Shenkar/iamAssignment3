@@ -29,12 +29,29 @@ const inviteUser = async (req, res) => {
 };
 
 const getAccount = async (req, res) => {
-  req;
+  const acc = await Account.retrieve({ _id: req.params.accountId });
+  const users = await User.find({ accountId: req.params.accountId });
+  const outputArray = users.reduce((accumulator, currentValue) => [
+    ...accumulator,
+    {
+      Name: currentValue.name,
+      email: currentValue.email,
+      Role: currentValue.type,
+      Status: currentValue.status,
+      Edit: '',
+    },
+  ], []);
+  const { features } = acc.assets;
+  outputArray.unshift({
+    Plan: acc.plan, Seats: acc.assets.seats, Credits: acc.assets.credits, Features: features,
+  });
+  res.status(200).json(outputArray);
 };
 
 const editAccount = async (req, res) => {};
+const getAccounts = async (req, res) => {};
 const disableAccount = async (req, res) => {};
 
 module.exports = {
-  inviteUser, Account, getAccount, editAccount, disableAccount,
+  inviteUser, Account, getAccount, getAccounts, editAccount, disableAccount,
 };

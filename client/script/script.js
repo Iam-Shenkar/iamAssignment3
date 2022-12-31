@@ -1,8 +1,10 @@
-let Accounts = [
-  {
-    profile: 'Monte Falco', VatNo: 1658, Created: 'Parco Foreste Casentinesi', Status: 'active', Edit: null,
-  },
-];
+
+const runningPath = 'http://localhost:5000';
+
+
+const table = document.querySelector('table');
+const data = Object.keys(Accounts[0]);
+
 
 // start bilding table
 const generateTableHead = (table, data) => {
@@ -42,7 +44,8 @@ const statusStyle = (element) => {
   status.innerText = element;
   if (element === 'active') status.className = 'badge badge-success';
   if (element === 'pending') status.className = 'badge badge-warning';
-  if (element === 'close') status.className = 'badge badge-danger';
+  if (element === 'closed') status.className = 'badge badge-danger';
+  if (element === 'suspended') status.className = 'badge badge-danger';
   return status;
 };
 
@@ -64,26 +67,24 @@ const buttonOption = () => {
   list.setAttribute('aria-labelledby', 'dropdownMenuIconButton6');
   const remove = document.createElement('a');
   const view = document.createElement('a');
-  remove.innerText = 'remove';
-  view.innerText = 'view';
+  remove.innerText = 'Remove';
+  view.innerText = 'Edit';
 
   remove.className = 'dropdown-item';
   view.className = 'dropdown-item';
 
-  remove.setAttribute('href', '#');
   view.setAttribute('href', '#');
+  remove.setAttribute('href', '#');
+
   list.appendChild(remove);
   list.appendChild(view);
   return list;
 };
 // End table
-const table = document.querySelector('table');
-const data = Object.keys(Accounts[0]);
-generateTableHead(table, data);
-generateTable(table, Accounts);
+
 
 const allUsers = async () => {
-  const response = await fetch('http://localhost:5000/users', {
+  const response = await fetch(`${runningPath}/users`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -91,6 +92,9 @@ const allUsers = async () => {
   });
 
   const body = await response.json();
-  Accounts = body;
-  generateTable(table, Accounts);
+  const table = document.querySelector('table');
+  const data = Object.keys(body[0]);
+  generateTableHead(table, data);
+  generateTable(table, body);
 };
+

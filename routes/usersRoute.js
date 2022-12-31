@@ -12,5 +12,4 @@ usersRouter.get('/:email', usersController.handleGetUser);
 usersRouter.put('/:email', usersController.handleUpdateUser);
 usersRouter.delete('/:email', usersController.handleDeleteUser);
 
-
 module.exports = { usersRouter };

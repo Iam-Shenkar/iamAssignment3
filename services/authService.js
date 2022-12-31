@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
-const UsersRepository = require('../repositories/Users.repositories');
+const UsersRepository = require('../repositories/users.repositories');
 const { sendEmail } = require('../sendEmail/sendEmail');
 
 const User = new UsersRepository();
@@ -30,7 +30,6 @@ const statusCheck = async (user) => {
       break;
     case 'closed':
       throw new Error('User is closed');
-      break;
 
     case 'suspended':
       const suspendTime = parseInt(user.suspensionTime, 10);
@@ -45,6 +44,7 @@ const statusCheck = async (user) => {
         await unSuspend(user);
       }
       break;
+    default:
   }
 };
 

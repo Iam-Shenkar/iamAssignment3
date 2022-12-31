@@ -43,7 +43,6 @@ const forgotPassControl = async (req, res) => {
     return res.status(200)
       .json({ message: 'A new password has been sent to the email' });
   } catch (e) {
-    console.log(e);
     return res.status(401).json({ message: e.message });
   }
 };

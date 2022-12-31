@@ -38,6 +38,7 @@ const getAccount = async (req, res) => {
       email: currentValue.email,
       Role: currentValue.type,
       Status: currentValue.status,
+      Gender: currentValue.gender,
       Edit: '',
     },
   ], []);
@@ -50,12 +51,20 @@ const getAccount = async (req, res) => {
 
 const getAccounts = async (req, res) => {
   // name plan credit how many people status
-  const user = await User.find({});
-  console.log(user);
-  await user.countDocuments((err, count) => {
-    console.log(count);
-  });
-  res.status(200).json('test');
+  const accounts = await Account.find({});
+  // console.log(accounts);
+  const outputArray = [];
+  for (let i = 0; i < accounts.length; i += 1) {
+    const account = {
+      Name: accounts[i].name,
+      Plan: accounts[i].plan,
+      Credits: accounts[i].assets.credits,
+      Features: accounts[i].assets.features.length,
+      Status: accounts[i].status,
+    };
+    outputArray.push(account);
+  }
+  res.status(200).json(outputArray);
 };
 
 const editAccount = async (req, res) => {};

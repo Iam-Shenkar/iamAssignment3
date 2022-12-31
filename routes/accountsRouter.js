@@ -5,7 +5,7 @@ const accountController = require('../controllers/accountsController');
 const { checkPermission, checkPermissionAdmin } = require('../middleware/validatorService');
 
 accountsRouter.get('/invite/:email', accountController.inviteUser); // done
-accountsRouter.get('/accounts/'/* , checkPermissionAdmin*/, accountController.getAccounts);
+accountsRouter.get('/getAll/'/* , checkPermissionAdmin*/, accountController.getAccounts);
 accountsRouter.get('/:accountId/', accountController.getAccount); // done
 accountsRouter.put('/:accountId/', checkPermission, accountController.editAccount);
 accountsRouter.put('/disable/:accountId/', checkPermission, accountController.disableAccount);

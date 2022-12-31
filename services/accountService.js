@@ -4,7 +4,7 @@ const { sendEmail } = require('../sendEmail/sendEmail');
 const Account = new accountRepository();
 
 const sendInvitation = async (manager, user) => {
-  const path = `http://localhost:5000/auth/${user.accountId}/users/${user.email}/confirmation`;
+  const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
   const mailData = {
     path: '/sendEmail/invitationUser.ejs',
     subject: 'Please Verify you Account',

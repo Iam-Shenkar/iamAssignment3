@@ -1,3 +1,4 @@
+const runningPath = window.location.origin;
 let Accounts = [
   {
     profile: 'Monte Falco', VatNo: 1658, Created: 'Parco Foreste Casentinesi', Status: 'active', Edit: null,
@@ -83,7 +84,7 @@ generateTableHead(table, data);
 generateTable(table, Accounts);
 
 const allUsers = async () => {
-  const response = await fetch('http://localhost:5000/users', {
+  const response = await fetch(`${runningPath}/users`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

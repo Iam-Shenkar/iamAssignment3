@@ -35,7 +35,7 @@ app.use(passport.session());
 app.use('/auth', validation, auth.authRouter);
 app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', users.usersRouter);
-app.use('/accounts', authenticateToken, accounts.accountsRouter);
+app.use('/accounts'/* ,  authenticateToken */, accounts.accountsRouter);
 
 app.all('/', (req, res) => {
   res.sendFile(path.join(__dirname, './client/index.html'));

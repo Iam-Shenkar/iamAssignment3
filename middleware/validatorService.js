@@ -1,6 +1,7 @@
 const mailValidator = require('email-validator');
 const passwordValidator = require('password-validator');
 const jwt = require('jsonwebtoken');
+const { User } = require('../services/authService');
 
 const schema = new passwordValidator();
 
@@ -53,6 +54,20 @@ function generateRefreshToken(email) {
   return jwt.sign(email, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
 }
 
+const checkPermission = async (req, res, next) => {
+  const user = await User.retrieve(req.body.mail);
+  if (user.type === 'user') throw new Error('Not authorized');
+  // check sit
+  next();
+};
+
+const checkPermissionAdmin = async (req, res, next) => {
+  const user = await User.retrieve(req.body.mail);
+  if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
+  // check sit
+  next();
+};
+
 schema
   .is().min(8) // Minimum length 8
   .is().max(100) // Maximum length 100
@@ -75,4 +90,6 @@ module.exports = {
   emailValidator,
   PasswordValidator,
   typeUser,
+  checkPermission,
+  checkPermissionAdmin,
 };

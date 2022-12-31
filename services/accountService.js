@@ -1,5 +1,6 @@
 const accountRepository = require('../repositories/account.repositories');
 const { sendEmail } = require('../sendEmail/sendEmail');
+const { User } = require('./authService');
 
 const Account = new accountRepository();
 
@@ -17,11 +18,7 @@ const sendInvitation = async (manager, user) => {
   };
   await sendEmail(mailData, details);
 };
-const checkPermission = (user) => {
-  if (user.type === 'user') throw new Error('Not authorized');
-  // check sit
-};
 
 module.exports = {
-  Account, sendInvitation, checkPermission,
+  Account, sendInvitation,
 };

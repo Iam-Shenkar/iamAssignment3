@@ -20,7 +20,7 @@ const { authenticateToken } = require('./middleware/authenticate');
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(express.static('client'));
+app.use(express.static(path.join('client')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 

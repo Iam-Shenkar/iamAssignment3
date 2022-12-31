@@ -1,8 +1,12 @@
-let Accounts = [
+const Accounts = [
   {
     profile: 'Monte Falco', VatNo: 1658, Created: 'Parco Foreste Casentinesi', Status: 'active', Edit: null,
   },
 ];
+
+const table = document.querySelector('table');
+const data = Object.keys(Accounts[0]);
+
 
 // start bilding table
 const generateTableHead = (table, data) => {
@@ -77,8 +81,7 @@ const buttonOption = () => {
   return list;
 };
 // End table
-const table = document.querySelector('table');
-const data = Object.keys(Accounts[0]);
+
 generateTableHead(table, data);
 generateTable(table, Accounts);
 
@@ -94,3 +97,4 @@ const allUsers = async () => {
   Accounts = body;
   generateTable(table, Accounts);
 };
+

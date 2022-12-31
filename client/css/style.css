@@ -38,3 +38,22 @@
     width: 300px;
     margin-left: 50px;
 }
+.btnInputAddUser input{
+    height: 45px;
+    width: 400px;
+    margin-left: 10px;
+    text-align: center;
+}
+.btnUpgrade, .btnEditUser{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.pie-card{
+    margin-left: 30px;
+    width: 900px;
+}
+.icon-card{
+    margin-left: 30px
+}
+

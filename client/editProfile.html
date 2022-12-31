@@ -21,7 +21,7 @@
           href="http://www.bootstrapdash.com/demo/star-admin2-free/template/css/vertical-layout-light/style.css">
     <link rel="shortcut icon" href="https://www.bootstrapdash.com/demo/star-admin2-free/template/images/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../client/css/style.css">
 
 </head>
 
@@ -92,13 +92,7 @@
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
                        aria-controls="ui-basic">
-                        <span class="menu-title">My Profile</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
-                       aria-controls="ui-basic">
-                        <span class="menu-title">My Account</span>
+                        <span class="menu-title">Add User</span>
                     </a>
                 </li>
             </ul>
@@ -106,74 +100,70 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="row">
-                    <div class="col-md-8 grid-margin stretch-card">
+                    <div class="col-8 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">User Profile</h4>
+                                <h4 class="card-title">Edit User</h4>
                                 <form class="forms-sample">
-                                    <div class="form-group">
-                                        <label for="exampleInputUsername1">Name</label>
-                                        <input type="text" class="form-control" id="exampleInputUsername1"
-                                               placeholder="Name">
+                                    <div class="form-group row">
+                                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="exampleInputUsername2"
+                                                   placeholder="Username">
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Email address</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1"
-                                               placeholder="Email">
+                                    <div class="form-group row">
+                                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Email</label>
+                                        <div class="col-sm-9">
+                                            <input type="email" class="form-control" id="exampleInputEmail2"
+                                                   placeholder="Email">
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Type</label>
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
-                                               placeholder="Type">
+                                    <div class="form-group row">
+                                        <label for="exampleSelectType" class="col-sm-3 col-form-label">Type</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="exampleSelectType">
+                                                <option>Admin</option>
+                                                <option>User</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="btnProfile">
-                                        <button type="button" class="btn btn-primary me-2">Edit</button>
-                                        <button type="button" class="btn btn-success">Save</button>
+                                    <div class="form-group row">
+                                        <label for="exampleSelectStatus" class="col-sm-3 col-form-label">Status</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="exampleSelectStatus">
+                                                <option>Active</option>
+                                                <option>Suspend</option>
+                                                <option>Close</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="btnEditUser">
+                                    <button type="submit" class="btn btn-warning me-2">Edit</button>
+                                    <button class="btn btn-success">Save</button>
+                                    <button class="btn btn-danger">Delete</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Change Password</h4>
-                                <form class="form-inline">
-                                    <label class="sr-only" for="inlineFormInputOldPassword">Old Password</label>
-                                    <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputOldPassword" placeholder="Old Password">
-
-                                    <label class="sr-only" for="inlineFormInputNewPassword">New Password</label>
-                                    <div class="input-group mb-2 mr-sm-2">
-                                        <input type="text" class="form-control" id="inlineFormInputNewPassword" placeholder="New Password">
-                                    </div><br>
-                                    <button type="submit" class="btn btn-primary mb-2">Update</button>
-                                </form>
-                            </div>
+                    <footer class="footer">
+                        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">IAM Team</span>
                         </div>
-                    </div>
-                    <div class="col-md-3 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="images/SORRRT%20IAM.png" alt="SORRRT IAM">
-                            </div>
-                        </div>
-                    </div>
+                    </footer>
                 </div>
-                <footer class="footer">
-                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">IAM Team</span>
-                    </div>
-                </footer>
             </div>
         </div>
     </div>
-    <script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/js/vendor.bundle.base.js"></script>
-    <script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-    <script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/off-canvas.js"></script>
-    <script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/hoverable-collapse.js"></script>
-    <script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/template.js"></script>
-    <script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/settings.js"></script>
-    <script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/todolist.js"></script>
+</div>
+<script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/js/vendor.bundle.base.js"></script>
+<script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/off-canvas.js"></script>
+<script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/hoverable-collapse.js"></script>
+<script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/template.js"></script>
+<script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/settings.js"></script>
+<script src="http://www.bootstrapdash.com/demo/star-admin2-free/template/js/todolist.js"></script>
 
 </body>
 </html>

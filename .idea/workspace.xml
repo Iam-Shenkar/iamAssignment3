@@ -2,15 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="889cff5f-266f-4ac8-9419-2bdd47a862c7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/addUser.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/allAccounts.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/allUsers.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myProfileRegularUser.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/script/script.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/editProfile.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/myAccount.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myProfile.html" beforeDir="false" afterPath="$PROJECT_DIR$/myProfile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addUser.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/allAccounts.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/allUsers.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/addUser.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/addUser.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/allAccounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/allAccounts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/allUsers.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/allUsers.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/myProfile.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/myProfile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/myProfileRegularUser.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/myProfileRegularUser.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/script/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/script/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/myProfile.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/myProfileRegularUser.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/script/script.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tables.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/template.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,8 +31,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
-        <option value="HTML File" />
         <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -78,7 +88,7 @@
       <option name="presentableId" value="Default" />
       <updated>1672154449295</updated>
       <workItem from="1672154450890" duration="10253000" />
-      <workItem from="1672444223222" duration="6532000" />
+      <workItem from="1672444223222" duration="16649000" />
     </task>
     <servers />
   </component>

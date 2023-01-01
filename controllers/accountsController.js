@@ -29,8 +29,10 @@ const inviteUser = async (req, res) => {
 };
 
 const getAccount = async (req, res) => {
-  const acc = await Account.retrieve({ _id: req.params.accountId });
-  const users = await User.find({ accountId: req.params.accountId });
+  const user = await User.retrieve({ email: req.params.email });
+  if (!user) throw new Error(' no');
+  const acc = await Account.retrieve({ _id: user.accountId });
+  const users = await User.find({ accountId: user.accountId });
   const outputArray = users.reduce((accumulator, currentValue) => [
     ...accumulator,
     {

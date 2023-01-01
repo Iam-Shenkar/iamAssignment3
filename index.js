@@ -20,13 +20,13 @@ const { authenticateToken } = require('./middleware/authenticate');
 
 const app = express();
 const port = process.env.PORT || 5000;
+app.use(cors('*'));
+app.use(express.static(path.join(__dirname, 'client')));
 
-app.use(express.static(path.join('client')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 
 app.use(express.json());
-app.use(cors());
 
 app.use(session({ secret: process.env.secret, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());

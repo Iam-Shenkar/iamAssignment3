@@ -1,21 +1,28 @@
+const path = require('path');
 const { User } = require('../services/authService');
 const { Account } = require('../services/accountService');
 const { oneTimePass, createAccount, createUser } = require('../services/registerService');
 
 async function handleAddUser(req, res) {
   try {
-    const accountID = await createAccount(req.body.email);
+    const user = User.retrieve({ email: req.body.email });
+    if (user) throw new Error('user  already exists');
+    let accountID;
+    if (req.body.type === 'admin') {
+      accountID = null;
+    } else {
+      accountID = await createAccount(req.body.email);
+    }
     await createUser(req.body, accountID);
     return res.status(200)
       .json({ message: 'User was added' });
   } catch (e) {
-    return res.status(401)
+    return res.status(402)
       .json({ message: e.message });
   }
 }
 
 async function handleGetUsers(req, res) {
-
   // const showAllUser = await User.find({});
   //
   const users = await User.find({});
@@ -35,7 +42,14 @@ async function handleGetUsers(req, res) {
 
 async function handleGetUser(req, res) {
   const user = await User.retrieve({ email: req.params.email });
-  return res.send(JSON.stringify(user));
+  const account = await Account.retrieve({ _id: user.accountId });
+  const del = {
+    name: user.name,
+    email: user.email,
+    role: user.type,
+    account: account.name,
+  };
+  res.status(200).json(del);
 }
 
 async function handleUpdateUser(req, res) {

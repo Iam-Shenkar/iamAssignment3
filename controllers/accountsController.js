@@ -73,17 +73,17 @@ const editAccount = async (req, res) => {
   acc.plan = req.body.plan;
   acc.assets.credits = req.body.credits;
   try {
-    if (acc.assets.usedSeats - req.body.availableSeats > 0) { throw new Error('more users then account can handle'); }
+    if (acc.assets.seats - req.body.usedSeats < 0) { throw new Error('more users then account can handle'); }
   } catch (e) {
     res.status(400).json(e);
   }
-  acc.assets.availableSeats = req.body.availableSeats;
+  acc.assets.seats = req.body.seats;
   acc.assets.features = req.body.features;
   await Account.update({ _id: acc._id }, {
     plan: acc.plan,
     assets: {
       credits: acc.assets.credits,
-      availableSeats: acc.assets.availableSeats,
+      seats: acc.assets.seats,
       features: acc.assets.features,
     },
   });

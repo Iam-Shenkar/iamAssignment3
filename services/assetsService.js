@@ -16,51 +16,43 @@ const getAssetsByUser = async (email) => {
   return account.assets;
 };
 
-const checkFeatures = async (req) => {
-  const { email, feature } = req.params;
+const getFeatures = async (req) => {
+  const { email } = req.params;
   const assets = await getAssetsByUser(email);
   const currentFeatures = assets.features;
-  const isFeatureExists = currentFeatures.includes(feature);
   let result;
-  if (isFeatureExists) {
-    result = { status: 200, message: `OK, feature ${feature} exists and available`, data: feature };
+  if (currentFeatures) {
+    result = { status: 200, message: `OK, available features are: ${currentFeatures}`, data: currentFeatures };
   } else {
-    result = { status: 200, message: `No feature ${feature} doesn't exist`, data: 0 };
+    result = { status: 200, message: 'No features allowed', data: 0 };
   }
   return result;
 };
 
-const seatsCheck = async (req) => {
+const getSeats = async (req) => {
   const { email } = req.params;
-  const accountID = await getAccountByUser(email);
   const assets = await getAssetsByUser(email);
-  const { usedSeats } = assets;
-  const { availableSeats } = assets;
-  const remainSeats = usedSeats - availableSeats;
+  const { usedSeats, seats } = assets;
+  const remainSeats = seats - usedSeats;
   let result;
-  if (remainSeats >= 0) {
-    result = { status: 200, message: 'No seats remain', data: 0 };
+  if (remainSeats < 0) {
+    result = { status: 200, message: 'No seats available', data: 0 };
   } else {
-    result = { status: 200, message: `OK, remain seats: ${remainSeats}`, data: remainSeats };
-    await accountService.Account.update({ _id: accountID }, { 'assets.seats': remainSeats });
+    result = { status: 200, message: `OK, available seats: ${remainSeats}`, data: remainSeats };
   }
   return result;
 };
 
-const creditCheck = async (req) => {
-  const wantedCredit = req.params.credit;
+const getCredit = async (req) => {
   const assetsAccount = await getAssetsByUser(req.params.email);
-  const accountID = getAccountByUser(req.params.email);
   const currentCredit = assetsAccount.credits;
-  const remainCredit = currentCredit - wantedCredit;
   let result;
-  if (remainCredit < 0) {
-    result = { status: 200, message: 'No remain credit', data: 0 };
+  if (currentCredit <= 0) {
+    result = { status: 200, message: 'No available credit', data: 0 };
   } else {
-    result = { status: 200, message: `OK, remain seats: ${remainCredit}`, data: remainCredit };
-    accountService.Account.update({ _id: accountID }, { 'assets.credits': remainCredit });
+    result = { status: 200, message: `OK, available credit: ${currentCredit}`, data: currentCredit };
   }
   return result;
 };
 
-module.exports = { checkFeatures, seatsCheck, creditCheck };
+module.exports = { getFeatures, getSeats, getCredit };

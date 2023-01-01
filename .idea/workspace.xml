@@ -3,123 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4aab8737-fbd9-4846-acfc-318d0133534c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpntlm/.jshintrc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpntlm/.npmignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpntlm/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpntlm/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpntlm/httpntlm.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpntlm/ntlm.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpntlm/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpreq/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpreq/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpreq/contributors.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpreq/lib/httpreq.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/httpreq/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/CHANGELOG.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/decode.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/decode.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/JsonWebTokenError.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/JsonWebTokenError.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/NotBeforeError.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/NotBeforeError.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/TokenExpiredError.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/TokenExpiredError.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/psSupported.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/psSupported.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/timespan.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/lib/timespan.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/.bin/semver" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/.bin/semver.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/.bin/semver.ps1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/semver/CHANGELOG.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/semver/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/semver/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/semver/bin/semver" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/semver/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/semver/range.bnf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/node_modules/semver/semver.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/sign.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/sign.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/jsonwebtoken/verify.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/jsonwebtoken/verify.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.includes/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.includes/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.includes/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.includes/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isboolean/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isboolean/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isboolean/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isboolean/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isinteger/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isinteger/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isinteger/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isinteger/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isnumber/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isnumber/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isnumber/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isnumber/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isplainobject/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isplainobject/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isplainobject/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isplainobject/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isstring/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isstring/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isstring/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.isstring/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.once/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.once/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.once/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/lodash.once/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/.eslintrc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/.npmignore" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/.npmignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/.travis.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/Gruntfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/Gruntfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/lib/cookies.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/lib/cookies.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/lib/fetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/lib/fetch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/test/cookies-test.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/test/cookies-test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-fetch/test/fetch-test.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-fetch/test/fetch-test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/.eslintrc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/.npmignore" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/.npmignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/.travis.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/Gruntfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/Gruntfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/lib/shared.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/lib/shared.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/test/fixtures/message.html" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/test/fixtures/message.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-shared/test/shared-test.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-shared/test/shared-test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/.eslintrc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/.npmignore" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/.npmignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/Gruntfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/Gruntfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/lib/smtp-transport.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/lib/smtp-transport.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-smtp-transport/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/.npmignore" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/.npmignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/.travis.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/services.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/services.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/nodemailer-wellknown/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/smtp-connection/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/smtp-connection/.eslintrc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/smtp-connection/.npmignore" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/smtp-connection/.npmignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/smtp-connection/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/smtp-connection/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/smtp-connection/Gruntfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/smtp-connection/Gruntfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/smtp-connection/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/smtp-connection/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/smtp-connection/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/smtp-connection/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/smtp-connection/lib/data-stream.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/smtp-connection/lib/data-stream.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/smtp-connection/lib/smtp-connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/smtp-connection/lib/smtp-connection.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/smtp-connection/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/smtp-connection/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/underscore/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/underscore/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/underscore/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/underscore/underscore-min.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/underscore/underscore.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/assetsRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/assetsRoute.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/assetsService.js" beforeDir="false" afterPath="$PROJECT_DIR$/services/assetsService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -145,17 +28,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Roni/dev/phase3&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/Roni/dev",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Roni\dev\phase3\utiles" />
@@ -184,7 +67,7 @@
       <updated>1672086373139</updated>
       <workItem from="1672086375966" duration="33926000" />
       <workItem from="1672415094523" duration="1046000" />
-      <workItem from="1672493190707" duration="6614000" />
+      <workItem from="1672493190707" duration="10751000" />
     </task>
     <servers />
   </component>
@@ -212,7 +95,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/services/assetsService.js</url>
-          <line>36</line>
+          <line>35</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="44" />
         </line-breakpoint>

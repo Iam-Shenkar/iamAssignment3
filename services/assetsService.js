@@ -31,14 +31,14 @@ const checkFeatures = async (req) => {
 };
 
 const seatsCheck = async (req) => {
-  const wantedSeats = req.params.seat;
   const { email } = req.params;
   const accountID = await getAccountByUser(email);
   const assets = await getAssetsByUser(email);
-  const currentSeats = assets.seats;
-  const remainSeats = currentSeats - wantedSeats;
+  const { usedSeats } = assets;
+  const { availableSeats } = assets;
+  const remainSeats = usedSeats - availableSeats;
   let result;
-  if (remainSeats < 0) {
+  if (remainSeats >= 0) {
     result = { status: 200, message: 'No seats remain', data: 0 };
   } else {
     result = { status: 200, message: `OK, remain seats: ${remainSeats}`, data: remainSeats };

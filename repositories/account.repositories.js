@@ -19,8 +19,8 @@ module.exports = class AccountRepository {
     return this.storage.create(obj);
   }
 
-  update(email, param) {
-    return this.storage.update(email, param);
+  update(param, data) {
+    return this.storage.update(param, data);
   }
 
   delete(email) {

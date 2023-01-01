@@ -5,9 +5,10 @@ const accountSchema = new Schema({
   plan: { type: String, default: 'free' },
   creationDate: { type: Date, default: new Date() },
   status: { type: String, default: 'active' },
+  usedSeats: { type: String, default: 0 },
   assets: {
     credits: { type: Number, default: 0 },
-    seats: { type: Number, default: 0 },
+    availableSeats: { type: Number, default: 0 },
     features: [String],
   },
 }, { collection: 'account' });

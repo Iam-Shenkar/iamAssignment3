@@ -69,7 +69,6 @@ const codeTime = async (user, timeCode) => {
 const createAccount = async (email) => {
   await Account.create({ name: email });
   const account = await Account.retrieve({ name: email });
-  // eslint-disable-next-line no-underscore-dangle
   const accountId = account._id.toString();
   return accountId;
 };

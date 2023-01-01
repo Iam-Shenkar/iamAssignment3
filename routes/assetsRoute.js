@@ -9,7 +9,7 @@ assetsRoute.get('/', (req, res) => {
 });
 
 assetsRoute.get('/features/:feature/:email', assetsController.isFeatureAllowed);
-assetsRoute.get('/seats/:seat/:email', assetsController.getSeats);
+assetsRoute.get('/seats/:email', assetsController.getSeats);
 
 assetsRoute.get('/credits/:credit', assetsController.getCredit);
 /*

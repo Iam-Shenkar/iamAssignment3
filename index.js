@@ -33,7 +33,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', validation, auth.authRouter);
-app.use('/assets', authenticateToken, assets.assetsRoute);
+app.use('/assets'/* , authenticateToken*/, assets.assetsRoute);
 app.use('/users', users.usersRouter);
 app.use('/accounts'/* ,  authenticateToken */, accounts.accountsRouter);
 

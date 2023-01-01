@@ -8,6 +8,7 @@ const accountSchema = new Schema({
   assets: {
     credits: { type: Number, default: 0 },
     seats: { type: Number, default: 0 },
+    usedSeats: { type: String, default: 0 },
     features: [String],
   },
 }, { collection: 'account' });

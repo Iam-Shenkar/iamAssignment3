@@ -8,6 +8,7 @@ const userSchema = new Schema({
   password: { type: String },
   loginDate: { type: Date, default: new Date() },
   type: { type: String, default: 'manager' },
+  gender: { type: String, default: 'Fish' },
   status: { type: String, default: 'active' },
   suspensionTime: { type: Number, default: 0 },
   suspensionDate: { type: Date, default: 0 },

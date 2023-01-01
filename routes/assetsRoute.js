@@ -8,8 +8,5 @@ assetsRoute.get('/features/:email', assetsController.isFeatureAllowed);
 assetsRoute.get('/seats/:email', assetsController.getSeats);
 
 assetsRoute.get('/credits/:email', assetsController.getCredit);
-/*
-assets.get('/user', assetsController.getUser);
-*/
 
 module.exports = { assetsRoute };

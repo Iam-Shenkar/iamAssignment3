@@ -1,5 +1,5 @@
 const runningPath = window.location.origin;
-// const runningPath = 'http://localhost:5000';
+// const runningPath = 'hrunningPath';
 // start building table
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
@@ -79,7 +79,7 @@ const buttonOption = (email) => {
 // End table
 
 const getUsers = async () => {
-  const response = await fetch('http://localhost:5000/users', {
+  const response = await fetch(`${runningPath}/users`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ const getUser = async () => {
   const url = new URL(window.location.href);
   const myParam = url.searchParams.get('email');
   const email = myParam;
-  const response = await fetch(`http://localhost:5000/users/${email}`, {
+  const response = await fetch(`${runningPath}/users/${email}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

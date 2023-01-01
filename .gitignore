@@ -101,5 +101,5 @@ dist
 
 # TernJS port file
 .tern-port
-/.idea/
 /node_modules/
+/.idea/

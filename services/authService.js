@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
-const UsersRepository = require('../repositories/Users.repositories');
+const UsersRepository = require('../repositories/users.repositories');
 const { sendEmail } = require('../sendEmail/sendEmail');
 
 const User = new UsersRepository();
@@ -20,27 +20,19 @@ const validPassword = async (pass, userPassword) => {
 const userExist = async (email) => {
   const userEmail = email.toLowerCase();
   const user = await User.retrieve({ email: userEmail });
-  if (!user) throw new Error("user doesn't exist");
+  if (!user) return null;
   return user;
-};
-
-const userNotExist = async (email) => {
-  const userEmail = email.toLowerCase();
-  const user = await User.retrieve(userEmail);
-  if (user) throw new Error('User already exists');
 };
 
 const statusCheck = async (user) => {
   switch (user.status) {
     case 'active':
       break;
-
     case 'closed':
       throw new Error('User is closed');
-      break;
 
     case 'suspended':
-      const suspendTime = parseInt(user.suspensionTime);
+      const suspendTime = parseInt(user.suspensionTime, 10);
       const suspendStartDate = user.suspensionDate;
       const dateExpired = suspendStartDate;
 
@@ -52,6 +44,7 @@ const statusCheck = async (user) => {
         await unSuspend(user);
       }
       break;
+    default:
   }
 };
 
@@ -77,7 +70,6 @@ const sendEmailPassword = async (newPass, user) => {
 };
 
 module.exports = {
-  userNotExist,
   statusCheck,
   userExist,
   validPassword,

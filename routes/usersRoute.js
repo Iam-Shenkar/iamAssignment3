@@ -2,8 +2,9 @@ const express = require('express');
 
 const usersRouter = new express.Router();
 const usersController = require('../controllers/usersController');
+const { checkPermissionAdmin } = require('../middleware/validatorService');
 
-usersRouter.post('/', usersController.getUsers);
+usersRouter.post('/', checkPermissionAdmin, usersController.handleAddUser);
 
 usersRouter.get('/', usersController.handleGetUsers);
 usersRouter.get('/:email', usersController.handleGetUser);

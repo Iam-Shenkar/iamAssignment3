@@ -23,5 +23,7 @@ module.exports = {
       'always',
     ],
     'consistent-return': 0,
+    'no-case-declarations': 0,
+    'no-underscore-dangle': 0,
   },
 };

@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4aab8737-fbd9-4846-acfc-318d0133534c" name="Changes" comment="">
+
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/assetsRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/assetsRoute.js" afterDir="false" />
     </list>
@@ -68,7 +71,9 @@
       <updated>1672086373139</updated>
       <workItem from="1672086375966" duration="33926000" />
       <workItem from="1672415094523" duration="1046000" />
-      <workItem from="1672493190707" duration="14081000" />
+
+      <workItem from="1672493190707" duration="13745000" />
+
     </task>
     <servers />
   </component>

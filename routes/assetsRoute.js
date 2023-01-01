@@ -4,16 +4,9 @@ const { authenticateToken } = require('../middleware/validator');
 
 const assetsRoute = new express.Router();
 
-assetsRoute.get('/', (req, res) => {
-  console.log('HERE');
-});
-
-assetsRoute.get('/features/:feature/:email', assetsController.isFeatureAllowed);
+assetsRoute.get('/features/:email', assetsController.isFeatureAllowed);
 assetsRoute.get('/seats/:email', assetsController.getSeats);
 
-assetsRoute.get('/credits/:credit', assetsController.getCredit);
-/*
-assets.get('/user', assetsController.getUser);
-*/
+assetsRoute.get('/credits/:email', assetsController.getCredit);
 
 module.exports = { assetsRoute };

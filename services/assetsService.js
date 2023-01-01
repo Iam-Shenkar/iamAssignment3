@@ -24,7 +24,7 @@ const getFeatures = async (req) => {
   if (currentFeatures) {
     result = { status: 200, message: `OK, available features are: ${currentFeatures}`, data: currentFeatures };
   } else {
-    result = { status: 200, message: 'No features allowed', data: 0 };
+    result = { status: 200, message: 'No features available', data: 0 };
   }
   return result;
 };

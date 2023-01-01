@@ -4,10 +4,10 @@ const { authenticateToken } = require('../middleware/validator');
 
 const assetsRoute = new express.Router();
 
-assetsRoute.get('/features/:feature/:email', assetsController.isFeatureAllowed);
+assetsRoute.get('/features/:email', assetsController.isFeatureAllowed);
 assetsRoute.get('/seats/:email', assetsController.getSeats);
 
-assetsRoute.get('/credits/:credit/:email', assetsController.getCredit);
+assetsRoute.get('/credits/:email', assetsController.getCredit);
 /*
 assets.get('/user', assetsController.getUser);
 */

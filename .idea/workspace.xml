@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4aab8737-fbd9-4846-acfc-318d0133534c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/accountsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/accountsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/assetsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/assetsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/Account.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/Account.model.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/services/assetsService.js" beforeDir="false" afterPath="$PROJECT_DIR$/services/assetsService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,7 +39,8 @@
     "last_opened_file_path": "C:/Users/Roni/dev",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "AndroidSdkUpdater"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -67,7 +71,7 @@
       <updated>1672086373139</updated>
       <workItem from="1672086375966" duration="33926000" />
       <workItem from="1672415094523" duration="1046000" />
-      <workItem from="1672493190707" duration="10751000" />
+      <workItem from="1672493190707" duration="12346000" />
     </task>
     <servers />
   </component>
@@ -92,12 +96,6 @@
           <url>file://$PROJECT_DIR$/middleware/authenticate.js</url>
           <line>5</line>
           <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/services/assetsService.js</url>
-          <line>35</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="44" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

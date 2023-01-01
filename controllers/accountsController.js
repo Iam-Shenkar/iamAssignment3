@@ -30,7 +30,9 @@ const inviteUser = async (req, res) => {
 
 const getAccount = async (req, res) => {
   const user = await User.retrieve({ email: req.params.email });
+
   if (!user) throw new Error('user does not exists');
+
   const acc = await Account.retrieve({ _id: user.accountId });
   const users = await User.find({ accountId: user.accountId });
   const outputArray = users.reduce((accumulator, currentValue) => [

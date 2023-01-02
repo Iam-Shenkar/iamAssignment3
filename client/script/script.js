@@ -1,6 +1,5 @@
 const runningPath = window.location.origin;
-// const runningPath = 'hrunningPath';
-// start building table
+
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
   const row = thead.insertRow();
@@ -12,14 +11,35 @@ const generateTableHead = (table, data) => {
   }
 };
 
-const generateTable = (table, data) => {
+const generateUserTable = (table, data) => {
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
       const cell = row.insertCell();
       if (key === 'Edit') {
         const button = editButton(element.email);
-        const option = buttonOption(element.email);
+        const option = buttonOption(element.email, 'myProfile');
+        cell.appendChild(button);
+        cell.appendChild(option);
+      } else if (key === 'Status') {
+        const status = statusStyle(element[key]);
+        cell.appendChild(status);
+      } else {
+        const text = document.createTextNode(element[key]);
+        cell.appendChild(text);
+      }
+    }
+  }
+};
+
+const generateAccountTable = (table, data) => {
+  for (const element of data) {
+    const row = table.insertRow();
+    for (const key in element) {
+      const cell = row.insertCell();
+      if (key === 'Edit') {
+        const button = editButton(element.Name);
+        const option = buttonOption(element.Name, 'myAccount');
         cell.appendChild(button);
         cell.appendChild(option);
       } else if (key === 'Status') {
@@ -56,7 +76,7 @@ const editButton = () => {
   return bth;
 };
 
-const buttonOption = (email) => {
+const buttonOption = (email, path) => {
   console.log(email);
   const list = document.createElement('div');
   list.className = 'dropdown-menu';
@@ -70,65 +90,13 @@ const buttonOption = (email) => {
   view.className = 'dropdown-item';
 
   remove.setAttribute('onclick', '');
-  view.setAttribute('href', `${runningPath}/iamAssignment3/client/myProfile.html/?email=${email}`);
+  view.setAttribute('href', `${runningPath}/${path}.html?email=${email}`);
 
   list.appendChild(remove);
   list.appendChild(view);
   return list;
 };
-// End table
 
-const getUsers = async () => {
-  const response = await fetch(`${runningPath}/users`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  const body = await response.json();
-  const table = document.querySelector('table');
-  const data = Object.keys(body[0]);
-  generateTableHead(table, data);
-  generateTable(table, body);
-};
-
-// add user by admin
-// adminAddUser.addEventListener('click', async () => {
-//   const data = {
-//     name: document.getElementById('exampleInputName1').value,
-//     email: document.getElementById('exampleInputEmail3').value,
-//     password: document.getElementById('exampleInputPassword').value,
-//     Gender: document.getElementById('exampleSelectGender').value,
-//     Type: document.getElementById('exampleInputType').value,
-//   };
-//
-//   const response = await fetch('http://localhost:5000/users', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   });
-//   const body = await response.json();
-// });
-
-// const myAccount = async () => {
-//   const response = await fetch(`${runningPath}/accounts/dkracheli135@gmail.com`, {
-//     method: 'GET',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   });
-//
-//   const body = await response.json();
-//   const table = document.querySelector('table');
-//   const data = Object.keys(body[0]);
-//   generateTableHead(table, data);
-//   generateTable(table, body);
-// };
-
-// eslint-disable-next-line no-unused-vars
 const getUser = async () => {
   const url = new URL(window.location.href);
   const myParam = url.searchParams.get('email');
@@ -155,16 +123,94 @@ const editProfile = () => {
   }
 };
 
-const updataUser = async () => {
+const adminAddUser = async () => {
   const data = {
-
+    name: document.getElementById('exampleInputName1').value,
+    email: document.getElementById('exampleInputEmail3').value,
+    password: document.getElementById('exampleInputPassword').value,
+    gender: document.getElementById('exampleSelectGender').value,
   };
-  const response = await fetch(`${runningPath}/accounts/`, {
+  const response = await fetch(`${runningPath}/users/`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const body = await response.json();
+  if (response.status === 200) {
+    document.getElementById('userAddedSuccessfully').style.display = 'block';
+    document.getElementById('userAddText').innerText = `${data.name} added successfully`;
+  } else if (body.message) {
+    alert((body.message));
+  }
+};
+
+const getUsers = async () => {
+  const response = await fetch(`${runningPath}/users`, {
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   });
 
   const body = await response.json();
+  const table = document.querySelector('table');
+  const data = Object.keys(body[0]);
+  generateTableHead(table, data);
+  generateUserTable(table, body);
+};
+
+const getAccounts = async () => {
+  const response = await fetch(`${runningPath}/accounts`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const body = await response.json();
+  const table = document.querySelector('table');
+  const data = Object.keys(body[0]);
+  generateTableHead(table, data);
+  generateAccountTable(table, body);
+};
+
+const getAccount = async () => {
+  const url = new URL(window.location.href);
+  const myParam = url.searchParams.get('email');
+  const email = myParam;
+  const response = await fetch(`${runningPath}/accounts/${email}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.json();
+  const table = document.querySelector('table');
+  const plan = body.shift();
+
+  const data = Object.keys(body[1]);
+  generateTableHead(table, data);
+  generateUserTable(table, body);
+  document.getElementById('plan').innerText = plan.Plan;
+  document.getElementById('seats').innerText = plan.Seats;
+  document.getElementById('credits').innerText = plan.Credits;
+  document.getElementById('features').innerText = plan.Features;
+};
+
+const userInvitation = async () => {
+  const url = new URL(window.location.href);
+  const account = url.searchParams.get('email');
+  const email = document.getElementById('userEmail').value;
+  const response = await fetch(`${runningPath}/accounts/${account}/invite/${email}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.json();
+  if (response.status === 200) {
+    document.getElementById('userEmail').placeholder = body.message;
+  }
 };

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const path = require('path');
 const { userExist, statusCheck, validPassword } = require('../services/authService');
 const { generatePassword, sendEmailPassword } = require('../services/authService');
 
@@ -19,7 +20,8 @@ const loginControl = async (req, res, next) => {
         refreshToken: req.token.refreshToken,
       },
     );
-    res.status(200).json({ message: 'login' });
+
+    res.sendFile(path.join(__dirname, '.', 'client', 'homePage.html'));
   } catch (err) {
     // redirect logout
     res.status(401).json({ message: err.message });

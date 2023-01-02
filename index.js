@@ -38,7 +38,7 @@ app.use('/users', users.usersRouter);
 app.use('/accounts'/* ,  authenticateToken */, accounts.accountsRouter);
 
 app.all('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/index.html'));
+  res.sendFile(path.join(__dirname, './client/homePage.html'));
 }); // res.redirect('homePage.html')
 
 app.listen(port, () => console.log(`Express server is running on port ${port}`));

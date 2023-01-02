@@ -3,13 +3,11 @@ const { User } = require('../services/authService');
 
 const inviteUser = async (req, res) => {
   try {
-    checkPermission(req.user);
-    const account = await Account.retrieve({ _id: req.user.accountId });
-
+    // checkPermission(req.user);
+    const account = await Account.retrieve({ name: req.params.account });
     const invitedUser = await User.retrieve({ email: req.params.email });
-
     if (invitedUser) {
-      // if (account._id.toString() === invitedUser.accountId) throw new Error('nooooooooo');
+      if (account._id.toString() === invitedUser.accountId) throw new Error('user alredy......');
       await sendInvitation(req.params.email, invitedUser);
     } else {
       const newUser = {
@@ -20,7 +18,7 @@ const inviteUser = async (req, res) => {
         accountId: account._id.toString(),
       };
       await User.create(newUser);
-      await sendInvitation(req.user, newUser);
+      await sendInvitation(account.name, newUser);
     }
     res.status(200).json({ message: 'user invited' });
   } catch (err) {
@@ -63,6 +61,7 @@ const getAccounts = async (req, res) => {
       Credits: accounts[i].assets.credits,
       Features: accounts[i].assets.features.length,
       Status: accounts[i].status,
+      Edit: '',
     };
     outputArray.push(account);
   }

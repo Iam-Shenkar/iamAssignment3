@@ -21,7 +21,7 @@
             <input id="newUserEmail" name="email" placeholder="Email" required type="email"/>
             <input id="pass" name="pass" placeholder="Password" required type="password"/>
             <input id='repass' name="repass" placeholder="Retype your password" required type="password"/>
-            <button id="openEmailConfirmation" onclick="signUpData()">Sign Up</button>
+            <button id="openEmailConfirmation" onclick="register()">Sign Up</button>
             <span id="message"></span>
         </form>
     </div>
@@ -31,7 +31,7 @@
             <input id="userEmail" placeholder="Email" required type="email"/>
             <input id="userPass" placeholder="Password" required type="password"/>
             <a href="#" id="forgot">Forgot your password?</a>
-            <button onclick="loginData()">Log In</button>
+            <button onclick="login()">Log In</button>
         </form>
     </div>
     <div class="overlay-container">
@@ -55,8 +55,8 @@
                 close
                 </span>
         <h1>FORGOT PASSWORD ?</h1>
-        <input id="emailPorgetPass" placeholder="Email" type="email"/>
-        <button onclick="forgotPassweord()">Reset My Password</button>
+        <input id="emailResetPassword" placeholder="Email" type="email"/>
+        <button onclick="ResetPassweord()">Reset My Password</button>
     </div>
 </div>
 <div class="emailConfirmation" id="emailConfirmation">
@@ -66,14 +66,14 @@
                 </span>
         <form id="OTP">
             <h1>Email Confirmation </h1>
-            <input id="OTPtext" name="OTP" placeholder="Enter Code" type="text"/>
-            <button onclick="emailConfirmation()">Confirm</button>
+            <input id="oneTimePassword" name="OTP" placeholder="Enter Code" type="text"/>
+            <button onclick="confirmationCode()">Confirm</button>
         </form>
     </div>
 </div>
 
 
-<script src="/script.js"></script>
+<script src="./script/script-auth.js"></script>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 const otpGenerator = require('otp-generator');
 const bcrypt = require('bcrypt');
 const OTPRepository = require('../repositories/oneTimePass.repositories');
-const { typeUser } = require('../middleware/validatorService');
+const { userRole } = require('../middleware/validatorService');
 const { sendEmail } = require('../sendEmail/sendEmail');
 
 const { User } = require('./authService');
@@ -51,12 +51,12 @@ const sendEmailOneTimePass = async (user, newCode) => {
 };
 
 const createUser = async (user, accountID) => {
-  user.password = await bcrypt.hash(user.password, 12);
+  const hashPassword = await bcrypt.hash(user.password, 12);
   const newUser = {
     name: user.name,
     email: user.email,
-    password: user.password,
     accountId: accountID,
+    password: hashPassword,
   };
   await User.create(newUser);
 };

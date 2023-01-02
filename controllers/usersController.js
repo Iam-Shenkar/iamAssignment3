@@ -1,19 +1,16 @@
-const path = require('path');
-const { User } = require('../services/authService');
+const { User, userExist } = require('../services/authService');
 const { Account } = require('../services/accountService');
 const { oneTimePass, createAccount, createUser } = require('../services/registerService');
+const { userRole } = require('../middleware/validatorService');
 
 async function handleAddUser(req, res) {
   try {
-    const user = User.retrieve({ email: req.body.email });
+    const user = await userExist(req.body.email);
     if (user) throw new Error('user  already exists');
-    let accountID;
-    if (req.body.type === 'admin') {
-      accountID = null;
-    } else {
-      accountID = await createAccount(req.body.email);
-    }
+
+    const accountID = await createAccount(req.body.email);
     await createUser(req.body, accountID);
+
     return res.status(200)
       .json({ message: 'User was added' });
   } catch (e) {
@@ -41,7 +38,7 @@ async function handleGetUsers(req, res) {
 }
 
 async function handleGetUser(req, res) {
-  const user = await User.retrieve({ email: req.params.email });
+  const user = await User.retrieve({ email: req.user });
   const account = await Account.retrieve({ _id: user.accountId });
   const del = {
     name: user.name,

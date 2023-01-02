@@ -19,7 +19,8 @@ const loginControl = async (req, res, next) => {
         refreshToken: req.token.refreshToken,
       },
     );
-    res.status(200).json({ message: 'login' });
+
+    res.status(200).json(user.email);
   } catch (err) {
     // redirect logout
     res.status(401).json({ message: err.message });

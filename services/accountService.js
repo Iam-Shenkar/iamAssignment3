@@ -13,7 +13,7 @@ const sendInvitation = async (manager, user) => {
   };
   const details = {
     name: `${user.name}`,
-    manager: `${manager.name}`,
+    manager: `${manager}`,
     path: `${path}`,
   };
   await sendEmail(mailData, details);

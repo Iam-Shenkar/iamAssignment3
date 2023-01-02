@@ -42,7 +42,7 @@ const refreshTokenVerify = async (req, res) => {
     const accessToken = generateAccessToken({ email: user.email });
 
     res.set('authorization', accessToken);
-    req.user = user;
+    req.user = user.email;
 
     req.token = { accessToken: `Bearer ${accessToken}` };
   });
@@ -53,7 +53,7 @@ const authenticateToken = async (req, res, next) => {
 
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
-  if (token == null) return res.sendStatus(401);
+  // if (token == null) return res.sendStatus(401);
   await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err) => {
     if (err) {
       await refreshTokenVerify(req, res);
@@ -61,7 +61,7 @@ const authenticateToken = async (req, res, next) => {
       next();
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });
-      req.user = user;
+      req.user = user.email;
       req.token = { refreshToken: req.body.refreshToken, accessToken: authHeader };
       next();
     }

@@ -9,7 +9,7 @@ const registerController = require('../controllers/registerController');
 const googleController = require('../controllers/googleController');
 
 authRouter.all('/', (req, res) => {
-  res.sendFile('POC.html');
+  res.sendFile('index.html');
 }); // sendFile('Login.html')
 
 authRouter.post('/login', generateToken, loginController.loginControl);

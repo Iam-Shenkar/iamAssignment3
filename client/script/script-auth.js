@@ -59,6 +59,63 @@ const login = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  window.location.href = `${runningPath}/homePage.html?email=${data.email}`;
+};
+
+const register = async () => {
+  const data = {
+    name: document.getElementById('newUsername').value,
+    email: document.getElementById('newUserEmail').value,
+    password: document.getElementById('pass').value,
+  };
+  const response = await fetch(`${runningPath}/auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const body = await response.json();
+  if (response.status !== 200 && body.message) {
+    alert((body.message));
+  }
+};
+
+const confirmationCode = async () => {
+  const data = {
+    name: document.getElementById('newUsername').value,
+    email: document.getElementById('newUserEmail').value,
+    password: document.getElementById('pass').value,
+    code: document.getElementById('oneTimePassword').value,
+  };
+  const response = await fetch(`${runningPath}/auth/register/code`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const body = await response.json();
+  if (response.status !== 200 && body.message) {
+    alert((body.message));
+  }
+};
+
+const ResetPassweord = async () => {
+  const data = {
+    email: document.getElementById('emailResetPassword').value,
+  };
+  const response = await fetch(`${runningPath}/auth/register/code`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const body = await response.json();
+  if (response.status !== 200 && body.message) {
+    alert((body.message));
+  }
 };
 
 // document.onload;

@@ -38,7 +38,7 @@ async function handleGetUsers(req, res) {
 }
 
 async function handleGetUser(req, res) {
-  const user = await User.retrieve({ email: req.params.email });
+  const user = await User.retrieve({ email: req.user });
   const account = await Account.retrieve({ _id: user.accountId });
   const del = {
     name: user.name,

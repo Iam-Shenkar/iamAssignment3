@@ -190,7 +190,7 @@ const getAccount = async () => {
   const table = document.querySelector('table');
   const plan = body.shift();
 
-  const data = Object.keys(body[1]);
+  const data = Object.keys(body[0]);
   generateTableHead(table, data);
   generateUserTable(table, body);
   document.getElementById('plan').innerText = plan.Plan;

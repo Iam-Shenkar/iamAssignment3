@@ -278,6 +278,189 @@ function getEmailUser() {
 //
 // window.addEventListener('load', sideMenu);
 
+  switch (true) {
+    case time < 10:
+      greeting = 'Good morning,';
+      break;
+    case time < 20:
+      greeting = 'Good day,';
+      break;
+    default:
+      greeting = 'Good evening,';
+  }
+  console.log(getCookie('name'))
+  const name = (getCookie('name')).replaceAll('%20',' ');;
+  const email = getCookie('email');
+  document.getElementById('timeOfDay').innerHTML = `${greeting
+  } <span style="color: #222222" id="userNameTitle" class="text-black fw-bold">${name}</span>`;
+  userName = document.getElementById("userNameProfile")
+  userName.innerText = name;
+  userName = document.getElementById("userEmailProfile")
+  userName.innerHTML = email.replace('%40','&#064;');
+}
+
+
+const sideMenu = () => {
+  const email = getEmailUser();
+  const nav = document.getElementById('navSideMenu');
+  const title = MenuPermission();
+  for (const key of title) {
+    const list = document.createElement('li');
+    const link = document.createElement('a');
+
+    list.className = 'nav-item';
+    link.className = 'nav-link';
+
+    link.setAttribute('aria-expanded', 'false');
+    link.setAttribute('aria-controls', 'ui-basic');
+    link.setAttribute('href', `${runningPath}/${key.replace(' ', '')}.html?email=${email}`);
+    link.innerText = key;
+    nav.appendChild(list);
+    list.appendChild(link);
+  }
+};
+
+function MenuPermission() {
+  const role = getCookie('role');
+  const titleNavAdmin = ['My Profile', 'Accounts', 'Users', 'Add User'];
+  const titleNavUser = ['My Profile', 'My Account'];
+  if (role !== 'admin') {
+    return titleNavUser;
+  }
+  return titleNavAdmin;
+}
+
+window.addEventListener('load', sideMenu);
+
+const charts = async () => {
+  const responseUser = await fetch(`${runningPath}/users`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const users = await responseUser.json();
+  typeChart(users);
+
+  const responseAccount = await fetch(`${runningPath}/accounts`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const accounts = await responseAccount.json();
+  planChart(accounts);
+}
+
+const typeChart = (users)=> {
+  let roles = {};
+  for (let i = 0; i < users.length; i++) {
+    let role = users[i].Role;
+    if (roles[role] == null) {
+      roles[role] = 0;
+    }
+    roles[role]++;
+  }
+  for (let role in roles) {
+    roles[role] = (roles[role] / users.length) * 100;
+  }
+  let ctx = document.getElementById('typePieChart')
+    .getContext('2d');
+  let pieChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(roles),
+      datasets: [{
+        data: Object.values(roles),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          fontSize: 14
+        }
+      },
+      responsive: true,
+      aspectRatio: 1,
+    }
+  });
+}
+
+
+const planChart = (accounts) => {
+  console.log(accounts)
+  let plans = {};
+  for (let i = 0; i < accounts.length; i++) {
+    let plan = accounts[i].Plan;
+    if (plans[plan] == null) {
+      plans[plan] = 0;
+    }
+    plans[plan]++;
+  }
+  for (let plan in plans) {
+    plans[plan] = (plans[plan] / accounts.length) * 100;
+  }
+  let ctx = document.getElementById('myPieChart').getContext('2d');
+  let pieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: Object.keys(plans),
+      datasets: [{
+        data: Object.values(plans),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          fontSize: 14
+        }
+      },
+    },
+    responsive: true,
+    aspectRatio: 1,
+  });
+}
+
+const logo = document.getElementById('logo'); //or grab it by tagname etc
+logo.setAttribute('href', `${runningPath}/homePage.html`);
+
 // eslint-disable-next-line no-unused-vars
 const positiveNumber = () => {
   const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');

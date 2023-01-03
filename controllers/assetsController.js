@@ -3,28 +3,45 @@ const authService = require('../services/authService');
 const accountService = require('../services/accountService');
 
 const getAllAssets = async (req, res) => {
-  const user = authService.userExist(req.user.email);
-  if (!user) {
-    throw new Error("user doesn't exist");
+  try {
+    const user = authService.userExist(req.user.email);
+    if (!user) {
+      throw new Error("user doesn't exist");
+    }
+    const account = user.accountId;
+    const assets = await accountService.Account.retrieve({ _id: account });
+  }catch(err){
+    res.status(401).json("could not find assets");
   }
-  const account = user.accountId;
-  const assets = await accountService.Account.retrieve({ _id: account });
   res.send(assets);
 };
 
 const isFeatureAllowed = async (req, res) => {
-  const result = await assetsService.getFeatures(req);
-  res.status(result.status).json(result.message || result.data);
+  try {
+    const result = await assetsService.getFeatures(req);
+    res.status(result.status)
+      .json(result.message || result.data);
+  }catch(err){
+    res.status(401).json("could not find assets");
+  }
 };
 
 const getSeats = async (req, res) => {
+  try {
   const result = await assetsService.getSeats(req);
   res.status(result.status).json(result.message || result.data);
+  }catch(err){
+    res.status(401).json("could not find assets");
+  }
 };
 
 const getCredit = async (req, res) => {
+  try {
   const result = await assetsService.getCredit(req);
   res.status(result.status).json(result.message || result.data);
+}catch(err){
+  res.status(401).json("could not find assets");
+}
 };
 
 module.exports = {

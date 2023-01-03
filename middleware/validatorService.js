@@ -56,6 +56,14 @@ const checkPermissionAdmin = async (req, res, next) => {
   const user = await User.retrieve({ email: req.user });
   if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
   // check sit
+  try {
+    const user = await User.retrieve(req.body.mail);
+    if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
+    // check sit
+  }
+  catch(err){
+    res.status(403);
+  }
   next();
 };
 

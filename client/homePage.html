@@ -21,11 +21,12 @@
         href="https://www.bootstrapdash.com/demo/star-admin2-free/template/css/vertical-layout-light/style.css">
   <link rel="shortcut icon" href="https://www.bootstrapdash.com/demo/star-admin2-free/template/images/favicon.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
   <link rel="stylesheet" href="./css/style.css">
 
 </head>
 
-<body>
+<body onload="charts()">
 <div class="container-scroller">
   <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
@@ -34,9 +35,9 @@
           <i class="bi bi-list"></i>
         </button>
       </div>
-      <div>
-        <a class="navbar-brand brand-logo"
-           href="https://www.bootstrapdash.com/demo/star-admin2-free/template/index.html">
+      <div >
+        <a id="logo" class="navbar-brand brand-logo"
+           >
           <span>IAM <font color="blue">Team</font></span>
         </a>
       </div>
@@ -55,11 +56,9 @@
                  alt="Profile image"> </a>
           <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
             <div class="dropdown-header text-center">
-              <img class="img-md rounded-circle"
-                   src="https://www.bootstrapdash.com/demo/star-admin2-free/template/images/faces/face8.jpg"
-                   alt="Profile image">
-              <p class="mb-1 mt-3 font-weight-semibold">Allen Moreno</p>
-              <p class="fw-light text-muted mb-0">allenmoreno@gmail.com</p>
+              <img class="img-xs rounded-circle" src="https://cdn.onlinewebfonts.com/svg/img_569204.png" alt="Profile image">
+              <p class="mb-1 mt-3 font-weight-semibold" id="userNameProfile"></p>
+              <p class="fw-light text-muted mb-0" id="userEmailProfile"></p>
             </div>
             <a class="dropdown-item"><i
                     class="bi bi-person-circle dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i>
@@ -94,11 +93,20 @@
     </nav>
     <div class="main-panel">
       <div class="content-wrapper">
+        <div class="cards">
             <div class="card">
-              <div class="card-body" id="homePage">
-                <h1>Hello <span id="userName"></span> </h1>
+              <div class="card-body" style="width: 100%; height: 100%">
+                <h4>Users Types 2023</h4>
+                <canvas id="typePieChart" width="1100" height="150" ></canvas>
               </div>
             </div>
+        <div class="card">
+              <div class="card-body" style="width: 100%; height: 100%">
+                <h4>Plans 2023</span> </h4>
+                <canvas id="myPieChart" width="1100" height="150" ></canvas>
+              </div>
+            </div>
+        </div>
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
             <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">IAM Team</span>

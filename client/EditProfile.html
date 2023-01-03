@@ -35,8 +35,8 @@
                 </button>
             </div>
             <div>
-                <a class="navbar-brand brand-logo"
-                   href="https://www.bootstrapdash.com/demo/star-admin2-free/template/index.html">
+                <a id="logo" class="navbar-brand brand-logo"
+                   >
                     <span>IAM <font color="blue">Team</font></span>
                 </a>
             </div>
@@ -48,20 +48,18 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown d-none d-lg-block user-dropdown">
                     <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img class="img-xs rounded-circle" src="http://cdn.onlinewebfonts.com/svg/img_569204.png"
+                        <img class="img-xs rounded-circle" src="https://cdn.onlinewebfonts.com/svg/img_569204.png"
                              alt="Profile image"> </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                         <div class="dropdown-header text-center">
-                            <img class="img-md rounded-circle"
-                                 src="https://www.bootstrapdash.com/demo/star-admin2-free/template/images/faces/face8.jpg"
-                                 alt="Profile image">
-                            <p class="mb-1 mt-3 font-weight-semibold">Allen Moreno</p>
-                            <p class="fw-light text-muted mb-0">allenmoreno@gmail.com</p>
+                            <img class="img-xs rounded-circle" src="https://cdn.onlinewebfonts.com/svg/img_569204.png" alt="Profile image">
+                            <p class="mb-1 mt-3 font-weight-semibold" id="userNameProfile"></p>
+                            <p class="fw-light text-muted mb-0" id="userEmailProfile"></p>
                         </div>
                         <a class="dropdown-item"><i
                                 class="bi bi-person-circle dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i>
                             My Profile</a>
-                        <a class="dropdown-item"><i
+                        <a class="dropdown-item" id="logout"><i
                                 class="bi bi-box-arrow-right dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign
                             Out</a>
                     </div>
@@ -141,13 +139,19 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="exampleSelectStatus" class="col-sm-3 col-form-label">Status</label>
+                                        <label for="exampleUsersStatus" class="col-sm-3 col-form-label">Status</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" id="exampleSelectStatus">
-                                                <option>Active</option>
-                                                <option>Suspend</option>
-                                                <option>Close</option>
+                                            <select class="form-control" id="exampleUsersStatus" onchange="updateDaysOfSuspension()">
+                                                <option value="Active">Active</option>
+                                                <option value="Suspend">Suspend</option>
+                                                <option value="Close">Close</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="exampleAmountOfDays" class="col-sm-3 col-form-label">Amount Of Days</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control" id="exampleAmountOfDays" min="0" onkeyup="positiveNumber()" placeholder="0" readonly>
                                         </div>
                                     </div>
                                     <div class="btnEditUser">

@@ -37,8 +37,8 @@
 
                 </button>
             </div>
-            <div>
-                <a class="navbar-brand brand-logo"
+            <div >
+                <a id="logo" class="navbar-brand brand-logo"
                    href="http://www.bootstrapdash.com/demo/star-admin2-free/template/index.html">
                     <!-- <img src="http://www.bootstrapdash.com/demo/star-admin2-free/template/images/logo.svg" alt="logo"> -->
                     <span>IAM Team</span>
@@ -54,16 +54,14 @@
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown d-none d-lg-block user-dropdown">
-                    <a aria-expanded="false" class="nav-link" data-bs-toggle="dropdown" href="#" id="UserDropdown">
-                        <img alt="Profile image" class="img-xs rounded-circle"
-                             src="http://cdn.onlinewebfonts.com/svg/img_569204.png"> </a>
-                    <div aria-labelledby="UserDropdown" class="dropdown-menu dropdown-menu-right navbar-dropdown">
+                    <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="img-xs rounded-circle" src="https://cdn.onlinewebfonts.com/svg/img_569204.png"
+                             alt="Profile image"> </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                         <div class="dropdown-header text-center">
-                            <img alt="Profile image"
-                                 class="img-md rounded-circle"
-                                 src="http://www.bootstrapdash.com/demo/star-admin2-free/template/images/faces/face8.jpg">
-                            <p class="mb-1 mt-3 font-weight-semibold">Allen Moreno</p>
-                            <p class="fw-light text-muted mb-0">allenmoreno@gmail.com</p>
+                            <img class="img-xs rounded-circle" src="https://cdn.onlinewebfonts.com/svg/img_569204.png" alt="Profile image">
+                            <p class="mb-1 mt-3 font-weight-semibold" id="userNameProfile"></p>
+                            <p class="fw-light text-muted mb-0" id="userEmailProfile"></p>
                         </div>
                         <a class="dropdown-item"><i
                                 class="bi bi-person-circle dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i>

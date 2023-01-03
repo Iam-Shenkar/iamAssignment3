@@ -15,13 +15,13 @@ module.exports = class MongoStorage extends EventEmitter {
   connect() {
     const connectionUrl = process.env.DB_HOST;
     mongoose
-      .connect(connectionUrl)
-      .then(() => console.log(`connected to ${this.entityName} collection`))
-      .catch((err) => console.log(`connection error: ${err}`));
+        .connect(connectionUrl)
+        .then(() => console.log(`connected to ${this.entityName} collection`))
+        .catch((err) => console.log(`connection error: ${err}`));
   }
 
-  find() {
-    return this.Model.findOne({});
+  find(param) {
+    return this.Model.find(param);
   }
 
   retrieve(param) {

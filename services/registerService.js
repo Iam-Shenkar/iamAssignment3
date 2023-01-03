@@ -1,18 +1,25 @@
 const otpGenerator = require('otp-generator');
+const bcrypt = require('bcrypt');
 const OTPRepository = require('../repositories/oneTimePass.repositories');
 const { typeUser } = require('../middleware/validatorService');
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { httpError } = require('../classes/httpError');
 
-const oneTimePass = new OTPRepository();
 const { User } = require('./authService');
-const bcrypt = require('bcrypt');
+const { Account } = require('./accountService');
+
+
+const oneTimePass = new OTPRepository();
 
 const createOneTimePass = async (email) => {
-  const sendCode = otpGenerator.generate(6, { upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false });
+  const sendCode = otpGenerator.generate(6, {
+    upperCaseAlphabets: false,
+    lowerCaseAlphabets: false,
+    specialChars: false,
+  });
   const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
-  const addedOTP = await oneTimePass.create(newOneTimePass);
-  if (!addedOTP) throw new httpError('No new OTP created');
+  await oneTimePass.create(newOneTimePass);
+  if (!newOneTimePass) throw new httpError(400,'No new OTP created');
   return newOneTimePass;
 };
 
@@ -32,7 +39,7 @@ const existCode = async (email) => {
 };
 
 const otpCompare = async (UserCode, userCode) => {
-  if (userCode !== UserCode) throw new httpError(403, 'Incorrect code');
+  if (userCode !== UserCode) throw new httpError(412, 'Incorrect code');
 };
 
 const sendEmailOneTimePass = async (user, newCode) => {
@@ -58,11 +65,19 @@ const createUser = async (user) => {
     type: domain,
   };
   User.create(newUser);
+  if(!newUser) throw new httpError(400,'failed to add new user');
 };
 
 const codeTime = async (user, timeCode) => {
   const time = Math.abs(new Date().getMinutes() - user.creationDate.getMinutes());
   if (time < timeCode) return true;
+};
+
+const createAccount = async (email) => {
+  await Account.create({ name: email });
+  const account = await Account.retrieve({ name: email });
+  if (!account) throw new httpError(400,"failed to find account");
+  return account._id.toString();
 };
 
 module.exports = {
@@ -73,4 +88,5 @@ module.exports = {
   deleteFormOTP,
   existCode,
   createOneTimePass,
+  createAccount,
 };

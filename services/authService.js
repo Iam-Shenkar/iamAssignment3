@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const generator = require('generate-password');
 const { httpError } = require('../classes/httpError');
 const { sendEmail } = require('../sendEmail/sendEmail');
-const UsersRepository = require('../repositories/Users.repositories');
+const UsersRepository = require('../repositories/users.repositories');
 
 const User = new UsersRepository();
 
@@ -16,20 +16,14 @@ const unSuspend = async (user) => {
 };
 
 const validPassword = async (pass, userPassword) => {
-  if (!await bcrypt.compare(pass, userPassword)) throw new httpError(403, 'incorrect password');
+  if (!await bcrypt.compare(pass, userPassword)) throw new httpError(400, 'incorrect password');
 };
 
 const userExist = async (email) => {
   const userEmail = email.toLowerCase();
   const user = await User.retrieve({ email: userEmail });
-  if (!user) throw new httpError(404, 'user doesn\'t exist');
+  if (!user) return null;
   return user;
-};
-
-const userNotExist = async (email) => {
-  const userEmail = email.toLowerCase();
-  const user = await User.retrieve(userEmail);
-  if (user) throw new httpError(400, 'User already exists');
 };
 
 const statusCheck = async (user) => {
@@ -78,7 +72,6 @@ const sendEmailPassword = async (newPass, user) => {
 };
 
 module.exports = {
-  userNotExist,
   statusCheck,
   userExist,
   validPassword,

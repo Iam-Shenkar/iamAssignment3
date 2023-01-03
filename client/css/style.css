@@ -1,0 +1,58 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.brand-logo span{
+    font-size: 30px;
+    font-weight: bolder;
+    color: black;
+}
+
+.ps__rail-x{
+    left: 0;
+    bottom: 0;
+}
+.ps__thumb-x{
+    left: 0;
+    width: 0;
+}
+.ps__rail-y{
+    top: 0;
+    height: 664px;
+    right: 0;
+}
+.ps__thumb-y{
+    top: 0;
+    height: 567px;
+}
+.btnProfile{
+    display: flex;
+    justify-content: space-between;
+}
+.sr-only{
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+.card-body img{
+    width: 300px;
+    margin-left: 50px;
+}
+.btnInputAddUser input{
+    height: 45px;
+    width: 400px;
+    margin-left: 10px;
+    text-align: center;
+}
+.btnUpgrade, .btnEditUser{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.pie-card{
+    margin-left: 30px;
+    width: 900px;
+}
+.icon-card{
+    margin-left: 30px
+}

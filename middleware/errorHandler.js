@@ -8,6 +8,7 @@ const errorHandler = (error, req, res, next) => {
   logger.error({
     code: errStatus,
     message: errMsg,
+    date: new Date().toISOString().slice(0, 10)
   });
 
   res.status(errStatus).json({

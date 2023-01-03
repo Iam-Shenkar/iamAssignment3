@@ -18,7 +18,6 @@ const generateToken = (req, res, next) => {
       secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-
     res.set({ authorization: `Bearer ${accessToken}` });
     req.token = { refreshToken, accessToken: `Bearer ${accessToken}` };
     next();

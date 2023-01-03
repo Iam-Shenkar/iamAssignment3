@@ -277,3 +277,23 @@ function MenuPermission() {
 }
 
 window.addEventListener('load', sideMenu);
+
+const Logout = document.getElementById('logout');
+
+Logout.addEventListener('click', async () => {
+  const data = {
+    email: decodeURIComponent(getCookie('email')),
+  };
+  console.log(data);
+  const response = await fetch(`${runningPath}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const body = await response.json();
+  if (response.status !== 200 && body.message) {
+    alert((body.message));
+  }
+});

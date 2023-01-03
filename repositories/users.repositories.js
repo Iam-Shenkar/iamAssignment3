@@ -26,4 +26,8 @@ module.exports = class UsersRepository {
   delete(email) {
     return this.storage.delete(email);
   }
+
+  deleteMany(param) {
+    return this.storage.deleteMany(param);
+  }
 };

@@ -9,7 +9,7 @@ const logout = async (req, res) => {
   res.clearCookie('role');
   res.clearCookie('account');
   res.clearCookie('jwt');
-  res.redirect(process.env.runningPath);
+  res.redirect('../');
 };
 
 module.exports = { logout };

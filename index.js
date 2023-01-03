@@ -37,13 +37,7 @@ app.use('/auth', validation, auth.authRouter);
 app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', authenticateToken, users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
-
+app.get('/login', (req, res) => { res.sendFile(path.join(__dirname, './client/Login.html')); });
 app.use('/', authenticateToken, dashboard.dashboardRouter);
-app.use('/login', (req, res) => { res.sendFile(path.join(__dirname, '/client/index.html')); });
-
-app.all('*'/* if logged in go to dashboard, if not go to login*/);
-// app.all('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, './client/homePage.html'));
-// }); // res.redirect('homePage.html')
 
 app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));

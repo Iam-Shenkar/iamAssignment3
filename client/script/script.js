@@ -1,4 +1,5 @@
 const runningPath = window.location.origin;
+const Logout = document.getElementById('logout');
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
   const row = thead.insertRow();
@@ -259,7 +260,7 @@ const sideMenu = () => {
 
     link.setAttribute('aria-expanded', 'false');
     link.setAttribute('aria-controls', 'ui-basic');
-    link.setAttribute('href', `${runningPath}/${key.replace(' ', '')}.html?email=${email}`);
+    link.setAttribute('href', `${runningPath}/${key.replace(' ', '')}?email=${email}`);
     link.innerText = key;
     nav.appendChild(list);
     list.appendChild(link);
@@ -278,8 +279,6 @@ function MenuPermission() {
 
 window.addEventListener('load', sideMenu);
 
-const Logout = document.getElementById('logout');
-
 Logout.addEventListener('click', async () => {
   const data = {
     email: decodeURIComponent(getCookie('email')),
@@ -292,8 +291,7 @@ Logout.addEventListener('click', async () => {
     },
     body: JSON.stringify(data),
   });
-  const body = await response.json();
-  if (response.status !== 200 && body.message) {
-    alert((body.message));
-  }
+  // const body = await response.json();
+  if (response.status !== 302) { console.log('redirect'); }
+  window.location.href = `${runningPath}/`;
 });

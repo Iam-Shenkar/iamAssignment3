@@ -32,12 +32,12 @@ function generateAccessToken(user) {
 
 const refreshTokenVerify = async (req, res) => {
   const refreshToken = req.cookies.jwt;
-  if (refreshToken == null) return res.redirect('/');
+  if (refreshToken === null) return res.redirect('/login');
 
   const user = await User.retrieve({ refreshToken });
-  if (!user) return res.redirect('/').end();
+  if (!user) return res.redirect('/login');
   await jwt.verify(user.refreshToken, process.env.REFRESH_TOKEN_SECRET, (err) => {
-    if (err) return res.redirect('/').end();
+    if (err) return res.redirect('/login');
     const accessToken = generateAccessToken({ email: user.email });
 
     res.set('authorization', accessToken);
@@ -52,13 +52,10 @@ const authenticateToken = async (req, res, next) => {
 
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
-  if (token == null) return res.redirect('/');
+  // if (token == null) return res.redirect('/');
   await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err) => {
     if (err) {
       await refreshTokenVerify(req, res);
-      res.redirect('/');
-      res.end();
-
       next();
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });

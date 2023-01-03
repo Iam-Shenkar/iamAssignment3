@@ -1,15 +1,14 @@
 const express = require('express');
 
 const usersRouter = new express.Router();
-const {
-  addUser, getUsers, getUser, updateUser, deleteUser,
-} = require('../controllers/usersController');
-const { checkPermissionAdmin, checkPermission } = require('../middleware/validatorService');
+const usersController = require('../controllers/usersController');
+const { checkPermissionAdmin } = require('../middleware/validatorService');
 
-usersRouter.post('/', checkPermissionAdmin, addUser);
-usersRouter.get('/', getUsers);
-usersRouter.get('/:email', getUser);
-usersRouter.put('/:email', updateUser);
-usersRouter.delete('/:email', checkPermission, deleteUser);
+usersRouter.post('/invite', usersController.handleAddUser);
+usersRouter.get('/list', usersController.handleGetUsers);
+usersRouter.get('/:email', usersController.handleGetUser);
+
+usersRouter.put('/:email', usersController.handleUpdateUser);
+usersRouter.delete('/:email', usersController.handleDeleteUser);
 
 module.exports = { usersRouter };

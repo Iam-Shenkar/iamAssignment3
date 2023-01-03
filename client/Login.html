@@ -21,7 +21,7 @@
             <input id="newUserEmail" name="email" placeholder="Email" required type="email"/>
             <input id="pass" name="pass" placeholder="Password" required type="password"/>
             <input id='repass' name="repass" placeholder="Retype your password" required type="password"/>
-            <button id="openEmailConfirmation" onclick="register()">Sign Up</button>
+            <button type="button" id="openEmailConfirmation" onclick="register()">Sign Up</button>
             <span id="message"></span>
         </form>
     </div>
@@ -67,7 +67,7 @@
         <form id="OTP">
             <h1>Email Confirmation </h1>
             <input id="oneTimePassword" name="OTP" placeholder="Enter Code" type="text"/>
-            <button onclick="confirmationCode()">Confirm</button>
+            <button type="button" onclick="confirmationCode()">Confirm</button>
         </form>
     </div>
 </div>

@@ -46,24 +46,21 @@ const codeValidator = (code) => {
 };
 
 const checkPermission = async (req, res, next) => {
-  const user = await User.retrieve({ email: req.user });
+  const user = await User.retrieve(req.body.mail);
   if (user.type === 'user') throw new Error('Not authorized');
   // check sit
   next();
 };
 
 const checkPermissionAdmin = async (req, res, next) => {
-  const user = await User.retrieve({ email: req.user });
-  if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
-  // check sit
+  const user = await User.retrieve(req.body.mail);
   try {
-    const user = await User.retrieve(req.body.mail);
     if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
-    // check sit
+  } catch (e) {
+    console.log(e);
   }
-  catch(err){
-    res.status(403);
-  }
+  // check sit
+
   next();
 };
 

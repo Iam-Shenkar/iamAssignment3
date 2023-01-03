@@ -1,23 +1,25 @@
-const {
-  Account, createUserToAccount, sendInvitation, inviteAuthorization,
-} = require('../services/accountService');
+const { Account, sendInvitation } = require('../services/accountService');
 const { User } = require('../services/authService');
-const { userRole } = require('../middleware/validatorService');
 
 const inviteUser = async (req, res) => {
   try {
-    const account = await Account.retrieve({ _id: req.params.accountId });
+    const manager = await User.retrieve({ email: req.user });
+    const account = await Account.retrieve({ _id: manager.accountId });
     const invitedUser = await User.retrieve({ email: req.params.email });
-
     if (invitedUser) {
-      inviteAuthorization(account, invitedUser);
-      await sendInvitation(account, invitedUser);
+      if (account._id.toString() === invitedUser.accountId) throw new Error('user already......');
+      await sendInvitation(req.params.email, invitedUser);
     } else {
-      if (userRole(req.params.email) === 'admin') throw new Error('Cant add Admins to an account');
-      const newUser = await createUserToAccount(req.params.email, account);
+      const newUser = {
+        email: req.params.email,
+        name: 'stranger',
+        type: 'user',
+        status: 'pending',
+        accountId: account._id.toString(),
+      };
+      await User.create(newUser);
       await sendInvitation(account.name, newUser);
     }
-
     res.status(200).json({ message: 'user invited' });
   } catch (err) {
     res.status(401).json({ message: err.message });
@@ -25,19 +27,17 @@ const inviteUser = async (req, res) => {
 };
 
 const getAccount = async (req, res) => {
-  const user = User.retrieve({ email: req.user });
   const acc = await Account.retrieve({ _id: req.params.accountId });
   const users = await User.find({ accountId: req.params.accountId });
-  const outputArray = users.reduce((accumulator, currentValue) => [
-    ...accumulator,
+  const outputArray = users.reduce((accumulator, currentValue) => [...accumulator,
     {
       Name: currentValue.name,
       email: currentValue.email,
       Role: currentValue.type,
       Status: currentValue.status,
       Gender: currentValue.gender,
-    },
-  ], []);
+      Edit: '',
+    }], []);
   const { features } = acc.assets;
   outputArray.unshift({
     Plan: acc.plan, Seats: acc.assets.seats, Credits: acc.assets.credits, Features: features,
@@ -89,8 +89,8 @@ const editAccount = async (req, res) => {
 const disableAccount = async (req, res) => {
   if (!req.body.name) { res.status(401); }
   const acc = Account.find({ name: req.body.name });
-  const users = User.find({ accountId: acc._id });
-  // users.i;
+  User.deleteMany({ accountId: acc._id });
+  Account.update({ _id: acc._id }, { status: 'disabled' });
 };
 
 module.exports = {

@@ -1,4 +1,5 @@
 const runningPath = window.location.origin;
+const Logout = document.getElementById('logout');
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
   const row = thead.insertRow();
@@ -315,7 +316,7 @@ const sideMenu = () => {
 
     link.setAttribute('aria-expanded', 'false');
     link.setAttribute('aria-controls', 'ui-basic');
-    link.setAttribute('href', `${runningPath}/${key.replace(' ', '')}.html?email=${email}`);
+    link.setAttribute('href', `${runningPath}/${key.replace(' ', '')}?email=${email}`);
     link.innerText = key;
     nav.appendChild(list);
     list.appendChild(link);
@@ -333,6 +334,23 @@ function MenuPermission() {
 }
 
 window.addEventListener('load', sideMenu);
+
+Logout.addEventListener('click', async () => {
+  const data = {
+    email: decodeURIComponent(getCookie('email')),
+  };
+  console.log(data);
+  const response = await fetch(`${runningPath}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  // const body = await response.json();
+  if (response.status !== 302) { console.log('redirect'); }
+  window.location.href = `${runningPath}/`;
+});
 
 const charts = async () => {
   const responseUser = await fetch(`${runningPath}/users`, {
@@ -477,3 +495,4 @@ const updateDaysOfSuspension = () => {
   const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
+

@@ -50,14 +50,13 @@ const sendEmailOneTimePass = async (user, newCode) => {
   await sendEmail(mailData, details);
 };
 
-const createUser = async (user, accountID, role) => {
+const createUser = async (user, accountID) => {
   const hashPassword = await bcrypt.hash(user.password, 12);
   const newUser = {
     name: user.name,
     email: user.email,
     accountId: accountID,
     password: hashPassword,
-    type: role,
   };
   await User.create(newUser);
 };
@@ -69,15 +68,9 @@ const codeTime = async (user, timeCode) => {
 
 const createAccount = async (email) => {
   await Account.create({ name: email });
-  await delay(100);
-  const account = await Account.retrieve({ name: email });
-  const accountId = account._id.toString();
-  return accountId;
+  return Account.retrieve({ name: email });
 };
 
-async function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 module.exports = {
   codeTime,
   sendEmailOneTimePass,

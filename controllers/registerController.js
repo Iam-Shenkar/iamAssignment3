@@ -39,9 +39,10 @@ const handleConfirmCode = async (req, res) => {
 
     const oneTimePassRecord = await existCode(req.body.email);
     await register.otpCompare(req.body.code, oneTimePassRecord.code);
-    const accountID = await createAccount(req.body.email);
-    await register.createUser(req.body, accountID);
-    return res.status(200)
+    const account = await createAccount(req.body.email);
+    await register.createUser(req.body, account._id.toString());
+    console.log(`user ${req.body.email} was added`);
+    res.status(200)
       .json({ message: 'User was added' });
   } catch (e) {
     return res.status(401)

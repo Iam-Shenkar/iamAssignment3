@@ -22,7 +22,8 @@ const loginControl = async (req, res, next) => {
     res.cookie('name', user.name);
     res.cookie('role', user.type);
     res.cookie('account', user.accountId);
-    res.status(200).json(user.email);
+    res.redirect('/');
+    res.end();
   } catch (err) {
     // redirect logout
     res.status(401).json({ message: err.message });

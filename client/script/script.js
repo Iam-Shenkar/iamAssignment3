@@ -226,10 +226,57 @@ function getEmailUser() {
   return `${value[0]}@${value[1]}`;
 }
 
-document.onload;
-{
-  let greeting;
-  const time = new Date().getHours();
+// document.onload;
+// {
+//   let greeting;
+//   const time = new Date().getHours();
+//
+//   switch (true) {
+//     case time < 10:
+//       greeting = 'Good morning,';
+//       break;
+//     case time < 20:
+//       greeting = 'Good day,';
+//       break;
+//     default:
+//       greeting = 'Good evening,';
+//   }
+//   const name = getCookie('name');
+//   document.getElementById('timeOfDay').innerHTML = `${greeting
+//   } <span style="color: #222222" id="userNameTitle" class="text-black fw-bold">${name}</span>`;
+// }
+//
+// const sideMenu = () => {
+//   const email = getEmailUser();
+//   const nav = document.getElementById('navSideMenu');
+//   const title = MenuPermission();
+//   for (const key of title) {
+//     const list = document.createElement('li');
+//     const link = document.createElement('a');
+//
+//     list.className = 'nav-item';
+//     link.className = 'nav-link';
+//
+//     link.setAttribute('aria-expanded', 'false');
+//     link.setAttribute('aria-controls', 'ui-basic');
+//     link.setAttribute('href', `${runningPath}/${key.replace(' ', '')}.html?email=${email}`);
+//     link.innerText = key;
+//     nav.appendChild(list);
+//     list.appendChild(link);
+//   }
+// };
+//
+// function MenuPermission() {
+//   const role = getCookie('role');
+//   const titleNavAdmin = ['My Profile', 'My Account', 'Accounts', 'Users', 'Add User'];
+//   const titleNavUser = ['My Profile', 'My Account'];
+//   if (role !== 'admin') {
+//     return titleNavUser;
+//   }
+//   return titleNavAdmin;
+// }
+//
+// window.addEventListener('load', sideMenu);
 
   switch (true) {
     case time < 10:
@@ -413,3 +460,18 @@ const planChart = (accounts) => {
 
 const logo = document.getElementById('logo'); //or grab it by tagname etc
 logo.setAttribute('href', `${runningPath}/homePage.html`);
+
+// eslint-disable-next-line no-unused-vars
+const positiveNumber = () => {
+  const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
+  if (exampleAmountOfDays.value < 0) {
+    exampleAmountOfDays.value *= -1;
+  }
+};
+
+// eslint-disable-next-line no-unused-vars
+const updateDaysOfSuspension = () => {
+  const select = document.getElementById('exampleUsersStatus');
+  const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
+  exampleAmountOfDays.readOnly = select.value !== 'Suspend';
+};

@@ -139,13 +139,19 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="exampleSelectStatus" class="col-sm-3 col-form-label">Status</label>
+                                        <label for="exampleUsersStatus" class="col-sm-3 col-form-label">Status</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control" id="exampleSelectStatus">
-                                                <option>Active</option>
-                                                <option>Suspend</option>
-                                                <option>Close</option>
+                                            <select class="form-control" id="exampleUsersStatus" onchange="updateDaysOfSuspension()">
+                                                <option value="Active">Active</option>
+                                                <option value="Suspend">Suspend</option>
+                                                <option value="Close">Close</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="exampleAmountOfDays" class="col-sm-3 col-form-label">Amount Of Days</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control" id="exampleAmountOfDays" min="0" onkeyup="positiveNumber()" placeholder="0" readonly>
                                         </div>
                                     </div>
                                     <div class="btnEditUser">

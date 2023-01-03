@@ -1,5 +1,4 @@
 const runningPath = window.location.origin;
-
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
   const row = thead.insertRow();
@@ -226,3 +225,55 @@ function getEmailUser() {
   const value = getCookie('email').split('%40');
   return `${value[0]}@${value[1]}`;
 }
+
+document.onload;
+{
+  let greeting;
+  const time = new Date().getHours();
+
+  switch (true) {
+    case time < 10:
+      greeting = 'Good morning,';
+      break;
+    case time < 20:
+      greeting = 'Good day,';
+      break;
+    default:
+      greeting = 'Good evening,';
+  }
+  const name = getCookie('name');
+  document.getElementById('timeOfDay').innerHTML = `${greeting
+  } <span style="color: #222222" id="userNameTitle" class="text-black fw-bold">${name}</span>`;
+}
+
+const sideMenu = () => {
+  const email = getEmailUser();
+  const nav = document.getElementById('navSideMenu');
+  const title = MenuPermission();
+  for (const key of title) {
+    const list = document.createElement('li');
+    const link = document.createElement('a');
+
+    list.className = 'nav-item';
+    link.className = 'nav-link';
+
+    link.setAttribute('aria-expanded', 'false');
+    link.setAttribute('aria-controls', 'ui-basic');
+    link.setAttribute('href', `${runningPath}/${key.replace(' ', '')}.html?email=${email}`);
+    link.innerText = key;
+    nav.appendChild(list);
+    list.appendChild(link);
+  }
+};
+
+function MenuPermission() {
+  const role = getCookie('role');
+  const titleNavAdmin = ['My Profile', 'My Account', 'Accounts', 'Users', 'Add User'];
+  const titleNavUser = ['My Profile', 'My Account'];
+  if (role !== 'admin') {
+    return titleNavUser;
+  }
+  return titleNavAdmin;
+}
+
+window.addEventListener('load', sideMenu);

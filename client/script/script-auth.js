@@ -117,23 +117,3 @@ const ResetPassweord = async () => {
     alert((body.message));
   }
 };
-
-// document.onload;
-// {
-//   let greeting;
-//   const time = new Date().getHours();
-//
-//   switch (true) {
-//     case time < 10:
-//       greeting = 'Good morning,';
-//       break;
-//     case time < 20:
-//       greeting = 'Good day,';
-//       break;
-//     default:
-//       greeting = 'Good evening,';
-//   }
-//
-//   document.getElementById('timeOfDay').innerHTML = `${greeting
-//   } <span style="color: #222222" id="userNameTitle">John Doe</span>`;
-// }

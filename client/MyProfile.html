@@ -4,7 +4,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>My Account</title>
+    <title>IAM </title>
     <link rel="stylesheet"
           href="https://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/feather/feather.css">
     <link rel="stylesheet"
@@ -21,12 +21,11 @@
           href="https://www.bootstrapdash.com/demo/star-admin2-free/template/css/vertical-layout-light/style.css">
     <link rel="shortcut icon" href="https://www.bootstrapdash.com/demo/star-admin2-free/template/images/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 
 </head>
 
-<body onload="getAccount()">
+<body onload="getUser()">
 <div class="container-scroller">
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
@@ -37,7 +36,7 @@
             </div>
             <div>
                 <a class="navbar-brand brand-logo"
-                   href="https://www.bootstrapdash.com/demo/star-admin2-free/template/index.html">
+                   href="http://www.bootstrapdash.com/demo/star-admin2-free/template/index.html">
                     <span>IAM <font color="blue">Team</font></span>
                 </a>
             </div>
@@ -45,8 +44,8 @@
         <div class="navbar-menu-wrapper d-flex align-items-top">
             <ul class="navbar-nav">
                 <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-                    <h1 class="welcome-text">Good Morning, <span class="text-black fw-bold">John Doe</span></h1>
-                    <h3 class="welcome-sub-text">Your performance summary this week </h3>
+                    <h1 class="welcome-text" id="timeOfDay"> </h1>
+                    <h3 class="welcome-sub-text">Welcome to the IAM project </h3>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
@@ -89,82 +88,72 @@
 
 
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link addEmail" href= "addUser.html" aria-expanded="false"
-                       aria-controls="ui-basic">Add User
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link addEmail" href="myProfile.html" aria-expanded="false"
-                       aria-controls="ui-basic">My Profile
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link addEmail" href="accounts.html" aria-expanded="false"
-                       aria-controls="ui-basic">Accounts
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link addEmail" href="users.html" aria-expanded="false"
-                       aria-controls="ui-basic">Users
-                    </a>
-                </li>
+            <ul class="nav" id="navSideMenu">
 
             </ul>
         </nav>
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="row">
-                    <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="col-md-8 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Users:</h4>
-                                <div class="table-responsive">
-                                    <table class="table" id="myAccountsTable">
-
-                                    </table>
-                                </div>
-                                <div class="btnInputAddUser">
-                                <button type="button" class="btn btn-primary mb-2" onclick="userInvitation()">Add User</button>
-                                <label>
-                                    <input id="userEmail" type="email" placeholder="example@gmail.com">
-                                </label>
-                                </div>
+                                <h4 class="card-title">User Profile</h4>
+                                <form class="forms-sample">
+                                    <div class="form-group">
+                                        <label for="exampleInputUsername1">Name</label>
+                                        <input type="text" class="form-control" id="exampleInputUsername1"
+                                               placeholder="Name" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email address</label>
+                                        <input type="email" class="form-control" id="exampleInputEmail1"
+                                               placeholder="Email" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputRole">Role</label>
+                                        <input type="text" class="form-control" id="exampleInputRole"
+                                               placeholder="Type" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputAccount">Account</label>
+                                        <input type="text" class="form-control" id="exampleInputAccount"
+                                               value="FREE" readonly>
+                                    </div>
+                                    <div class="btnProfile">
+                                        <button type="button" class="btn btn-warning me-2" onclick="editProfile()">Edit</button>
+                                        <button type="button" class="btn btn-success" onclick="updataUser()">Save</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Our Plan : </h4>
-                            <section id="ourPlan">
-                            <h5>Plan: <span id="plan"></span></h5>
-                            <h5>Seats: <span  id="seats"></span></h5>
-                            <h5>Credits: <span id="credits"></span></h5>
-                            <h5>Features: <span id="features">Free</span></h5>
-                            </section>
-                            <div class="btnUpgrade">
-                                <button type="button" class="btn btn-danger">Upgrade</button>
-                                <button type="button" class="btn btn-warning">Edit</button>
+                    <div class="col-md-5 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Change Password</h4>
+                                <form class="form-inline">
+                                    <label class="sr-only" for="inlineFormInputOldPassword">Old Password</label>
+                                    <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputOldPassword"
+                                           placeholder="Old Password">
+
+                                    <label class="sr-only" for="inlineFormInputNewPassword">New Password</label>
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <input type="text" class="form-control" id="inlineFormInputNewPassword"
+                                               placeholder="New Password">
+                                    </div>
+                                    <br>
+                                    <button type="submit" class="btn btn-primary mb-2">Update</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="chartjs-size-monitor">
-                            <div class="chartjs-size-monitor-expand">
-                                <div class="">
-
-                                </div>
-                            </div>
-                            <div class="chartjs-size-monitor-shrink"><div class="">
-
-                            </div>
+                    <div class="col-md-3 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="images/SORRRT%20IAM.png" alt="SORRRT IAM">
                             </div>
                         </div>
-                        <h4 class="card-title">Pie chart</h4>
-                        <canvas id="pieChart" style="display: block; width: 352px; height: 176px;" width="352" height="176" class="chartjs-render-monitor"></canvas>
                     </div>
                 </div>
                 <footer class="footer">
@@ -182,6 +171,6 @@
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/hoverable-collapse.js"></script>
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/settings.js"></script>
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/todolist.js"></script>
-<script src="./script/script.js"></script>
+<script src="../script/script.js"></script>
 </body>
 </html>

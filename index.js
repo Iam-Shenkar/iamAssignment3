@@ -13,6 +13,7 @@ const path = require('path');
 const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');
 const assets = require('./routes/assetsRoute');
+const dashboard = require('./routes/dashboardRoute');
 
 const accounts = require('./routes/accountsRouter');
 const { validation } = require('./middleware/validator');
@@ -36,6 +37,11 @@ app.use('/auth', validation, auth.authRouter);
 app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', authenticateToken, users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
+
+app.use('/', authenticateToken, dashboard.dashboardRouter);
+app.use('/login', (req, res) => { res.sendFile(path.join(__dirname, '/client/index.html')); });
+
+app.all('*'/* if logged in go to dashboard, if not go to login*/);
 // app.all('/', (req, res) => {
 //   res.sendFile(path.join(__dirname, './client/homePage.html'));
 // }); // res.redirect('homePage.html')

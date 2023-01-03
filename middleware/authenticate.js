@@ -32,12 +32,12 @@ function generateAccessToken(user) {
 
 const refreshTokenVerify = async (req, res) => {
   const refreshToken = req.cookies.jwt;
-  if (refreshToken == null) return res.status(403).json({ message: 'Unauthorized' });
+  if (refreshToken == null) return res.redirect('/');
 
   const user = await User.retrieve({ refreshToken });
-  if (!user) return res.status(403).json({ message: 'Unauthorized' });
+  if (!user) return res.redirect('/').end();
   await jwt.verify(user.refreshToken, process.env.REFRESH_TOKEN_SECRET, (err) => {
-    if (err) return res.status(403).json({ message: err.message });
+    if (err) return res.redirect('/').end();
     const accessToken = generateAccessToken({ email: user.email });
 
     res.set('authorization', accessToken);
@@ -48,15 +48,17 @@ const refreshTokenVerify = async (req, res) => {
 };
 
 const authenticateToken = async (req, res, next) => {
-  console.log(req.cookies.jwt);
+  console.log('checked token');
 
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
-  // if (token == null) return res.sendStatus(401);
+  if (token == null) return res.redirect('/');
   await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err) => {
     if (err) {
       await refreshTokenVerify(req, res);
-      if (res.statusCode !== 200) return res.send();
+      res.redirect('/');
+      res.end();
+
       next();
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });

@@ -241,7 +241,8 @@ document.onload;
     default:
       greeting = 'Good evening,';
   }
-  const name = getCookie('name');
+  console.log(getCookie('name'))
+  const name = (getCookie('name')).replaceAll('%20',' ');;
   const email = getCookie('email');
   document.getElementById('timeOfDay').innerHTML = `${greeting
   } <span style="color: #222222" id="userNameTitle" class="text-black fw-bold">${name}</span>`;
@@ -319,7 +320,7 @@ const typeChart = (users)=> {
   let ctx = document.getElementById('typePieChart')
     .getContext('2d');
   let pieChart = new Chart(ctx, {
-    type: 'pie',
+    type: 'doughnut',
     data: {
       labels: Object.keys(roles),
       datasets: [{
@@ -350,7 +351,9 @@ const typeChart = (users)=> {
         labels: {
           fontSize: 14
         }
-      }
+      },
+      responsive: true,
+      aspectRatio: 1,
     }
   });
 }
@@ -401,11 +404,12 @@ const planChart = (accounts) => {
         labels: {
           fontSize: 14
         }
-      }}
+      },
+    },
+    responsive: true,
+    aspectRatio: 1,
   });
 }
-
-//window.addEventListener('load', charts);
 
 const logo = document.getElementById('logo'); //or grab it by tagname etc
 logo.setAttribute('href', `${runningPath}/homePage.html`);

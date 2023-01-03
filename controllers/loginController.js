@@ -20,6 +20,10 @@ const loginControl = async (req, res, next) => {
       },
     );
 
+    res.cookie('email', user.email);
+    res.cookie('name', user.name);
+    res.cookie('role', user.type);
+    res.cookie('account', user.accountId);
     res.status(200).json(user.email);
   } catch (err) {
     // redirect logout

@@ -18,7 +18,7 @@ const generateUserTable = (table, data) => {
       const cell = row.insertCell();
       if (key === 'Edit') {
         const button = editButton(element.email);
-        const option = buttonOption(element.email, 'myProfile');
+        const option = buttonOption(element.email, 'myProfile', 'email');
         cell.appendChild(button);
         cell.appendChild(option);
       } else if (key === 'Status') {
@@ -36,18 +36,20 @@ const generateAccountTable = (table, data) => {
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
-      const cell = row.insertCell();
-      if (key === 'Edit') {
-        const button = editButton(element.Name);
-        const option = buttonOption(element.Name, 'myAccount');
-        cell.appendChild(button);
-        cell.appendChild(option);
-      } else if (key === 'Status') {
-        const status = statusStyle(element[key]);
-        cell.appendChild(status);
-      } else {
-        const text = document.createTextNode(element[key]);
-        cell.appendChild(text);
+      if (key !== 'id') {
+        const cell = row.insertCell();
+        if (key === 'Edit') {
+          const button = editButton(element.id);
+          const option = buttonOption(element.id, 'myAccount', 'id');
+          cell.appendChild(button);
+          cell.appendChild(option);
+        } else if (key === 'Status') {
+          const status = statusStyle(element[key]);
+          cell.appendChild(status);
+        } else {
+          const text = document.createTextNode(element[key]);
+          cell.appendChild(text);
+        }
       }
     }
   }
@@ -76,8 +78,7 @@ const editButton = () => {
   return bth;
 };
 
-const buttonOption = (email, path) => {
-  console.log(email);
+const buttonOption = (email, path, val) => {
   const list = document.createElement('div');
   list.className = 'dropdown-menu';
   list.setAttribute('aria-labelledby', 'dropdownMenuIconButton6');
@@ -90,7 +91,7 @@ const buttonOption = (email, path) => {
   view.className = 'dropdown-item';
 
   remove.setAttribute('onclick', '');
-  view.setAttribute('href', `${runningPath}/${path}.html?email=${email}`);
+  view.setAttribute('href', `${runningPath}/${path}.html?${val}=${email}`);
 
   list.appendChild(remove);
   list.appendChild(view);
@@ -99,8 +100,8 @@ const buttonOption = (email, path) => {
 
 const getUser = async () => {
   const url = new URL(window.location.href);
-  const myParam = url.searchParams.get('email');
-  const email = myParam;
+  let email = url.searchParams.get('email');
+  if (!email) email = getCookie('email');
   const response = await fetch(`${runningPath}/users/${email}`, {
     method: 'GET',
     headers: {
@@ -171,16 +172,16 @@ const getAccounts = async () => {
 
   const body = await response.json();
   const table = document.querySelector('table');
-  const data = Object.keys(body[0]);
+  const data = Object.keys(body[0]).splice(1, 6);
   generateTableHead(table, data);
   generateAccountTable(table, body);
 };
 
 const getAccount = async () => {
   const url = new URL(window.location.href);
-  const myParam = url.searchParams.get('email');
-  const email = myParam;
-  const response = await fetch(`${runningPath}/accounts/${email}`, {
+  let id = url.searchParams.get('id');
+  if (!id) id = getCookie('account');
+  const response = await fetch(`${runningPath}/accounts/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -214,3 +215,14 @@ const userInvitation = async () => {
     document.getElementById('userEmail').placeholder = body.message;
   }
 };
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function getEmailUser() {
+  const value = getCookie('email').split('%40');
+  return `${value[0]}@${value[1]}`;
+}

@@ -4,7 +4,8 @@ const { User } = require('../services/authService');
 const inviteUser = async (req, res) => {
   try {
     // checkPermission(req.user);
-    const account = await Account.retrieve({ name: req.params.account });
+    const manager = await User.retrieve({ email: req.user });
+    const account = await Account.retrieve({ _id: manager.accountId });
     const invitedUser = await User.retrieve({ email: req.params.email });
     if (invitedUser) {
       if (account._id.toString() === invitedUser.accountId) throw new Error('user alredy......');
@@ -27,12 +28,8 @@ const inviteUser = async (req, res) => {
 };
 
 const getAccount = async (req, res) => {
-  const user = await User.retrieve({ email: req.params.email });
-
-  if (!user) throw new Error('user does not exists');
-
-  const acc = await Account.retrieve({ _id: user.accountId });
-  const users = await User.find({ accountId: user.accountId });
+  const acc = await Account.retrieve({ _id: req.params.accountId });
+  const users = await User.find({ accountId: req.params.accountId });
   const outputArray = users.reduce((accumulator, currentValue) => [
     ...accumulator,
     {
@@ -56,6 +53,7 @@ const getAccounts = async (req, res) => {
   const outputArray = [];
   for (let i = 0; i < accounts.length; i += 1) {
     const account = {
+      id: accounts[i]._id,
       Name: accounts[i].name,
       Plan: accounts[i].plan,
       Credits: accounts[i].assets.credits,

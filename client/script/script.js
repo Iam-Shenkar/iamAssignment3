@@ -201,7 +201,8 @@ const getAccount = async () => {
 
 const userInvitation = async () => {
   const url = new URL(window.location.href);
-  const account = url.searchParams.get('email');
+  let account = url.searchParams.get('id');
+  if (!account) account = getCookie('account');
   const email = document.getElementById('userEmail').value;
   const response = await fetch(`${runningPath}/accounts/${account}/invite/${email}`, {
     method: 'GET',
@@ -211,7 +212,8 @@ const userInvitation = async () => {
   });
   const body = await response.json();
   if (response.status === 200) {
-    document.getElementById('userEmail').placeholder = body.message;
+    document.getElementById('userEmail').value = body.message;
+    getAccount();
   }
 };
 
@@ -277,3 +279,5 @@ function MenuPermission() {
 }
 
 window.addEventListener('load', sideMenu);
+
+// xhr.send();

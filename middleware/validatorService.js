@@ -1,6 +1,5 @@
 const mailValidator = require('email-validator');
 const passwordValidator = require('password-validator');
-const jwt = require('jsonwebtoken');
 const { User } = require('../services/authService');
 
 const schema = new passwordValidator();
@@ -47,14 +46,14 @@ const codeValidator = (code) => {
 };
 
 const checkPermission = async (req, res, next) => {
-  const user = await User.retrieve(req.body.mail);
+  const user = await User.retrieve({ email: req.user });
   if (user.type === 'user') throw new Error('Not authorized');
   // check sit
   next();
 };
 
 const checkPermissionAdmin = async (req, res, next) => {
-  const user = await User.retrieve(req.body.mail);
+  const user = await User.retrieve({ email: req.user });
   if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
   // check sit
   next();

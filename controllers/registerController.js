@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const path = require('path');
 const register = require('../services/registerService');
 const { User, userExist } = require('../services/authService');
 const { existCode, sendEmailOneTimePass, createAccount } = require('../services/registerService');
@@ -35,6 +36,7 @@ const handleConfirmCode = async (req, res) => {
   try {
     const user = await userExist(req.body.email);
     if (user) throw new Error('user already exist');
+
     const oneTimePassRecord = await existCode(req.body.email);
     await register.otpCompare(req.body.code, oneTimePassRecord.code);
     const accountID = await createAccount(req.body.email);
@@ -57,9 +59,9 @@ const confirmationUser = async (req, res, next) => {
       await User.update({ email }, { accountId, status: 'active' });
       // הורדת SIT
 
-      res.sendFile('homePage.html');
+      res.redirect(`${process.env.runningPath}/homePage.html`);
     } else {
-      res.sendFile('./regester');
+      res.redirect(`${process.env.runningPath}/index.html`);
     }
   } catch (err) {
     res.status(401).json({ message: err.message });

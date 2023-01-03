@@ -1,26 +1,23 @@
-const { Account, sendInvitation, checkPermission } = require('../services/accountService');
+const {
+  Account, createUserToAccount, sendInvitation, inviteAuthorization,
+} = require('../services/accountService');
 const { User } = require('../services/authService');
+const { userRole } = require('../middleware/validatorService');
 
 const inviteUser = async (req, res) => {
   try {
-    // checkPermission(req.user);
-    const manager = await User.retrieve({ email: req.user });
-    const account = await Account.retrieve({ _id: manager.accountId });
+    const account = await Account.retrieve({ _id: req.params.accountId });
     const invitedUser = await User.retrieve({ email: req.params.email });
+
     if (invitedUser) {
-      if (account._id.toString() === invitedUser.accountId) throw new Error('user alredy......');
-      await sendInvitation(req.params.email, invitedUser);
+      inviteAuthorization(account, invitedUser);
+      await sendInvitation(account, invitedUser);
     } else {
-      const newUser = {
-        email: req.params.email,
-        name: 'stranger',
-        type: 'user',
-        status: 'pending',
-        accountId: account._id.toString(),
-      };
-      await User.create(newUser);
+      if (userRole(req.params.email) === 'admin') throw new Error('Cant add Admins to an account');
+      const newUser = await createUserToAccount(req.params.email, account);
       await sendInvitation(account.name, newUser);
     }
+
     res.status(200).json({ message: 'user invited' });
   } catch (err) {
     res.status(401).json({ message: err.message });
@@ -28,6 +25,7 @@ const inviteUser = async (req, res) => {
 };
 
 const getAccount = async (req, res) => {
+  const user = User.retrieve({ email: req.user });
   const acc = await Account.retrieve({ _id: req.params.accountId });
   const users = await User.find({ accountId: req.params.accountId });
   const outputArray = users.reduce((accumulator, currentValue) => [
@@ -38,7 +36,6 @@ const getAccount = async (req, res) => {
       Role: currentValue.type,
       Status: currentValue.status,
       Gender: currentValue.gender,
-      Edit: '',
     },
   ], []);
   const { features } = acc.assets;

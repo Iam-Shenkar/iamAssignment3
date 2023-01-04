@@ -105,7 +105,7 @@ const ResetPassweord = async () => {
   const data = {
     email: document.getElementById('emailResetPassword').value,
   };
-  const response = await fetch(`${runningPath}/auth/register/code`, {
+  const response = await fetch(`${runningPath}/auth/login/password`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

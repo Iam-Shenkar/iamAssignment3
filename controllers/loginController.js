@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt');
+const { User } = require('../services/authService');
 const { userExist, statusCheck, validPassword } = require('../services/authService');
 const { generatePassword, sendEmailPassword } = require('../services/authService');
-
-const { User } = require('../services/authService');
 
 const loginControl = async (req, res, next) => {
   try {
@@ -11,7 +10,6 @@ const loginControl = async (req, res, next) => {
 
     await validPassword(req.body.password, user.password);
     await statusCheck(user);
-
     await User.update(
       { email: user.email },
       {
@@ -38,7 +36,6 @@ const forgotPassControl = async (req, res) => {
     if (!user) throw new Error('user not exist');
     await statusCheck(user);
     const newPass = generatePassword();
-
     const hashedPassword = await bcrypt.hash(newPass, 12);
     await sendEmailPassword(newPass, user);
     await User.update(

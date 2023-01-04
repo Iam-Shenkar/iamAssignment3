@@ -19,7 +19,7 @@ const getAllAssets = async (req, res) => {
     const account = user.accountId;
     const assets = await accountService.Account.retrieve({ _id: account });
   } catch (err) {
-    res.status(401).json('could not find assets');
+    res.status(401);
   }
   res.send(assets);
 };
@@ -30,7 +30,7 @@ const isFeatureAllowed = async (req, res) => {
     res.status(result.status)
       .json(result.message || result.data);
   } catch (err) {
-    res.status(401).json('could not find assets');
+    res.status(401);
   }
 };
 
@@ -39,7 +39,7 @@ const getSeats = async (req, res) => {
     const result = await assetsService.getSeats(req.user.email);
     res.status(result.status).json(result.message || result.data);
   } catch (err) {
-    res.status(401).json('could not find assets');
+    res.status(401);
   }
 };
 
@@ -48,7 +48,7 @@ const getCredit = async (req, res) => {
     const result = await assetsService.getCredit(req.user.email);
     res.status(result.status).json(result.message || result.data);
   } catch (err) {
-    res.status(401).json('could not find assets');
+    res.status(401);
   }
 };
 

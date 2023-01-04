@@ -9,14 +9,14 @@ const registerController = require('../controllers/registerController');
 const logoutController = require('../controllers/logoutController');
 const googleController = require('../controllers/googleController');
 
+authRouter.post('/logout', logoutController.logout);
+
 authRouter.post('/login', generateToken, loginController.loginControl);
 authRouter.put('/login/password/:email', loginController.forgotPassControl);
 
 authRouter.post('/register', registerController.handleRegister);
 authRouter.post('/register/code', registerController.handleConfirmCode);
 authRouter.get('/:accountId/users/:email/confirmation', registerController.confirmationUser);
-
-authRouter.post('/logout', logoutController.logout);
 
 authRouter.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
 authRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/error' }), googleController.handleGoogleCallBack);

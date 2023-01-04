@@ -119,16 +119,16 @@
                                                value="FREE" readonly>
                                     </div>
                                     <div class="btnProfile">
-                                        <button type="button" class="btn btn-warning me-2" onclick="editProfile()">Edit</button>
-                                        <button type="button" class="btn btn-success" onclick="updataUser()">Save</button>
+                                        <button id="editButton" type="button" class="btn btn-warning me-2" onclick="editProfile()">Edit</button>
+                                        <button id="saveButton" type="button" class="btn btn-success" onclick="updataUser()">Save</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-5 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
+                        <div class="card" id="changePassword">
+                            <div class="card-body" >
                                 <h4 class="card-title">Change Password</h4>
                                 <form class="form-inline">
                                     <label class="sr-only" for="inlineFormInputOldPassword">Old Password</label>
@@ -170,6 +170,8 @@
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/settings.js"></script>
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/todolist.js"></script>
 <script src="../script/script.js"></script>
+<script src="./script/scriptPermissions.js"></script>
 <script>getUser()</script>
+<script>ChangePasswordPage()</script>
 </body>
 </html>

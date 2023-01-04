@@ -13,12 +13,31 @@ const sendInvitation = async (manager, user) => {
   };
   const details = {
     name: `${user.name}`,
-    manager: `${manager}`,
+    manager: `${manager.name}`,
     path: `${path}`,
   };
   await sendEmail(mailData, details);
 };
 
+const inviteAuthorization = (account, invitedUser) => {
+  if (account._id.toString() === invitedUser.accountId) throw new Error('User already in the account');
+  if (account.role === 'admin') throw new Error('Cant add Admins to an account');
+  if (account.plan !== 'free') throw new Error('User already in an Account');
+  if (account.role !== 'user') throw new Error('User already in an Account');
+};
+
+const createUserToAccount = async (email, account) => {
+  const newUser = {
+    email,
+    name: 'stranger',
+    type: 'user',
+    status: 'pending',
+    accountId: account._id.toString(),
+  };
+  await User.create(newUser);
+  return newUser;
+};
+
 module.exports = {
-  Account, sendInvitation,
+  Account, sendInvitation, inviteAuthorization, createUserToAccount,
 };

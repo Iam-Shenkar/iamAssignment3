@@ -1,4 +1,4 @@
-const { Account, sendInvitation, checkPermission } = require('../services/accountService');
+const { Account, sendInvitation } = require('../services/accountService');
 const { User } = require('../services/authService');
 
 const inviteUser = async (req, res) => {
@@ -8,7 +8,7 @@ const inviteUser = async (req, res) => {
     const account = await Account.retrieve({ _id: manager.accountId });
     const invitedUser = await User.retrieve({ email: req.params.email });
     if (invitedUser) {
-      if (account._id.toString() === invitedUser.accountId) throw new Error('user alredy......');
+      if (account._id.toString() === invitedUser.accountId) throw new Error('user already......');
       await sendInvitation(req.params.email, invitedUser);
     } else {
       const newUser = {
@@ -30,8 +30,7 @@ const inviteUser = async (req, res) => {
 const getAccount = async (req, res) => {
   const acc = await Account.retrieve({ _id: req.params.accountId });
   const users = await User.find({ accountId: req.params.accountId });
-  const outputArray = users.reduce((accumulator, currentValue) => [
-    ...accumulator,
+  const outputArray = users.reduce((accumulator, currentValue) => [...accumulator,
     {
       Name: currentValue.name,
       email: currentValue.email,
@@ -39,8 +38,7 @@ const getAccount = async (req, res) => {
       Status: currentValue.status,
       Gender: currentValue.gender,
       Edit: '',
-    },
-  ], []);
+    }], []);
   const { features } = acc.assets;
   outputArray.unshift({
     Plan: acc.plan, Seats: acc.assets.seats, Credits: acc.assets.credits, Features: features,
@@ -92,8 +90,8 @@ const editAccount = async (req, res) => {
 const disableAccount = async (req, res) => {
   if (!req.body.name) { res.status(401); }
   const acc = Account.find({ name: req.body.name });
-  const users = User.find({ accountId: acc._id });
-  // users.i;
+  User.deleteMany({ accountId: acc._id });
+  Account.update({ _id: acc._id }, { status: 'disabled' });
 };
 
 module.exports = {

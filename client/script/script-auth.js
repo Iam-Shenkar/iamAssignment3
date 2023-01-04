@@ -55,11 +55,11 @@ const login = async () => {
     },
     body: JSON.stringify(data),
   });
-  const body = await response.json();
-  if (response.status !== 200 && body.message) {
-    alert((body.message));
+  // const body = await response.json();
+  if (response.status !== 302) {
+  // alert((body.message));
   }
-  window.location.href = `${runningPath}/homePage.html?email=${data.email}`;
+  window.location.href = `${runningPath}/`;
 };
 
 const register = async () => {
@@ -105,7 +105,7 @@ const ResetPassweord = async () => {
   const data = {
     email: document.getElementById('emailResetPassword').value,
   };
-  const response = await fetch(`${runningPath}/auth/register/code`, {
+  const response = await fetch(`${runningPath}/auth/login/password`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

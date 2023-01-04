@@ -1,4 +1,5 @@
 const runningPath = window.location.origin;
+const Logout = document.getElementById('logout');
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
   const row = thead.insertRow();
@@ -11,13 +12,17 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
+  let path = 'myProfile';
+  if (getCookie('role') === 'admin') {
+    path = 'EditProfile';
+  }
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
       const cell = row.insertCell();
       if (key === 'Edit') {
         const button = editButton(element.email);
-        const option = buttonOption(element.email, 'myProfile', 'email');
+        const option = buttonOption(element.email, path, 'email');
         cell.appendChild(button);
         cell.appendChild(option);
       } else if (key === 'Status') {
@@ -83,14 +88,14 @@ const buttonOption = (email, path, val) => {
   list.setAttribute('aria-labelledby', 'dropdownMenuIconButton6');
   const remove = document.createElement('a');
   const view = document.createElement('a');
+  view.innerText = 'View';
   remove.innerText = 'Remove';
-  view.innerText = 'Edit';
 
   remove.className = 'dropdown-item';
   view.className = 'dropdown-item';
 
+  view.setAttribute('href', `${runningPath}/${path}?${val}=${email}`);
   remove.setAttribute('onclick', '');
-  view.setAttribute('href', `${runningPath}/${path}.html?${val}=${email}`);
 
   list.appendChild(remove);
   list.appendChild(view);
@@ -130,7 +135,7 @@ const adminAddUser = async () => {
     password: document.getElementById('exampleInputPassword').value,
     gender: document.getElementById('exampleSelectGender').value,
   };
-  const response = await fetch(`${runningPath}/users/`, {
+  const response = await fetch(`${runningPath}/users/invite`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -147,7 +152,7 @@ const adminAddUser = async () => {
 };
 
 const getUsers = async () => {
-  const response = await fetch(`${runningPath}/users`, {
+  const response = await fetch(`${runningPath}/users/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -162,7 +167,7 @@ const getUsers = async () => {
 };
 
 const getAccounts = async () => {
-  const response = await fetch(`${runningPath}/accounts`, {
+  const response = await fetch(`${runningPath}/accounts/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -180,6 +185,7 @@ const getAccount = async () => {
   const url = new URL(window.location.href);
   let id = url.searchParams.get('id');
   if (!id) id = getCookie('account');
+  console.log(`${runningPath}/accounts/${id}`);
   const response = await fetch(`${runningPath}/accounts/${id}`, {
     method: 'GET',
     headers: {
@@ -201,7 +207,8 @@ const getAccount = async () => {
 
 const userInvitation = async () => {
   const url = new URL(window.location.href);
-  const account = url.searchParams.get('email');
+  let account = url.searchParams.get('id');
+  if (!account) account = getCookie('account');
   const email = document.getElementById('userEmail').value;
   const response = await fetch(`${runningPath}/accounts/${account}/invite/${email}`, {
     method: 'GET',
@@ -211,7 +218,8 @@ const userInvitation = async () => {
   });
   const body = await response.json();
   if (response.status === 200) {
-    document.getElementById('userEmail').placeholder = body.message;
+    document.getElementById('userEmail').value = body.message;
+    getAccount();
   }
 };
 
@@ -221,39 +229,8 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function getEmailUser() {
-  const value = getCookie('email').split('%40');
-  return `${value[0]}@${value[1]}`;
-}
-
-document.onload;
-{
-  let greeting;
-  const time = new Date().getHours();
-
-  switch (true) {
-    case time < 10:
-      greeting = 'Good morning,';
-      break;
-    case time < 20:
-      greeting = 'Good day,';
-      break;
-    default:
-      greeting = 'Good evening,';
-  }
-  const name = (getCookie('name')).replaceAll('%20',' ');;
-  const email = getCookie('email');
-  document.getElementById('timeOfDay').innerHTML = `${greeting
-  } <span style="color: #222222" id="userNameTitle" class="text-black fw-bold">${name}</span>`;
-  userName = document.getElementById("userNameProfile")
-  userName.innerText = name;
-  userName = document.getElementById("userEmailProfile")
-  userName.innerHTML = email.replace('%40','&#064;');
-}
-
-
 const sideMenu = () => {
-  const email = getEmailUser();
+  const email = decodeURIComponent(getCookie('email'));
   const nav = document.getElementById('navSideMenu');
   const title = MenuPermission();
   for (const key of title) {
@@ -265,7 +242,7 @@ const sideMenu = () => {
 
     link.setAttribute('aria-expanded', 'false');
     link.setAttribute('aria-controls', 'ui-basic');
-    link.setAttribute('href', `${runningPath}/${key.replace(' ', '')}.html?email=${email}`);
+    link.setAttribute('href', `${runningPath}/${key.replace(' ', '')}?email=${email}`);
     link.innerText = key;
     nav.appendChild(list);
     list.appendChild(link);
@@ -274,7 +251,7 @@ const sideMenu = () => {
 
 function MenuPermission() {
   const role = getCookie('role');
-  const titleNavAdmin = ['My Profile', 'Accounts', 'Users', 'Add User'];
+  const titleNavAdmin = ['My Profile', 'My Account', 'Accounts', 'Users', 'Add User'];
   const titleNavUser = ['My Profile', 'My Account'];
   if (role !== 'admin') {
     return titleNavUser;
@@ -283,9 +260,48 @@ function MenuPermission() {
 }
 
 window.addEventListener('load', sideMenu);
+window.onload = () => {
+  const time = new Date().getHours();
+  switch (true) {
+    case time < 10:
+      greeting = 'Good morning,';
+      break;
+    case time < 20:
+      greeting = 'Good day,';
+      break;
+    default:
+      greeting = 'Good evening,';
+  }
+  console.log(getCookie('name'));
+  const name = (getCookie('name')).replace('%20', ' ');
+  const email = getCookie('email');
+  document.getElementById('timeOfDay').innerHTML = `${greeting
+  } <span style="color: #222222" id="userNameTitle" class="text-black fw-bold">${name}</span>`;
+  let userName = document.getElementById('userNameProfile');
+  userName.innerText = name;
+  userName = document.getElementById('userEmailProfile');
+  userName.innerHTML = email.replace('%40', '&#064;');
+};
+
+Logout.addEventListener('click', async () => {
+  const data = {
+    email: decodeURIComponent(getCookie('email')),
+  };
+  console.log(data);
+  const response = await fetch(`${runningPath}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  // const body = await response.json();
+  if (response.status !== 302) { console.log('redirect'); }
+  window.location.href = `${runningPath}/`;
+});
 
 const charts = async () => {
-  const responseUser = await fetch(`${runningPath}/users`, {
+  const responseUser = await fetch(`${runningPath}/users/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -294,7 +310,7 @@ const charts = async () => {
   const users = await responseUser.json();
   typeChart(users);
 
-  const responseAccount = await fetch(`${runningPath}/accounts`, {
+  const responseAccount = await fetch(`${runningPath}/accounts/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -302,23 +318,23 @@ const charts = async () => {
   });
   const accounts = await responseAccount.json();
   planChart(accounts);
-}
+};
 
-const typeChart = (users)=> {
-  let roles = {};
+const typeChart = (users) => {
+  const roles = {};
   for (let i = 0; i < users.length; i++) {
-    let role = users[i].Role;
+    const role = users[i].Role;
     if (roles[role] == null) {
       roles[role] = 0;
     }
     roles[role]++;
   }
-  for (let role in roles) {
+  for (const role in roles) {
     roles[role] = (roles[role] / users.length) * 100;
   }
-  let ctx = document.getElementById('typePieChart')
+  const ctx = document.getElementById('typePieChart')
     .getContext('2d');
-  let pieChart = new Chart(ctx, {
+  const pieChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: Object.keys(roles),
@@ -330,7 +346,7 @@ const typeChart = (users)=> {
           'rgba(255, 206, 86, 0.2)',
           'rgba(75, 192, 192, 0.2)',
           'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
+          'rgba(255, 159, 64, 0.2)',
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -338,40 +354,39 @@ const typeChart = (users)=> {
           'rgba(255, 206, 86, 1)',
           'rgba(75, 192, 192, 1)',
           'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
+          'rgba(255, 159, 64, 1)',
         ],
-        borderWidth: 1
-      }]
+        borderWidth: 1,
+      }],
     },
     options: {
       legend: {
         display: true,
         position: 'right',
         labels: {
-          fontSize: 14
-        }
+          fontSize: 14,
+        },
       },
       responsive: true,
       aspectRatio: 1,
-    }
+    },
   });
-}
-
+};
 
 const planChart = (accounts) => {
-  let plans = {};
+  const plans = {};
   for (let i = 0; i < accounts.length; i++) {
-    let plan = accounts[i].Plan;
+    const plan = accounts[i].Plan;
     if (plans[plan] == null) {
       plans[plan] = 0;
     }
     plans[plan]++;
   }
-  for (let plan in plans) {
+  for (const plan in plans) {
     plans[plan] = (plans[plan] / accounts.length) * 100;
   }
-  let ctx = document.getElementById('myPieChart').getContext('2d');
-  let pieChart = new Chart(ctx, {
+  const ctx = document.getElementById('myPieChart').getContext('2d');
+  const pieChart = new Chart(ctx, {
     type: 'pie',
     data: {
       labels: Object.keys(plans),
@@ -383,7 +398,7 @@ const planChart = (accounts) => {
           'rgba(255, 206, 86, 0.2)',
           'rgba(75, 192, 192, 0.2)',
           'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
+          'rgba(255, 159, 64, 0.2)',
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -391,23 +406,39 @@ const planChart = (accounts) => {
           'rgba(255, 206, 86, 1)',
           'rgba(75, 192, 192, 1)',
           'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
+          'rgba(255, 159, 64, 1)',
         ],
-        borderWidth: 1
-      }]
+        borderWidth: 1,
+      }],
     },
-    options: {legend: {
+    options: {
+      legend: {
         display: true,
         position: 'right',
         labels: {
-          fontSize: 14
-        }
+          fontSize: 14,
+        },
       },
     },
     responsive: true,
     aspectRatio: 1,
   });
-}
+};
 
-const logo = document.getElementById('logo'); //or grab it by tagname etc
-logo.setAttribute('href', `${runningPath}/homePage.html`);
+const logo = document.getElementById('logo'); // or grab it by tagname etc
+logo.setAttribute('href', `${runningPath}/`);
+
+// eslint-disable-next-line no-unused-vars
+const positiveNumber = () => {
+  const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
+  if (exampleAmountOfDays.value < 0) {
+    exampleAmountOfDays.value *= -1;
+  }
+};
+
+// eslint-disable-next-line no-unused-vars
+const updateDaysOfSuspension = () => {
+  const select = document.getElementById('exampleUsersStatus');
+  const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
+  exampleAmountOfDays.readOnly = select.value !== 'Suspend';
+};

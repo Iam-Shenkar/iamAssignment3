@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
+// eslint-disable-next-line import/no-unresolved
 const register = require('../services/registerService');
 const { User, userExist } = require('../services/authService');
-const { existCode, sendEmailOneTimePass, createAccount } = require('../services/registerService');
+const { existCode, sendEmailOneTimePass } = require('../services/registerService');
 const { Account } = require('../services/accountService');
+const { userRole } = require('../middleware/validatorService');
 
 const handleRegister = async (req, res) => {
   try {
@@ -20,6 +22,9 @@ const handleRegister = async (req, res) => {
       return res.status(200)
         .json({ message: 'user update' });
     }
+    if (userRole(newUser.email) !== 'admin') {
+      await Account.create({ name: newUser.email });
+    }
     await register.deleteFormOTP(newUser.email);
     const newOneTimePass = await register.createOneTimePass(newUser.email);
     await sendEmailOneTimePass(newUser, newOneTimePass);
@@ -33,13 +38,21 @@ const handleRegister = async (req, res) => {
 
 const handleConfirmCode = async (req, res) => {
   try {
-    const user = await userExist(req.body.email);
+    const userEmail = req.body.email;
+    const user = await userExist(userEmail);
     if (user) throw new Error('user already exist');
-    const oneTimePassRecord = await existCode(req.body.email);
+
+    const oneTimePassRecord = await existCode(userEmail);
     await register.otpCompare(req.body.code, oneTimePassRecord.code);
-    const accountID = await createAccount(req.body.email);
-    await register.createUser(req.body, accountID);
-    return res.status(200)
+    await register.createUser(req.body);
+
+    if (userRole(userEmail) !== 'admin') {
+      const account = await Account.retrieve({ name: userEmail });
+      await User.update({ email: userEmail }, { accountId: account._id.toString(), status: 'active' });
+    }
+    console.log(`user ${userEmail} was added`);
+
+    res.status(200)
       .json({ message: 'User was added' });
   } catch (e) {
     return res.status(401)
@@ -52,15 +65,14 @@ const confirmationUser = async (req, res, next) => {
     const { email, accountId } = req.params;
     const user = await userExist(email);
 
-    if (!user.status === 'pending') {
-      await Account.delete({ _id: accountId });
-      await User.update({ email }, { accountId, status: 'active' });
-      // הורדת SIT
+    // if (!user.status === 'pending') {
+    await Account.delete({ _id: user.accountId });
+    await User.update({ email }, { accountId, status: 'active' });
+    // הורדת SIT
 
-      res.sendFile('homePage.html');
-    } else {
-      res.sendFile('./regester');
-    }
+    // res.redirect('/');
+
+    res.redirect('/login');
   } catch (err) {
     res.status(401).json({ message: err.message });
   }

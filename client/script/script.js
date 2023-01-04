@@ -16,10 +16,11 @@ const generateUserTable = (table, data) => {
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
+      let func = 'disableAccount('+element.email+')'
       const cell = row.insertCell();
       if (key === 'Edit') {
         const button = editButton(element.email);
-        const option = buttonOption(element.email, path, 'email', '');
+        const option = buttonOption(element.email, path, 'email');
         cell.appendChild(button);
         cell.appendChild(option);
       } else if (key === 'Status') {
@@ -41,7 +42,7 @@ const generateAccountTable = (table, data) => {
         const cell = row.insertCell();
         if (key === 'Edit') {
           const button = editButton(element.id);
-          const option = buttonOption(element.id, 'myAccount', 'id', 'disableAccount(email)');
+          const option = buttonOption(element.id, 'myAccount', 'id' );
           cell.appendChild(button);
           cell.appendChild(option);
         } else if (key === 'Status') {
@@ -79,7 +80,7 @@ const editButton = () => {
   return bth;
 };
 
-const buttonOption = (email, path, val, removeFunc) => {
+const buttonOption = (email, path, val) => {
   const list = document.createElement('div');
   list.className = 'dropdown-menu';
   list.setAttribute('aria-labelledby', 'dropdownMenuIconButton6');
@@ -92,7 +93,9 @@ const buttonOption = (email, path, val, removeFunc) => {
   view.className = 'dropdown-item';
 
   view.setAttribute('href', `${runningPath}/${path}?${val}=${email}`);
-  remove.setAttribute('onclick', removeFunc);
+  remove.setAttribute("onclick", `disableAccount(\'${email}\')`);
+  remove.setAttribute('value', email);
+
 
   list.appendChild(view);
   if (getCookie('role') === 'admin') list.appendChild(remove);
@@ -449,17 +452,13 @@ const updateDaysOfSuspension = () => {
 };
 
 const disableAccount = async (accotnt) => {
-  const data = {
-    name: accotnt,
-  };
   const response = await fetch(
-    `${runningPath}/disable`,
+    `${runningPath}/accounts/disable/${accotnt}`,
     {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
     },
   );
   const body = await response.json();

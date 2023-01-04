@@ -60,7 +60,7 @@ const getCredit = async (mail) => {
 
 const setSeats = async (mail, count=1) => {
   const assets = await getAssetsByUser(mail);
-  accountID =await getAccountByUser(mail);
+   accountID = await getAccountByUser(mail);
   const { usedSeats, seats } = assets;
   await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': usedSeats+count });
 };

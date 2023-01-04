@@ -92,8 +92,8 @@ const editAccount = async (req, res) => {
 
 const disableAccount = async (req, res) => {
   try {
-    if (!req.body.name) throw new Error('Please choose Account');
-    const acc = Account.find({ name: req.body.name });
+    if (!req.body.id) throw new Error('Please choose Account');
+    const acc = Account.retrieve({ _id: req.body.id });
     User.deleteMany({ accountId: acc._id });
     Account.update({ _id: acc._id }, { status: 'closed' });
   } catch (err) {

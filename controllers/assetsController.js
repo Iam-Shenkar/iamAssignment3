@@ -26,8 +26,7 @@ const getAllAssets = async (req, res) => {
 
 const getFeatures = async (req, res) => {
   try {
-    const {email} = req.params;
-    const result = await assetsService.getFeatures(email);
+    const result = await assetsService.getFeatures(req.user.email);
     res.status(result.status)
       .json(result.data);
   } catch (err) {

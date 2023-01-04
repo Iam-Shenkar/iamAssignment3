@@ -17,8 +17,8 @@ const getAssetsByUser = async (email) => {
   return account.assets;
 };
 
-const getFeatures = async (req) => {
-  const { email } = req.params;
+const getFeatures = async (mail) => {
+  const email = mail;
   const assets = await getAssetsByUser(email);
   const currentFeatures = assets.features;
   let result;
@@ -30,7 +30,10 @@ const getFeatures = async (req) => {
   return result;
 };
 
-const getSeats = async (email) => {
+
+const getSeats = async (mail) => {
+  const email = mail;
+
   const assets = await getAssetsByUser(email);
   const { usedSeats, seats } = assets;
   const remainSeats = seats - usedSeats;
@@ -43,8 +46,8 @@ const getSeats = async (email) => {
   return result;
 };
 
-const getCredit = async (req) => {
-  const assetsAccount = await getAssetsByUser(req.params.email);
+const getCredit = async (mail) => {
+  const assetsAccount = await getAssetsByUser(mail);
   const currentCredit = assetsAccount.credits;
   let result;
   if (currentCredit <= 0) {
@@ -55,4 +58,31 @@ const getCredit = async (req) => {
   return result;
 };
 
-module.exports = { getFeatures, getSeats, getCredit };
+const setSeats = async (mail, count=1) => {
+  const assets = await getAssetsByUser(mail);
+  accountID =await getAccountByUser(mail);
+  const { usedSeats, seats } = assets;
+  await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': usedSeats+count });
+};
+
+const setCredit = async (mail, count=1) => {
+  const assets = await getAssetsByUser(mail);
+  accountID = await getAccountByUser(mail);
+  const { credits } = assets;
+  await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': count+ credits });
+};
+
+const setFeature = async (mail, feature) => {
+  const assets = await getAssetsByUser(mail);
+  accountID =await getAccountByUser(mail);
+  const currentFeatures = assets.features;
+  const isFeatureExists = currentFeatures.includes(feature);
+  if (isFeatureExists) {
+    return "feature already exists";
+  }
+  else {
+    await accountService.Account.update({ _id: accountID._id }, { $push: { 'assets.features': feature }});
+  }
+};
+
+module.exports = { getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature };

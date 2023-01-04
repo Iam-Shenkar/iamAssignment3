@@ -278,7 +278,7 @@ window.onload = () => {
       greeting = 'Good evening,';
   }
   console.log(getCookie('name'));
-  const name = (getCookie('name')).replace('%20', ' ');
+  const name = (getCookie('name')).replaceAll('%20', ' ');
   const email = getCookie('email');
   document.getElementById('timeOfDay').innerHTML = `${greeting
   } <span style="color: #222222" id="userNameTitle" class="text-black fw-bold">${name}</span>`;

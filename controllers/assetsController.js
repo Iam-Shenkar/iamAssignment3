@@ -58,5 +58,4 @@ module.exports = {
   getCredit,
   getAllAssets,
   verifyToken,
-  test,
 };

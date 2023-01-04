@@ -16,8 +16,8 @@ const getAssetsByUser = async (email) => {
   return account.assets;
 };
 
-const getFeatures = async (req) => {
-  const { email } = req.params;
+const getFeatures = async (mail) => {
+  const email = mail;
   const assets = await getAssetsByUser(email);
   const currentFeatures = assets.features;
   let result;
@@ -29,8 +29,8 @@ const getFeatures = async (req) => {
   return result;
 };
 
-const getSeats = async (req) => {
-  const { email } = req.params;
+const getSeats = async (mail) => {
+  const email = mail;
   const assets = await getAssetsByUser(email);
   const { usedSeats, seats } = assets;
   const remainSeats = seats - usedSeats;
@@ -43,8 +43,8 @@ const getSeats = async (req) => {
   return result;
 };
 
-const getCredit = async (req) => {
-  const assetsAccount = await getAssetsByUser(req.params.email);
+const getCredit = async (mail) => {
+  const assetsAccount = await getAssetsByUser(mail);
   const currentCredit = assetsAccount.credits;
   let result;
   if (currentCredit <= 0) {

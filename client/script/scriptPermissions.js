@@ -17,8 +17,6 @@ const ChangePasswordPage = () => {
     } else {
       const email = document.getElementById('exampleInputEmail1').value;
       editButton.style.display = 'block';
-      editButton.removeAttribute('onclick');
-      editButton.setAttribute('href', `${runningPath}/EditProfile=${email}`);
     }
   }
 };

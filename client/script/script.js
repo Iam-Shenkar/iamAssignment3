@@ -12,17 +12,14 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
-  let path = 'myProfile';
-  if (getCookie('role') === 'admin') {
-    path = 'EditProfile';
-  }
+  const path = 'myProfile';
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
       const cell = row.insertCell();
       if (key === 'Edit') {
         const button = editButton(element.email);
-        const option = buttonOption(element.email, path, 'email');
+        const option = buttonOption(element.email, path, 'email', '');
         cell.appendChild(button);
         cell.appendChild(option);
       } else if (key === 'Status') {
@@ -44,7 +41,7 @@ const generateAccountTable = (table, data) => {
         const cell = row.insertCell();
         if (key === 'Edit') {
           const button = editButton(element.id);
-          const option = buttonOption(element.id, 'myAccount', 'id');
+          const option = buttonOption(element.id, 'myAccount', 'id', 'disableAccount(email)');
           cell.appendChild(button);
           cell.appendChild(option);
         } else if (key === 'Status') {
@@ -82,7 +79,7 @@ const editButton = () => {
   return bth;
 };
 
-const buttonOption = (email, path, val) => {
+const buttonOption = (email, path, val, removeFunc) => {
   const list = document.createElement('div');
   list.className = 'dropdown-menu';
   list.setAttribute('aria-labelledby', 'dropdownMenuIconButton6');
@@ -95,10 +92,10 @@ const buttonOption = (email, path, val) => {
   view.className = 'dropdown-item';
 
   view.setAttribute('href', `${runningPath}/${path}?${val}=${email}`);
-  remove.setAttribute('onclick', '');
+  remove.setAttribute('onclick', removeFunc);
 
-  list.appendChild(remove);
   list.appendChild(view);
+  if (getCookie('role') === 'admin') list.appendChild(remove);
   return list;
 };
 
@@ -113,6 +110,12 @@ const getUser = async () => {
     },
   });
   const body = await response.json();
+
+  const editButton = document.getElementById('editButton');
+  const role = getCookie('role');
+  if (role === 'admin') editButton.setAttribute('href', `${runningPath}/EditProfile=${email}`);
+  if (role !== 'admin') editButton.setAttribute('onclick', 'editProfile()');
+
   document.getElementById('exampleInputUsername1').value = body.name;
   document.getElementById('exampleInputEmail1').value = body.email;
   document.getElementById('exampleInputRole').value = body.role;
@@ -121,11 +124,9 @@ const getUser = async () => {
 
 // eslint-disable-next-line no-unused-vars
 const editProfile = () => {
-  const role = document.getElementById('exampleInputRole').value;
+  console.log('edit');
   const name = document.getElementById('exampleInputUsername1');
-  if (role !== 'admin') {
-    name.removeAttribute('readonly');
-  }
+  name.removeAttribute('readonly');
 };
 
 const adminAddUser = async () => {
@@ -193,16 +194,20 @@ const getAccount = async () => {
     },
   });
   const body = await response.json();
-  const table = document.querySelector('table');
-  const plan = body.shift();
+  if (response.status === 200) {
+    const table = document.querySelector('table');
+    const plan = body.shift();
 
-  const data = Object.keys(body[0]);
-  generateTableHead(table, data);
-  generateUserTable(table, body);
-  document.getElementById('plan').innerText = plan.Plan;
-  document.getElementById('seats').innerText = plan.Seats;
-  document.getElementById('credits').innerText = plan.Credits;
-  document.getElementById('features').innerText = plan.Features;
+    const data = Object.keys(body[0]);
+    generateTableHead(table, data);
+    generateUserTable(table, body);
+    document.getElementById('plan').innerText = plan.Plan;
+    document.getElementById('seats').innerText = plan.Seats;
+    document.getElementById('credits').innerText = plan.Credits;
+    document.getElementById('features').innerText = plan.Features;
+  } else {
+    alert(body.message);
+  }
 };
 
 const userInvitation = async () => {
@@ -251,7 +256,7 @@ const sideMenu = () => {
 
 function MenuPermission() {
   const role = getCookie('role');
-  const titleNavAdmin = ['My Profile', 'My Account', 'Accounts', 'Users', 'Add User'];
+  const titleNavAdmin = ['My Profile', 'Accounts', 'Users', 'Add User'];
   const titleNavUser = ['My Profile', 'My Account'];
   if (role !== 'admin') {
     return titleNavUser;
@@ -441,4 +446,24 @@ const updateDaysOfSuspension = () => {
   const select = document.getElementById('exampleUsersStatus');
   const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
+};
+
+const disableAccount = async (accotnt) => {
+  const data = {
+    name: accotnt,
+  };
+  const response = await fetch(
+    `${runningPath}/disable`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    },
+  );
+  const body = await response.json();
+  if (body.message === 200) {
+    alert('account closed');
+  }
 };

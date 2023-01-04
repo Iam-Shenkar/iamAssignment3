@@ -1,23 +1,6 @@
 const { User, userExist } = require('../services/authService');
 const { Account } = require('../services/accountService');
 const { oneTimePass, createAccount, createUser } = require('../services/registerService');
-const { userRole } = require('../middleware/validatorService');
-
-async function addUser(req, res) {
-  try {
-    const user = await userExist(req.body.email);
-    if (user) throw new Error('user  already exists');
-
-    const accountID = await createAccount(req.body.email);
-    await createUser(req.body, accountID);
-
-    return res.status(200)
-      .json({ message: 'User was added' });
-  } catch (e) {
-    return res.status(402)
-      .json({ message: e.message });
-  }
-}
 
 async function getUsers(req, res) {
   try {
@@ -91,5 +74,5 @@ async function deleteUser(req, res) {
 }
 
 module.exports = {
-  addUser, getUsers, getUser, deleteUser, updateUser,
+  getUsers, getUser, deleteUser, updateUser,
 };

@@ -4,9 +4,8 @@
   "description": "IAM Assignment 3",
   "main": "index.js",
   "scripts": {
-    "test": "npm dev",
     "start": "npm start",
-    "dev": "nodemon index.js"
+    "test": "nodemon index.js"
   },
   "repository": {
     "type": "git",

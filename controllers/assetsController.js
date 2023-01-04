@@ -24,9 +24,10 @@ const getAllAssets = async (req, res) => {
   res.send(assets);
 };
 
-const isFeatureAllowed = async (req, res) => {
+const getFeatures = async (req, res) => {
   try {
-    const result = await assetsService.getFeatures(req.user.email);
+    const {email} = req.params;
+    const result = await assetsService.getFeatures(email);
     res.status(result.status)
       .json(result.data);
   } catch (err) {
@@ -37,7 +38,7 @@ const isFeatureAllowed = async (req, res) => {
 const getSeats = async (req, res) => {
   try {
     const result = await assetsService.getSeats(req.user.email);
-    res.status(result.status).json(רesult.data);
+    res.status(result.status).json(result.data);
   } catch (err) {
     res.status(401);
   }
@@ -80,7 +81,7 @@ const setFeature = async (req, res) => {
 };
 
 module.exports = {
-  isFeatureAllowed,
+  getFeatures,
   getSeats,
   getCredit,
   getAllAssets,

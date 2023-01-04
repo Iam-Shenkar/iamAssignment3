@@ -65,7 +65,7 @@ const setSeats = async (mail, count=1) => {
       await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': newSeats });
       result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: newSeats };
     } else {
-      result = { status: 400, message: `ERROR, no available seats`, data: 0 }
+      result = { status: 400, message: `ERROR, no available seats` }
     }
     return result;
 };
@@ -80,7 +80,7 @@ const setCredit = async (mail, count=1) => {
     await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': count + credits });
     result = { status: 200, message: `OK, used seats has been updated: ${newCredit}`, data: newCredit };
   } else {
-    result = { status: 400, message: `ERROR, no available credit`, data: 0 }
+    result = { status: 400, message: `ERROR, no available credit`}
   }
   return result;
 };
@@ -92,7 +92,7 @@ const setFeature = async (mail, feature) => {
   const isFeatureExists = currentFeatures.includes(feature);
   let result;
   if (isFeatureExists) {
-    result = { status: 400, message: `ERROR, feature ${feature} already exists`, data: 0 }
+    result = { status: 400, message: `ERROR, feature ${feature} already exists` }
   }
   else {
     await accountService.Account.update({ _id: accountID._id }, { $push: { 'assets.features': feature }});

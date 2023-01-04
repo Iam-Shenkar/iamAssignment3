@@ -45,7 +45,9 @@
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
     "password-validator": "^5.3.0",
+    "sleep-promise": "^9.1.0",
     "string-validator": "^1.0.5",
+    "thread-sleep": "^2.2.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {

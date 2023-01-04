@@ -50,12 +50,12 @@ const sendEmailOneTimePass = async (user, newCode) => {
   await sendEmail(mailData, details);
 };
 
-const createUser = async (user, accountID) => {
+const createUser = async (user) => {
   const hashPassword = await bcrypt.hash(user.password, 12);
   const newUser = {
     name: user.name,
     email: user.email,
-    accountId: accountID,
+    accountId: 'none',
     password: hashPassword,
   };
   await User.create(newUser);
@@ -66,10 +66,11 @@ const codeTime = async (user, timeCode) => {
   if (time < timeCode) return true;
 };
 
-const createAccount = async (email) => {
-  await Account.create({ name: email });
-  return Account.retrieve({ name: email });
-};
+// const createAccount = async (email) => {
+//   await Account.create({ name: email });
+//   const account = await Account.retrieve({ name: email });
+//   return account._id.toString();
+// };
 
 module.exports = {
   codeTime,
@@ -79,5 +80,4 @@ module.exports = {
   deleteFormOTP,
   existCode,
   createOneTimePass,
-  createAccount,
 };

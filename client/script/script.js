@@ -12,13 +12,17 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
+  let path = 'myProfile';
+  if (getCookie('role') === 'admin') {
+    path = 'EditProfile';
+  }
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
       const cell = row.insertCell();
       if (key === 'Edit') {
         const button = editButton(element.email);
-        const option = buttonOption(element.email, 'myProfile', 'email');
+        const option = buttonOption(element.email, path, 'email');
         cell.appendChild(button);
         cell.appendChild(option);
       } else if (key === 'Status') {
@@ -84,14 +88,14 @@ const buttonOption = (email, path, val) => {
   list.setAttribute('aria-labelledby', 'dropdownMenuIconButton6');
   const remove = document.createElement('a');
   const view = document.createElement('a');
+  view.innerText = 'View';
   remove.innerText = 'Remove';
-  view.innerText = 'Edit';
 
   remove.className = 'dropdown-item';
   view.className = 'dropdown-item';
 
+  view.setAttribute('href', `${runningPath}/${path}?${val}=${email}`);
   remove.setAttribute('onclick', '');
-  view.setAttribute('href', `${runningPath}/${path}.html?${val}=${email}`);
 
   list.appendChild(remove);
   list.appendChild(view);
@@ -423,7 +427,7 @@ const planChart = (accounts) => {
 };
 
 const logo = document.getElementById('logo'); // or grab it by tagname etc
-logo.setAttribute('href', `${runningPath}/homePage.html`);
+logo.setAttribute('href', `${runningPath}/`);
 
 // eslint-disable-next-line no-unused-vars
 const positiveNumber = () => {

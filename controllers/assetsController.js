@@ -52,10 +52,40 @@ const getCredit = async (req, res) => {
   }
 };
 
+const setCredit = async (req, res) => {
+  try {
+    const result = await assetsService.setCredit(req.user.email, req.params.credit);
+    res.status(result.status).json(result.message || result.data);
+  } catch (err) {
+    res.status(401);
+  }
+};
+
+const setSeats = async (req, res) => {
+  try {
+    const result = await assetsService.setSeats(req.user.email, req.params.seat);
+    res.status(result.status).json(result.message || result.data);
+  } catch (err) {
+    res.status(401);
+  }
+};
+
+const setFeature = async (req, res) => {
+  try {
+    const result = await assetsService.setFeature(req.user.email,req.params.feature);
+    res.status(result.status).json(result.message || result.data);
+  } catch (err) {
+    res.status(401);
+  }
+};
+
 module.exports = {
   isFeatureAllowed,
   getSeats,
   getCredit,
   getAllAssets,
   verifyToken,
+  setFeature,
+  setCredit,
+  setSeats,
 };

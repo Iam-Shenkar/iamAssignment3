@@ -4,6 +4,18 @@ const { User } = require('./authService');
 
 const Account = new accountRepository();
 
+const inviteNewUser = async (account, email) => {
+  const newUser = {
+    email,
+    name: 'stranger',
+    type: 'user',
+    status: 'pending',
+    accountId: account._id.toString(),
+  };
+  await User.create(newUser);
+  await sendInvitation(account.name, newUser);
+};
+
 const sendInvitation = async (manager, user) => {
   const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
   const mailData = {
@@ -24,6 +36,8 @@ const inviteAuthorization = (account, invitedUser) => {
   if (account.role === 'admin') throw new Error('Cant add Admins to an account');
   if (account.plan !== 'free') throw new Error('User already in an Account');
   if (account.role !== 'user') throw new Error('User already in an Account');
+  if (invitedUser.status !== 'active') throw new Error('Unable to invite this user');
+  if (account === null) throw new Error('Account not found');
 };
 
 const createUserToAccount = async (email, account) => {
@@ -39,5 +53,5 @@ const createUserToAccount = async (email, account) => {
 };
 
 module.exports = {
-  Account, sendInvitation, inviteAuthorization, createUserToAccount,
+  Account, sendInvitation, inviteAuthorization, createUserToAccount, inviteNewUser,
 };

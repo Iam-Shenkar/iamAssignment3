@@ -1,5 +1,6 @@
 const authService = require('./authService');
 const accountService = require('./accountService');
+const { Account } = require('./accountService');
 
 const getAccountByUser = async (email) => {
   const user = await authService.userExist(email);
@@ -29,8 +30,10 @@ const getFeatures = async (mail) => {
   return result;
 };
 
+
 const getSeats = async (mail) => {
   const email = mail;
+
   const assets = await getAssetsByUser(email);
   const { usedSeats, seats } = assets;
   const remainSeats = seats - usedSeats;

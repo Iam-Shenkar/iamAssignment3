@@ -28,6 +28,7 @@ const handleRegister = async (req, res) => {
     await register.deleteFormOTP(newUser.email);
     const newOneTimePass = await register.createOneTimePass(newUser.email);
     await sendEmailOneTimePass(newUser, newOneTimePass);
+
     return res.status(200)
       .json({ message: 'code has been sent' });
   } catch (e) {
@@ -48,8 +49,10 @@ const handleConfirmCode = async (req, res) => {
 
     if (userRole(userEmail) !== 'admin') {
       const account = await Account.retrieve({ name: userEmail });
+      await Account.update({ accountId: account._id.toString() }, { status: 'active' });
       await User.update({ email: userEmail }, { accountId: account._id.toString(), status: 'active' });
     }
+
     console.log(`user ${userEmail} was added`);
 
     res.status(200)
@@ -65,12 +68,14 @@ const confirmationUser = async (req, res, next) => {
     const { email, accountId } = req.params;
     const user = await userExist(email);
 
-    // if (!user.status === 'pending') {
-    await Account.delete({ _id: user.accountId });
-    await User.update({ email }, { accountId, status: 'active' });
-    // הורדת SIT
-
-    // res.redirect('/');
+    if (user.status === 'pending') {
+      await User.update({ email }, { status: 'active' });
+    } else if (user.status === 'active') {
+      await Account.delete({ _id: user.accountId });
+      await User.update({ email }, { accountId });
+    } else {
+      throw new Error('Unable to confirm this user');
+    }
 
     res.redirect('/login');
   } catch (err) {

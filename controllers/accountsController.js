@@ -3,7 +3,8 @@ const { User } = require('../services/authService');
 
 const inviteUser = async (req, res) => {
   try {
-    const manager = await User.retrieve({ email: req.user });
+    // checkPermission(req.user.email);
+    const manager = await User.retrieve({ email: req.user.email });
     const account = await Account.retrieve({ _id: manager.accountId });
     const invitedUser = await User.retrieve({ email: req.params.email });
     if (invitedUser) {

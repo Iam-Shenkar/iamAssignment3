@@ -374,7 +374,6 @@ const typeChart = (users) => {
 };
 
 const planChart = (accounts) => {
-  console.log(accounts);
   const plans = {};
   for (let i = 0; i < accounts.length; i++) {
     const plan = accounts[i].Plan;

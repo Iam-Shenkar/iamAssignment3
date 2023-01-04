@@ -26,7 +26,7 @@
 
 </head>
 
-<body onload="charts()">
+<body >
 <div class="container-scroller">
   <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
@@ -87,26 +87,31 @@
 
 
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
-      <ul class="nav" id="navSideMenu">
+      <ul class="nav" id="navSideMenu" >
 
       </ul>
     </nav>
     <div class="main-panel">
       <div class="content-wrapper">
-        <div class="cards">
+        <div class="row" >
+          <div class="col-md-5 grid-margin stretch-card">
+
             <div class="card">
               <div class="card-body" style="width: 100%; height: 100%">
                 <h4>Users Types 2023</h4>
-                <canvas id="typePieChart" width="1100" height="150" ></canvas>
+                <canvas id="typePieChart" width="1100" height="400" ></canvas>
               </div>
             </div>
+            </div>
+            <div class="col-md-5 grid-margin stretch-card">
         <div class="card">
               <div class="card-body" style="width: 100%; height: 100%">
                 <h4>Plans 2023</span> </h4>
-                <canvas id="myPieChart" width="1100" height="150" ></canvas>
+                <canvas id="myPieChart" width="1100" height="400" ></canvas>
               </div>
             </div>
-        </div>
+</div>
+  </div>
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
             <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">IAM Team</span>
@@ -124,5 +129,6 @@
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/settings.js"></script>
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/todolist.js"></script>
 <script src="./script/script.js"></script>
+<script>charts()</script>
 </body>
 </html>

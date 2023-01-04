@@ -2,7 +2,6 @@ const { User, userExist } = require('../services/authService');
 const { Account } = require('../services/accountService');
 const { oneTimePass, createAccount, createUser } = require('../services/registerService');
 const { userRole } = require('../middleware/validatorService');
-const userServise = require('../services/userService');
 
 async function addUser(req, res) {
   try {
@@ -22,11 +21,20 @@ async function addUser(req, res) {
 
 async function getUsers(req, res) {
   try {
-    const user = await User.retrieve({ email: req.user });
+    // const user = await User.retrieve({ email: req.user });
+    // if(user.type !==)
     const users = await User.find({});
-    let outputArray = userData(users);
-    if (user.type !== 'manager') outputArray = Object.assign(outputArray, { Edit: '' });
-    console.log(outputArray);
+
+    const outputArray = users.reduce((accumulator, currentValue) => [
+      ...accumulator,
+      {
+        Name: currentValue.name,
+        email: currentValue.email,
+        Role: currentValue.type,
+        Status: currentValue.status,
+        Edit: '',
+      },
+    ], []);
     res.status(200).json(outputArray);
   } catch (err) {
     res.status(400).json({ message: err.message });

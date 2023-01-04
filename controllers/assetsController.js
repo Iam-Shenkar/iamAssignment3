@@ -28,7 +28,7 @@ const isFeatureAllowed = async (req, res) => {
   try {
     const result = await assetsService.getFeatures(req.user.email);
     res.status(result.status)
-      .json(result.message || result.data);
+      .json(result.data);
   } catch (err) {
     res.status(401);
   }
@@ -37,7 +37,7 @@ const isFeatureAllowed = async (req, res) => {
 const getSeats = async (req, res) => {
   try {
     const result = await assetsService.getSeats(req.user.email);
-    res.status(result.status).json(result.message || result.data);
+    res.status(result.status).json(רesult.data);
   } catch (err) {
     res.status(401);
   }
@@ -46,7 +46,7 @@ const getSeats = async (req, res) => {
 const getCredit = async (req, res) => {
   try {
     const result = await assetsService.getCredit(req.user.email);
-    res.status(result.status).json(result.message || result.data);
+    res.status(result.status).json(result.data);
   } catch (err) {
     res.status(401);
   }
@@ -55,7 +55,7 @@ const getCredit = async (req, res) => {
 const setCredit = async (req, res) => {
   try {
     const result = await assetsService.setCredit(req.user.email, req.params.credit);
-    res.status(result.status).json(result.message || result.data);
+    res.status(result.status).json(result.data);
   } catch (err) {
     res.status(401);
   }
@@ -64,7 +64,7 @@ const setCredit = async (req, res) => {
 const setSeats = async (req, res) => {
   try {
     const result = await assetsService.setSeats(req.user.email, req.params.seat);
-    res.status(result.status).json(result.message || result.data);
+    res.status(result.status).json(result.data);
   } catch (err) {
     res.status(401);
   }
@@ -73,7 +73,7 @@ const setSeats = async (req, res) => {
 const setFeature = async (req, res) => {
   try {
     const result = await assetsService.setFeature(req.user.email,req.params.feature);
-    res.status(result.status).json(result.message || result.data);
+    res.status(result.status).json(result.data);
   } catch (err) {
     res.status(401);
   }

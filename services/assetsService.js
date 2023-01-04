@@ -59,6 +59,7 @@ const getCredit = async (mail) => {
 };
 
 const setSeats = async (mail, count=1) => {
+
     const assets = await getAssetsByUser(mail);
     accountID = await getAccountByUser(mail);
     const { usedSeats, seats } = assets;

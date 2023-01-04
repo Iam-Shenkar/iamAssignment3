@@ -22,11 +22,12 @@
     <link href="https://www.bootstrapdash.com/demo/star-admin2-free/template/images/favicon.png" rel="shortcut icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <script src="./script/script.js"></script>
 
 </head>
 
 <body>
-<script src="./script/script.js"></script>
+
 <div class="container-scroller">
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
@@ -63,7 +64,7 @@
                         <a class="dropdown-item"><i
                                 class="bi bi-person-circle dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i>
                             My Profile</a>
-                        <a class="dropdown-item" id="logout"><i
+                        <a class="dropdown-item" id='logout'><i
                                 class="bi bi-box-arrow-right dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign
                             Out</a>
                     </div>
@@ -76,7 +77,7 @@
         </div>
     </nav>
     <div class="container-fluid page-body-wrapper">
-        <div class="settings-panel" id="right-sidebar">
+        <div id="right-sidebar" class="settings-panel">
             <div class="ps__rail-x">
                 <div class="ps__thumb-x" tabindex="0"></div>
             </div>
@@ -87,26 +88,7 @@
 
 
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="nav-link addEmail" href= "AddUser.html" aria-expanded="false"
-                       aria-controls="ui-basic">Add User
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link addEmail" href="MyProfile.html" aria-expanded="false"
-                       aria-controls="ui-basic">My Profile
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link addEmail" href="Accounts.html" aria-expanded="false"
-                       aria-controls="ui-basic">Accounts
-                    </a>
-                </li>
-                <li class="nav-item">
-                       aria-controls="ui-basic">Users
-                    </a>
-                </li>
+            <ul class="nav" id="navSideMenu" >
 
             </ul>
         </nav>

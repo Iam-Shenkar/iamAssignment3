@@ -55,4 +55,31 @@ const getCredit = async (mail) => {
   return result;
 };
 
-module.exports = { getFeatures, getSeats, getCredit };
+const setSeats = async (mail, count=1) => {
+  const assets = await getAssetsByUser(mail);
+  accountID =await getAccountByUser(mail);
+  const { usedSeats, seats } = assets;
+  await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': usedSeats+count });
+};
+
+const setCredit = async (mail, count=1) => {
+  const assets = await getAssetsByUser(mail);
+  accountID = await getAccountByUser(mail);
+  const { credits } = assets;
+  await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': count+ credits });
+};
+
+const setFeature = async (mail, feature) => {
+  const assets = await getAssetsByUser(mail);
+  accountID =await getAccountByUser(mail);
+  const currentFeatures = assets.features;
+  const isFeatureExists = currentFeatures.includes(feature);
+  if (isFeatureExists) {
+    return "feature already exists";
+  }
+  else {
+    await accountService.Account.update({ _id: accountID._id }, { $push: { 'assets.features': feature }});
+  }
+};
+
+module.exports = { getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature };

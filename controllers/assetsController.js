@@ -51,10 +51,12 @@ const getCredit = async (req, res) => {
     res.status(401).json('could not find assets');
   }
 };
+
 module.exports = {
   isFeatureAllowed,
   getSeats,
   getCredit,
   getAllAssets,
-  verifyToken
+  verifyToken,
+  test,
 };

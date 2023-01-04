@@ -38,6 +38,9 @@ app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', authenticateToken, users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 app.get('/login', (req, res) => { res.sendFile(path.join(__dirname, './client/Login.html')); });
+app.use('/test', assets.assetsRoute);
 app.use('/', authenticateToken, dashboard.dashboardRouter);
+
+
 
 app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));

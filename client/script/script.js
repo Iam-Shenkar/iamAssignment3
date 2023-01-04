@@ -241,7 +241,6 @@ document.onload;
     default:
       greeting = 'Good evening,';
   }
-  console.log(getCookie('name'))
   const name = (getCookie('name')).replaceAll('%20',' ');;
   const email = getCookie('email');
   document.getElementById('timeOfDay').innerHTML = `${greeting
@@ -360,7 +359,6 @@ const typeChart = (users)=> {
 
 
 const planChart = (accounts) => {
-  console.log(accounts)
   let plans = {};
   for (let i = 0; i < accounts.length; i++) {
     let plan = accounts[i].Plan;

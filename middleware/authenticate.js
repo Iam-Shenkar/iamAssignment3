@@ -6,7 +6,7 @@ const generateToken = (req, res, next) => {
     const accessToken = jwt.sign({
       email: req.body.email,
     }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '5s',
+      expiresIn: '15m',
     });
 
     const refreshToken = jwt.sign({
@@ -42,7 +42,7 @@ const refreshTokenVerify = async (req, res) => {
     const accessToken = generateAccessToken({ email: user.email });
 
     res.set('authorization', accessToken);
-    req.user = user.email;
+    req.user = user;
 
     req.token = { accessToken: `Bearer ${accessToken}` };
   });
@@ -61,7 +61,7 @@ const authenticateToken = async (req, res, next) => {
       next();
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });
-      req.user = user.email;
+      req.user = user;
       req.token = { refreshToken: req.body.refreshToken, accessToken: authHeader };
       next();
     }

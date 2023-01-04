@@ -47,17 +47,17 @@ const codeValidator = (code) => {
 };
 
 const checkPermission = async (req, res, next) => {
-  const user = await User.retrieve(req.body.mail);
-  if (user.type === 'user') throw new Error('Not authorized');
-  // check sit
+  const user = req.user;
+  if (user.type === 'user') throw new Error('Not authorized'); 
+  //no need try and carch or throw- if type==user dredirect to homepage! thats it
   next();
 };
 
 const checkPermissionAdmin = async (req, res, next) => {
   try {
-    const user = await User.retrieve(req.body.mail);
+    const user = req.user;
     if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
-    // check sit
+    //no need try and carch or throw- if type==user dredirect to homepage! thats it
   }
   catch(err){
     res.status(403);

@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const accountSchema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true , immutable: true },
   plan: { type: String, default: 'free' },
   creationDate: { type: Date, default: new Date() },
   status: { type: String, default: 'pending' },

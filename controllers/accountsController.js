@@ -2,15 +2,16 @@ const {
   Account, sendInvitation, inviteAuthorization, inviteNewUser,
 } = require('../services/accountService');
 const { User } = require('../services/authService');
-const { getSeats, setSeats } = require('../services/assetsService');
+const { getSeats, setSeats, setCredit ,setFeature } = require('../services/assetsService');
+const { httpError } = require('../class/httpError');
 
-const inviteUser = async (req, res) => {
+const inviteUser = async (req, res, next) => {
   try {
     const manager = req.user;
     const { accountId, userEmail } = req.req.params;
     const account = await Account.retrieve({ _id: accountId });
     const invitedUser = await User.retrieve({ email: userEmail });
-    if ((await getSeats(account.name)).data < 1) throw new Error('There is not enough seats');
+    if ((await getSeats(account.name)).data < 1) throw new httpError(400,'There is not enough seats');
 
     if (invitedUser) {
       inviteAuthorization(account, invitedUser);
@@ -21,15 +22,18 @@ const inviteUser = async (req, res) => {
     await setSeats(account.name, manager.type, 1);
     res.status(200).json({ message: 'user invited' });
   } catch (err) {
-    res.status(401).json({ message: err.message });
+    next(err);
   }
 };
 
-const getAccount = async (req, res) => {
+const getAccount = async (req, res , next) => {
   try {
-    if (req.params.accountId === 'none') throw new Error('The admin does not have an account');
-    const acc = await Account.retrieve({ _id: req.params.accountId });
-    const users = await User.find({ accountId: req.params.accountId });
+    if (req.params.accountId === 'none') throw new httpError(404,'The admin does not have an account');
+    const acc = await Account.retrieve({ _id: req.params.id });
+    if(!acc) throw new httpError(404,"account doesnt exist");
+    if(acc.status === 'closed') throw new httpError(400,"account disabled");
+
+    const users = await User.find({ accountId: req.params.id });
     const outputArray = users.reduce((accumulator, currentValue) => [...accumulator,
       {
         Name: currentValue.name,
@@ -45,59 +49,77 @@ const getAccount = async (req, res) => {
     });
     res.status(200).json(outputArray);
   } catch (err) {
-    res.status(401).json({ message: 'The admin does not have an account' });
+    next(err);
   }
 };
 
-const getAccounts = async (req, res) => {
-  const accounts = await Account.find({});
-  const outputArray = [];
-  for (let i = 0; i < accounts.length; i += 1) {
-    const account = {
-      id: accounts[i]._id,
-      Name: accounts[i].name,
-      Plan: accounts[i].plan,
-      Credits: accounts[i].assets.credits,
-      Features: accounts[i].assets.features.length,
-      Status: accounts[i].status,
-      Edit: '',
-    };
-    outputArray.push(account);
-  }
-  res.status(200).json(outputArray);
-};
-
-const editAccount = async (req, res) => {
-  if (!req.body.name) { res.status(401); }
-  const acc = await Account.retrieve({ name: req.body.name });
-  acc.plan = req.body.plan;
-  acc.assets.credits = req.body.credits;
+const getAccounts = async (req, res, next) => {
   try {
-    if (acc.assets.seats - req.body.usedSeats < 0) { throw new Error('more users then account can handle'); }
-  } catch (e) {
-    res.status(400).json(e);
+    const accounts = await Account.find({});
+    const outputArray = [];
+    for (let i = 0; i < accounts.length; i += 1) {
+      const account = {
+        id: accounts[i]._id,
+        Name: accounts[i].name,
+        Plan: accounts[i].plan,
+        Credits: accounts[i].assets.credits,
+        Features: accounts[i].assets.features.length,
+        Status: accounts[i].status,
+        Edit: '',
+      };
+      outputArray.push(account);
+    }
+    res.status(200)
+      .json(outputArray);
+  } catch(err) {
+    next(err);
   }
-  acc.assets.seats = req.body.seats;
-  acc.assets.features = req.body.features;
-  await Account.update({ _id: acc._id }, {
-    plan: acc.plan,
-    assets: {
-      credits: acc.assets.credits,
-      seats: acc.assets.seats,
-      features: acc.assets.features,
-    },
-  });
-  res.status(200).json('Account updated!');
 };
 
-const disableAccount = async (req, res) => {
+const editAccount = async (req, res, next) => {
+    try {
+      if (!req.body) throw new httpError(400,"bad Request");
+
+      const account = await Account.retrieve({_id: req.params.id});
+      if(!account)
+        throw new httpError(404,"account doesnt exist");
+      if(account.status === 'closed')
+        throw new httpError(400,"disabled account");
+
+      const { params: { id }, body } = req;
+      if(req.body.features) {
+        await Account.update({ _id: id },
+          { $push: { "assets.features": req.body.features } });
+      }
+
+      const updatedAccount =   await Account.update({ _id: id }, {...body});
+      if (!updatedAccount) throw new httpError(400,"Not updated");
+      return res.status(200)
+        .json({ message: "account updated!" });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+const disableAccount = async (req, res, next) => {
   try {
-    if (!req.body.id) throw new Error('Please choose Account');
-    const acc = Account.retrieve({ _id: req.body.id });
-    User.deleteMany({ accountId: acc._id });
-    Account.update({ _id: acc._id }, { status: 'closed' });
+    if (!req.params) throw new httpError(400,'Bad request');
+
+    const account = await Account.retrieve({_id: req.params.id});
+    if(!account)
+      throw new httpError(404,"account doesnt exist");
+    if(account.status === 'closed')
+      throw new httpError(400,"account already disabled");
+
+    // delete all users that are not type manager & update account status to closed
+    await User.deleteMany({ accountId: req.params.id ,type: { $ne: "manager" } });
+    await Account.update({ _id: req.params.id }, { status: 'closed' });
+    // update manager status to closed
+    await User.update({ accountId: req.params.id } , { status: 'closed' })
+    return res.status(200)
+      .json({ message: "account disabled" });
   } catch (err) {
-    res.status(401).json({ message: err.message });
+    next(err);
   }
 };
 

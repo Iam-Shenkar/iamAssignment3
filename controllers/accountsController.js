@@ -111,8 +111,11 @@ const disableAccount = async (req, res, next) => {
     if(account.status === 'closed')
       throw new httpError(400,"account already disabled");
 
-    await User.deleteMany({ accountId: req.params.id });
+    // delete all users that are not type manager & update account status to closed
+    await User.deleteMany({ accountId: req.params.id  ,  type: { $ne: "manager" } });
     await Account.update({ _id: req.params.id }, { status: 'closed' });
+    // update manager status to closed
+    await User.update({ accountId: req.params.id } , { status: 'closed' })
     return res.status(200)
       .json({ message: "account disabled" });
   } catch (err) {

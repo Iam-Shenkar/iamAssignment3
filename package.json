@@ -23,6 +23,8 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
+    "bootstrap": "^5.2.3",
+    "bootstrap-vue": "^2.23.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "deep-email-validator": "^0.1.21",
@@ -49,6 +51,7 @@
     "string-validator": "^1.0.5",
     "thread-sleep": "^2.2.0",
     "validator": "^13.7.0",
+    "vue": "^2.7.14",
     "winston": "^3.8.2"
   },
   "devDependencies": {

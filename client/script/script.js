@@ -1,5 +1,20 @@
 const runningPath = window.location.origin;
-const Logout = document.getElementById('logout');
+
+// const Logout = document.getElementById('logout');
+
+const alert = (message, type, id) => {
+  const alertPlaceholder = document.getElementById(id);
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = [
+    `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+    `   <div>${message}</div>`,
+    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
+
+  alertPlaceholder.append(wrapper)
+}
+
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
   const row = thead.insertRow();
@@ -12,15 +27,14 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
-  const path = 'myProfile';
+
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
-      let func = 'disableAccount('+element.email+')'
       const cell = row.insertCell();
       if (key === 'Edit') {
         const button = editButton(element.email);
-        const option = buttonOption(element.email, path, 'email');
+        const option = buttonOption(element.email, 'myProfile', 'email','deleteUser', element);
         cell.appendChild(button);
         cell.appendChild(option);
       } else if (key === 'Status') {
@@ -42,7 +56,7 @@ const generateAccountTable = (table, data) => {
         const cell = row.insertCell();
         if (key === 'Edit') {
           const button = editButton(element.id);
-          const option = buttonOption(element.id, 'myAccount', 'id' );
+          const option = buttonOption(element.id, 'myAccount', 'id','disableAccount',element );
           cell.appendChild(button);
           cell.appendChild(option);
         } else if (key === 'Status') {
@@ -80,7 +94,7 @@ const editButton = () => {
   return bth;
 };
 
-const buttonOption = (email, path, val) => {
+const buttonOption = (email, path, val, removeFunc, element) => {
   const list = document.createElement('div');
   list.className = 'dropdown-menu';
   list.setAttribute('aria-labelledby', 'dropdownMenuIconButton6');
@@ -92,10 +106,13 @@ const buttonOption = (email, path, val) => {
   remove.className = 'dropdown-item';
   view.className = 'dropdown-item';
 
-  view.setAttribute('href', `${runningPath}/${path}?${val}=${email}`);
-  remove.setAttribute("onclick", `disableAccount(\'${email}\')`);
+  if (element.Status === 'closed'){
+    view.setAttribute('onclick',`viewClose()` );
+  }else {
+    view.setAttribute('href', `${runningPath}/${path}?${val}=${email}`);
+  }
+  remove.setAttribute("onclick", `${removeFunc}(\'${email}\')`);
   remove.setAttribute('value', email);
-
 
   list.appendChild(view);
   if (getCookie('role') === 'admin') list.appendChild(remove);
@@ -259,7 +276,7 @@ const sideMenu = () => {
 
 function MenuPermission() {
   const role = getCookie('role');
-  const titleNavAdmin = ['My Profile', 'Accounts', 'Users', 'Add User'];
+  const titleNavAdmin = ['My Profile', 'Accounts', 'Users'];
   const titleNavUser = ['My Profile', 'My Account'];
   if (role !== 'admin') {
     return titleNavUser;
@@ -291,22 +308,22 @@ window.onload = () => {
   userName.innerHTML = email.replace('%40', '&#064;');
 };
 
-Logout.addEventListener('click', async () => {
-  const data = {
-    email: decodeURIComponent(getCookie('email')),
-  };
-  console.log(data);
-  const response = await fetch(`${runningPath}/auth/logout`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  // const body = await response.json();
-  if (response.status !== 302) { console.log('redirect'); }
-  window.location.href = `${runningPath}/`;
-});
+// Logout.addEventListener('click', async () => {
+//   const data = {
+//     email: decodeURIComponent(getCookie('email')),
+//   };
+//   console.log(data);
+//   const response = await fetch(`${runningPath}/auth/logout`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(data),
+//   });
+//   // const body = await response.json();
+//   if (response.status !== 302) { console.log('redirect'); }
+//   window.location.href = `${runningPath}/`;
+// });
 
 const charts = async () => {
   const responseUser = await fetch(`${runningPath}/users/list`, {
@@ -433,8 +450,8 @@ const planChart = (accounts) => {
   });
 };
 
-const logo = document.getElementById('logo'); // or grab it by tagname etc
-logo.setAttribute('href', `${runningPath}/`);
+// const logo = document.getElementById('logo'); // or grab it by tagname etc
+// logo.setAttribute('href', `${runningPath}/`);
 
 // eslint-disable-next-line no-unused-vars
 const positiveNumber = () => {
@@ -453,7 +470,7 @@ const updateDaysOfSuspension = () => {
 
 const disableAccount = async (accotnt) => {
   const response = await fetch(
-    `${runningPath}/accounts/disable/${accotnt}`,
+    `${runningPath}/accounts/status/${accotnt}`,
     {
       method: 'PUT',
       headers: {
@@ -462,7 +479,31 @@ const disableAccount = async (accotnt) => {
     },
   );
   const body = await response.json();
-  if (body.message === 200) {
-    alert('account closed');
+  if (response.status === 200) {
+    alert('account closed','primary', 'liveAlertPlaceholder');
+  }
+
+};
+
+function viewClose(){
+  alert(`It is not possible to view a closed account!`, 'danger', 'liveAlertPlaceholder')
+}
+
+const deleteUser = async (email) => {
+  console.log("deleteF")
+  const response = await fetch(
+    `${runningPath}/users/${email}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  const body = await response.json();
+  if (body.status === 200) {
+    alert('account closed',"primary" ,'liveAlertPlaceholder');
   }
 };
+
+

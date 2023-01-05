@@ -1,20 +1,23 @@
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
+const { httpError } = require('../class/httpError');
 const UsersRepository = require('../repositories/users.repositories');
 const { sendEmail } = require('../sendEmail/sendEmail');
+
 
 const User = new UsersRepository();
 
 const unSuspend = async (user) => {
-  await User.update(user.email, {
+  const updatedUser = await User.update(user.email, {
     status: 'active',
     suspensionTime: 0,
     suspensionDate: 0,
   });
+  if (!updatedUser) throw new httpError(400, 'not Updated');
 };
 
 const validPassword = async (pass, userPassword) => {
-  if (!await bcrypt.compare(pass, userPassword)) throw new Error('incorrect password');
+  if (!await bcrypt.compare(pass, userPassword)) throw new httpError(400, 'incorrect password');
 };
 
 const userExist = async (email) => {
@@ -29,7 +32,7 @@ const statusCheck = async (user) => {
     case 'active':
       break;
     case 'closed':
-      throw new Error('User is closed');
+      throw new httpError(400, 'User is closed');
 
     case 'suspended':
       const suspendTime = parseInt(user.suspensionTime, 10);
@@ -39,7 +42,7 @@ const statusCheck = async (user) => {
       dateExpired.setDate(suspendStartDate.getDate() + suspendTime);
       if (dateExpired > new Date()) {
         console.log(`user: ${user.email} is suspended- login failed`, 'ERROR');
-        throw new Error(`User is suspended until ${dateExpired}`);
+        throw new httpError(400, `User is suspended until ${dateExpired}`);
       } else {
         await unSuspend(user);
       }

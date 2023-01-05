@@ -47,7 +47,7 @@ app.use(
 );
 
 app.use('/auth', validation, auth.authRouter);
-app.use('/assets', authenticateToken, assets.assetsRoute);
+app.use('/assets',authenticateToken, assets.assetsRoute);
 app.use('/users', authenticateToken, users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 app.get('/login', (req, res) => { res.sendFile(path.join(__dirname, './client/Login.html')); });

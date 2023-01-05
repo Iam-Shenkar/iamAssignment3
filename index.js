@@ -19,8 +19,15 @@ const accounts = require('./routes/accountsRouter');
 const { validation } = require('./middleware/validator');
 const { authenticateToken } = require('./middleware/authenticate');
 
+//access logger
+const { morgan } = require('./middleware/logger');
+const fs = require('fs');
+const logPath = path.join(__dirname, '/log', 'access.log');
+
+const errorHandler = require('./middleware/errorHandler');
+
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 app.use(cors('*'));
 app.use(express.static(path.join(__dirname, 'client')));
 
@@ -33,14 +40,19 @@ app.use(session({ secret: process.env.secret, resave: false, saveUninitialized: 
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(
+  morgan(':date --> :method :url :status :response-time ms', {
+    stream: fs.createWriteStream(logPath, { flags: 'a' }),
+  }),
+);
 
 app.use('/auth', validation, auth.authRouter);
 app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', authenticateToken, users.usersRouter);
-app.use('/accounts', authenticateToken, accounts.accountsRouter);
+app.use('/accounts' /*authenticateToken*/, accounts.accountsRouter);
 app.get('/login', (req, res) => { res.sendFile(path.join(__dirname, './client/Login.html')); });
 app.use('/', authenticateToken, dashboard.dashboardRouter);
 
-
+app.use(errorHandler);
 
 app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));

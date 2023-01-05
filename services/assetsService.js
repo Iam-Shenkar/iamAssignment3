@@ -1,14 +1,16 @@
 const authService = require('./authService');
 const accountService = require('./accountService');
 const { Account } = require('./accountService');
+const { httpError } = require('../class/httpError');
 
 const getAccountByUser = async (email) => {
   const user = await authService.userExist(email);
   if (!user) {
-    throw new Error("user doesn't exist");
+    throw new httpError(404,"user doesn't exist");
   }
   const { accountId } = user;
   const account = await accountService.Account.retrieve({ _id: accountId });
+  if(!account) throw new httpError(400, "couldn't find account");
   return account;
 };
 

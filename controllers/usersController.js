@@ -2,12 +2,9 @@ const { User, userExist } = require('../services/authService');
 const { Account } = require('../services/accountService');
 const { oneTimePass, createAccount, createUser } = require('../services/registerService');
 
-async function getUsers(req, res) {
+async function getUsers(req, res , next) {
   try {
-    // const user = await User.retrieve({ email: req.user });
-    // if(user.type !==)
     const users = await User.find({});
-
     const outputArray = users.reduce((accumulator, currentValue) => [
       ...accumulator,
       {
@@ -20,11 +17,11 @@ async function getUsers(req, res) {
     ], []);
     res.status(200).json(outputArray);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    next(err);
   }
 }
 
-async function getUser(req, res) {
+async function getUser(req, res , next) {
   try {
     let accountName = 'none';
     const user = await User.retrieve({ email: req.params.email });
@@ -40,11 +37,11 @@ async function getUser(req, res) {
     };
     res.status(200).json(del);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    next(err);
   }
 }
 
-async function updateUser(req, res) {
+async function updateUser(req, res, next) {
   try {
     const userType = await User.retrieve({ email: req.body.email });
     if (userType.type === 'admin' && req.body.status !== 'active') {
@@ -56,11 +53,11 @@ async function updateUser(req, res) {
     }
     return res.status(200).json({ message: 'user update' });
   } catch (err) {
-    return res.status(401).json({ message: err.message });
+    next(err);
   }
 }
 
-async function deleteUser(req, res) {
+async function deleteUser(req, res , next) {
   try {
     const planCheck = await Account.retrieve({ email: req.body.email });
     if (planCheck.plan === 'free') {
@@ -69,7 +66,7 @@ async function deleteUser(req, res) {
     await oneTimePass.delete({ email: req.body.email });
     return res.status(200).json({ message: 'The user has been deleted' });
   } catch (e) {
-    return res.status(401).json({ message: e.message });
+    next(e);
   }
 }
 

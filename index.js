@@ -23,9 +23,6 @@ const { authenticateToken } = require('./middleware/authenticate');
 const { morgan } = require('./middleware/logger');
 
 const logPath = path.join(__dirname, '/log', 'access.log');
-
-
-const logPath = path.join(__dirname, '/log', 'access.log');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();

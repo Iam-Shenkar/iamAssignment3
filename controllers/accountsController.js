@@ -3,7 +3,7 @@ const {
 } = require('../services/accountService');
 const { Account, User } = require('../repositories/repositories.init');
 const {
-  getSeats, setSeats, setCredit, setFeature,
+  getSeats, setSeats,
 } = require('../services/assetsService');
 const { httpError } = require('../class/httpError');
 
@@ -81,13 +81,19 @@ const getAccounts = async (req, res, next) => {
 const editAccount = async (req, res, next) => {
   try {
     if (!req.body) throw new httpError(400, 'bad Request');
-    // await editAuthorization(req.params.id);
+    const account = await Account.retrieve({ _id: req.params.id });
+    if (!account) throw new httpError(404, 'account doesnt exist');
+    if (account.status === 'closed') throw new httpError(400, 'disabled account');
+    const currentFeatures = account.assets.features;
+    const isFeatureExists = currentFeatures.includes(currentFeatures);
+    if (isFeatureExists) throw new httpError(400, `ERROR, feature ${currentFeatures} already exists`);
 
     const { params: { id }, body } = req;
     const data = {
       'assets.credits': body.credits,
       'assets.seats': body.seats,
       plan: body.plan,
+      status: body.status
     };
     if (req.body.features) {
       await Account.update(

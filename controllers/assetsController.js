@@ -27,12 +27,15 @@ const getAllAssets = async (req, res, next) => {
 };
 
 const getFeatures = async (req, res, next) => {
+  console.log(`3 ${req.user}`);
   try {
     const result = await assetsService.getFeatures(req.user.email);
+    console.log(`4 ${req.user}`);
     if (!result) throw new httpError(400, 'could not find features');
     res.status(result.status)
       .json(result.data);
   } catch (err) {
+    console.log(`6 ${req.user}`);
     next(err);
   }
 };

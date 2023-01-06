@@ -20,10 +20,12 @@ const getAssetsByUser = async (email) => {
 };
 
 const getFeatures = async (mail) => {
+  console.log(`1: ${mail}` );
   const email = mail;
   const assets = await getAssetsByUser(email);
   const currentFeatures = assets.features;
   let result;
+  console.log(`2: ${result}` );
   if (currentFeatures) {
     result = { status: 400, message: `OK, available features are: ${currentFeatures}`, data: currentFeatures };
   } else {

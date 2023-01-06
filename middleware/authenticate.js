@@ -55,12 +55,14 @@ const authenticateToken = async (req, res, next) => {
   // if (token == null) return res.redirect('/');
   await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err) => {
     if (err) {
+      console.log(`4`);
       await refreshTokenVerify(req, res);
       if (res.statusCode === 302) { return res.end(); }
       next();
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });
       req.user = user;
+      console.log(`5 ${user}`);
       req.token = { refreshToken: req.body.refreshToken, accessToken: authHeader };
       next();
     }

@@ -56,9 +56,9 @@ const login = async () => {
     body: JSON.stringify(data),
   });
   // const body = await response.json();
-  if (response.status !== 302) {
+  if (response.status === 200) {
   // alert((body.message));
-    window.location.href = `/dashboard`;
+    window.location.href = '/';
   }
 };
 

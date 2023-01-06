@@ -5,7 +5,7 @@ const { httpError } = require('../class/httpError');
 const { updateName, adminUpdateUser } = require('../services/userService');
 
 
-async function getUsers(req, res , next) {
+async function getUsers(req, res, next) {
   try {
     const users = await User.find({});
     const outputArray = users.reduce((accumulator, currentValue) => [
@@ -24,7 +24,7 @@ async function getUsers(req, res , next) {
   }
 }
 
-async function getUser(req, res , next) {
+async function getUser(req, res, next) {
   try {
     let accountName = 'none';
     const user = await User.retrieve({ email: req.params.email });
@@ -59,19 +59,19 @@ async function updateUser(req, res, next) {
   }
 }
 
-async function deleteUser(req, res , next) {
+async function deleteUser(req, res, next) {
   try {
-    const user = await User.retrieve({email: req.params.email});
+    const user = await User.retrieve({ email: req.params.email });
     const account = await Account.retrieve({ _id: user.accountId });
 
-    if(!account) throw new httpError(400,'Cant delede this user');
+    if (!account) throw new httpError(400, 'Cant delede this user');
 
     if (account.plan === 'free') {
       await Account.update({ _id: account._id }, { status: 'closed' });
-      await User.update({ email: user.email } , { status: 'closed' });
-    } else if(user.role !== 'user') {
+      await User.update({ email: user.email }, { status: 'closed' });
+    } else if (user.role !== 'user') {
       throw new Error('Unable to delete this user');
-    }else {
+    } else {
       await User.delete({ email: user.email });
     }
     return res.status(200).json({ message: 'The user has been deleted' });

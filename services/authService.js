@@ -3,9 +3,7 @@ const generator = require('generate-password');
 const { httpError } = require('../class/httpError');
 const UsersRepository = require('../repositories/users.repositories');
 const { sendEmail } = require('../sendEmail/sendEmail');
-const { Account } = require('./accountService');
-
-
+// const { Account } = require('./accountService');
 
 const User = new UsersRepository();
 
@@ -29,8 +27,8 @@ const userExist = async (email) => {
   return user;
 };
 const accountStatusCheck = async (accountId) => {
-  const account = await Account.retrieve(accountId);
-  if (account.status !== 'active') throw new httpError(400, `Account is ${account.status}`);
+  const account = await Account.retrieve({ _id: accountId });
+//   if (account.status !== 'active') throw new httpError(400, `Account is ${account.status}`);
 };
 
 const userStatusCheck = async (user) => {

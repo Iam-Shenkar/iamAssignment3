@@ -11,8 +11,7 @@ const loginControl = async (req, res, next) => {
     const user = await userExist(req.body.email);
 
     if (!user) throw new httpError(404, 'user not exist');
-    if (user.accountId !== 'none') await accountStatusCheck(user.accountId);
-
+    // if (user.accountId !== 'none') await accountStatusCheck(user.accountId);
 
     await validPassword(req.body.password, user.password);
     await userStatusCheck(user);
@@ -28,17 +27,16 @@ const loginControl = async (req, res, next) => {
     res.cookie('name', user.name);
     res.cookie('role', user.type);
     res.cookie('account', user.accountId);
-    res.redirect('/');
-    res.end();
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
 };
 
-const forgotPassControl = async (req, res , next) => {
+const forgotPassControl = async (req, res, next) => {
   try {
     const user = await userExist(req.body.email);
-    if (!user) throw new httpError(404,'user not exist');
+    if (!user) throw new httpError(404, 'user not exist');
 
     await userStatusCheck(user);
 

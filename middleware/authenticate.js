@@ -32,7 +32,7 @@ function generateAccessToken(user) {
 
 const refreshTokenVerify = async (req, res) => {
   const refreshToken = req.cookies.jwt;
-  if (refreshToken === null) return res.redirect('/login');
+  if (refreshToken === undefined) { return res.redirect('/login'); }
 
   const user = await User.retrieve({ refreshToken });
   if (!user) return res.redirect('/login');
@@ -48,6 +48,10 @@ const refreshTokenVerify = async (req, res) => {
 };
 
 const authenticateToken = async (req, res, next) => {
+  if (req.path === '/login') {
+    return next();
+  }
+
   console.log('checked token');
 
   const authHeader = req.headers.authorization;
@@ -56,6 +60,7 @@ const authenticateToken = async (req, res, next) => {
   await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err) => {
     if (err) {
       await refreshTokenVerify(req, res);
+      if (res.statusCode === 302) { return res.end(); }
       next();
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });

@@ -31,15 +31,12 @@ function generateAccessToken(user) {
 }
 
 const refreshTokenVerify = async (req, res) => {
-  console.log(`6 ${req.cookies.jwt}`)
-  console.log(`7 ${req.cookies}`)
   const refreshToken = req.cookies.jwt;
   if (refreshToken === undefined) { return res.redirect('/login'); }
 
   const user = await User.retrieve({ refreshToken });
   if (!user) return res.redirect('/login');
   await jwt.verify(user.refreshToken, process.env.REFRESH_TOKEN_SECRET, (err) => {
-    console.log(`8 ${user.email}`)
     if (err) return res.redirect('/login');
     const accessToken = generateAccessToken({ email: user.email });
 
@@ -47,26 +44,22 @@ const refreshTokenVerify = async (req, res) => {
     req.user = user;
 
     req.token = { accessToken: `Bearer ${accessToken}` };
-    console.log(`9 ${req.token}  10    ${req.user}`);
   });
 };
 
 const authenticateToken = async (req, res, next) => {
   console.log('checked token');
-
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   // if (token == null) return res.redirect('/');
   await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err) => {
     if (err) {
-      console.log(`4`);
       await refreshTokenVerify(req, res);
       if (res.statusCode === 302) { return res.end(); }
       next();
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });
       req.user = user;
-      console.log(`5 ${user}`);
       req.token = { refreshToken: req.body.refreshToken, accessToken: authHeader };
       next();
     }

@@ -33,6 +33,7 @@ const getUser = async (req, res, next) => {
       name: user.name,
       email: user.email,
       role: user.type,
+      gender: user.gender,
       account: accountName,
     };
     res.status(200).json(del);

@@ -28,7 +28,7 @@ const loginControl = async (req, res, next) => {
     res.cookie('name', user.name);
     res.cookie('role', user.type);
     res.cookie('account', user.accountId);
-    res.redirect('/');
+   // res.redirect('/');
     res.end();
   } catch (err) {
     next(err);

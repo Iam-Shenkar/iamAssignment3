@@ -19,7 +19,6 @@ const accounts = require('./routes/accountsRouter');
 const { validation } = require('./middleware/validator');
 const { authenticateToken } = require('./middleware/authenticate');
 
-//access logger
 const { morgan } = require('./middleware/logger');
 const fs = require('fs');
 const logPath = path.join(__dirname, '/log', 'access.log');

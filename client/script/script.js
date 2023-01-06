@@ -172,7 +172,7 @@ const adminAddUser = async () => {
 };
 
 const getUsers = async () => {
-  const response = await fetch(`${runningPath}/users/list`, {
+  const response = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ const getUsers = async () => {
 };
 
 const getAccounts = async () => {
-  const response = await fetch(`${runningPath}/accounts/list`, {
+  const response = await fetch(`${runningPath}/accounts`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -325,7 +325,7 @@ window.onload = () => {
 // });
 
 const charts = async () => {
-  const responseUser = await fetch(`${runningPath}/users/list`, {
+  const responseUser = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -334,7 +334,7 @@ const charts = async () => {
   const users = await responseUser.json();
   typeChart(users);
 
-  const responseAccount = await fetch(`${runningPath}/accounts/list`, {
+  const responseAccount = await fetch(`${runningPath}/accounts/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

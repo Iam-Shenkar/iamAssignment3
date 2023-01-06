@@ -104,6 +104,17 @@ const setFeature = async (mail, feature) => {
   return result;
 };
 
+const coreDetails = async(mail)=>{
+  const assets = await getAssetsByUser(mail);
+  const user = await authService.userExist(email);
+  const account = await getAccountByUser(mail);
+  if (!user) {
+    throw new httpError(404, "user doesn't exist");
+  }else {
+    result = { status: 200, message: `OK, details were sent`, data: { credit: account.credits , plan: account.plan,type: user.type} };
+  }
+}
+
 module.exports = {
-  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature,
+  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature,coreDetails
 };

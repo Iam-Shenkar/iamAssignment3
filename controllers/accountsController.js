@@ -93,7 +93,7 @@ const editAccount = async (req, res, next) => {
       'assets.credits': body.credits,
       'assets.seats': body.seats,
       plan: body.plan,
-      status: body.status
+      status: body.status,
     };
     if (req.body.features) {
       await Account.update(

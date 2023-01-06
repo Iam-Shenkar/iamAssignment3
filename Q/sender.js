@@ -1,4 +1,5 @@
 const amqp = require('amqplib/callback_api');
+
 const { amqpCreateFreePlan } = process.env;
 const { amqpSuspendedAccount } = process.env;
 

@@ -13,13 +13,13 @@ const adminUpdateUser = async (data) => {
 
   const updateData = {
     name: data.name,
-    role: data.role,
+    // role: data.role,
     status: data.status,
   };
   if (data.status === 'suspended') {
     const suspensionData = {
       suspensionTime: data.suspensionTime,
-      suspensionDate: data.suspensionDate,
+      suspensionDate: new Date(),
     };
     Object.assign(updateData, suspensionData);
   }

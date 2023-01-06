@@ -26,5 +26,4 @@ module.exports = class AccountRepository {
   delete(email) {
     return this.storage.delete(email);
   }
-
 };

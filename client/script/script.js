@@ -10,9 +10,8 @@ const alert = (message, type, id) => {
     '</div>',
   ].join('');
 
-  alertPlaceholder.append(wrapper)
+  alertPlaceholder.append(wrapper);
 };
-
 
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
@@ -26,7 +25,6 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
-
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
@@ -132,7 +130,7 @@ const getUser = async () => {
 
   const editButton = document.getElementById('editButton');
   const role = getCookie('role');
-  if (role === 'admin') editButton.setAttribute('href', `${runningPath}/EditProfile=${email}`);
+  if (role === 'admin') editButton.setAttribute('onclick', `editProfileAdmin('${email}')`);
   if (role !== 'admin') editButton.setAttribute('onclick', 'editProfile()');
 
   document.getElementById('exampleInputUsername1').value = body.name;
@@ -141,11 +139,56 @@ const getUser = async () => {
   document.getElementById('exampleInputAccount').value = body.account;
 };
 
+const editProfileAdmin = async (email) => {
+  window.location.href = `${runningPath}/EditProfile?email=${email}`;
+};
 // eslint-disable-next-line no-unused-vars
 const editProfile = () => {
   console.log('edit');
   const name = document.getElementById('exampleInputUsername1');
   name.removeAttribute('readonly');
+};
+
+const getUserAdmin = async () => {
+  const url = new URL(window.location.href);
+  let email = url.searchParams.get('email');
+  if (!email) email = getCookie('email');
+  const response = await fetch(`${runningPath}/users/${email}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.json();
+  document.getElementById('exampleInputUsername2').value = body.name;
+  document.getElementById('exampleInputEmail2').value = body.email;
+  document.getElementById('currentStatus').innerText = body.status;
+};
+
+const editAdmin = async () => {
+  let name = document.getElementById('exampleInputUsername2').value;
+  const email = document.getElementById('exampleInputEmail2').value;
+  let status = document.getElementById('currentStatus').value;
+  if (!name) {
+    name = document.getElementById('exampleInputEmail1').value;
+  }
+  if (status === 'Suspend') { status = 'suspended'; }
+  const data = {
+    name,
+    status,
+    suspensionTime: document.getElementById('exampleAmountOfDays').value,
+  };
+  const response = await fetch(`${runningPath}/users/${email}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const body = await response.json();
+  if (response.status !== 200 && body.message) {
+    alert((body.message));
+  }
 };
 
 const adminAddUser = async () => {
@@ -647,8 +690,8 @@ const buildTableForCredits = (dataArray1, dataArry2) => {
     tableMonth.appendChild(rowMonth);
   }
 
-  day.appendChild(tableDay);
-  month.appendChild(tableMonth);
+  // day.appendChild(tableDay);
+  // month.appendChild(tableMonth);
 };
 
 // Define the data array for total credits usage per day per user

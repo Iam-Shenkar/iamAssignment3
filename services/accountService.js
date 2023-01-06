@@ -46,7 +46,7 @@ const editAuthorization = async (accountId) => {
   const acc = await Account.retrieve({ _id: accountId });
   if (!acc) throw new httpError(404, 'account doesnt exist');
   if (acc.status === 'closed') throw new httpError(400, 'account disabled');
-}
+};
 
 const createUserToAccount = async (email, account) => {
   const newUser = {
@@ -61,5 +61,5 @@ const createUserToAccount = async (email, account) => {
 };
 
 module.exports = {
-  Account, sendInvitation, inviteAuthorization, createUserToAccount, inviteNewUser, editAuthorization
+  Account, sendInvitation, inviteAuthorization, createUserToAccount, inviteNewUser, editAuthorization,
 };

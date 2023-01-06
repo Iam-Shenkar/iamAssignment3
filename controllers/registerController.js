@@ -1,18 +1,19 @@
 const bcrypt = require('bcrypt');
 // eslint-disable-next-line import/no-unresolved
 const register = require('../services/registerService');
-const { User, userExist } = require('../services/authService');
+const { userExist } = require('../services/authService');
 const { existCode, sendEmailOneTimePass } = require('../services/registerService');
 const { Account } = require('../services/accountService');
 const { userRole } = require('../middleware/validatorService');
 const { httpError } = require('../class/httpError');
+const { User } = require('../services/authService');
 
 const handleRegister = async (req, res, next) => {
   try {
     const newUser = req.body;
     const user = await userExist(newUser.email);
     if (user) {
-      if (user.status !== 'pending') throw new httpError(400,'user already exist');
+      if (user.status !== 'pending') throw new httpError(400, 'user already exist');
       const newPass = await bcrypt.hash(req.body.password, 12);
       await User.update({ email: user.email }, {
         status: 'active',
@@ -33,7 +34,7 @@ const handleRegister = async (req, res, next) => {
     return res.status(200)
       .json({ message: 'code has been sent' });
   } catch (e) {
-  next(e);
+    next(e);
   }
 };
 
@@ -41,7 +42,7 @@ const handleConfirmCode = async (req, res, next) => {
   try {
     const userEmail = req.body.email;
     const user = await userExist(userEmail);
-    if (user) throw new httpError(400,'user already exist');
+    if (user) throw new httpError(400, 'user already exist');
 
     const oneTimePassRecord = await existCode(userEmail);
     await register.otpCompare(req.body.code, oneTimePassRecord.code);
@@ -58,7 +59,7 @@ const handleConfirmCode = async (req, res, next) => {
     res.status(200)
       .json({ message: 'User was added' });
   } catch (e) {
-   next(e);
+    next(e);
   }
 };
 
@@ -73,7 +74,7 @@ const confirmationUser = async (req, res, next) => {
       await Account.delete({ _id: user.accountId });
       await User.update({ email }, { accountId });
     } else {
-      throw new httpError(401,'Unable to confirm this user');
+      throw new httpError(401, 'Unable to confirm this user');
     }
 
     res.redirect('/login');

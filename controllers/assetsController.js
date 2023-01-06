@@ -2,13 +2,13 @@ const assetsService = require('../services/assetsService');
 const authService = require('../services/authService');
 const accountService = require('../services/accountService');
 
-const verifyToken = (req,res)=>{
-  const user = req.user;
+const verifyToken = (req, res) => {
+  const { user } = req;
   res.status(200).json({
     message: 'User is approved',
-    data: user.email
+    data: user.email,
   });
-}
+};
 
 const getAllAssets = async (req, res) => {
   try {
@@ -72,7 +72,7 @@ const setSeats = async (req, res) => {
 
 const setFeature = async (req, res) => {
   try {
-    const result = await assetsService.setFeature(req.user.email,req.params.feature);
+    const result = await assetsService.setFeature(req.user.email, req.params.feature);
     res.status(result.status).json(result.data);
   } catch (err) {
     res.status(401);

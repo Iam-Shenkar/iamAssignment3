@@ -13,7 +13,7 @@ const alert = (message, type, id) => {
   ].join('')
 
   alertPlaceholder.append(wrapper)
-}
+};
 
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
@@ -504,7 +504,6 @@ const deleteUser = async (email) => {
   );
   // const body = await response.json();
   if (response.status === 200) {
-    location.reload();
     alert('account closed',"primary" ,'liveAlertPlaceholder');
   }else {
     alert(`Cant delede ${email} `,"danger" ,'liveAlertPlaceholder');

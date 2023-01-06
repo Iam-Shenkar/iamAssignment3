@@ -17,7 +17,7 @@ const createOneTimePass = async (email) => {
     specialChars: false,
   });
   const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
-  if (!newOneTimePass) throw new httpError(400,'No new OTP created');
+  if (!newOneTimePass) throw new httpError(400, 'No new OTP created');
   await oneTimePass.create(newOneTimePass);
   return newOneTimePass;
 };
@@ -38,7 +38,7 @@ const existCode = async (email) => {
 };
 
 const otpCompare = async (UserCode, userCode) => {
-  if (userCode !== UserCode) if (userCode !== UserCode) throw new httpError(400, 'Incorrect code');;
+  if (userCode !== UserCode) if (userCode !== UserCode) throw new httpError(400, 'Incorrect code');
 };
 
 const sendEmailOneTimePass = async (user, newCode) => {
@@ -59,6 +59,7 @@ const createUser = async (user) => {
   const newUser = {
     name: user.name,
     email: user.email,
+    gender: user.gender,
     accountId: 'none',
     password: hashPassword,
   };

@@ -2,9 +2,8 @@ const bcrypt = require('bcrypt');
 const generator = require('generate-password');
 const { httpError } = require('../class/httpError');
 const { sendEmail } = require('../sendEmail/sendEmail');
-// const { Account } = require('./accountService');
+const { Account } = require('./accountService');
 const UsersRepository = require('../repositories/users.repositories');
-
 
 const User = new UsersRepository();
 

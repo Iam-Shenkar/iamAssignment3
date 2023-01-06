@@ -9,8 +9,10 @@ const { httpError } = require('../class/httpError');
 const loginControl = async (req, res, next) => {
   try {
     const user = await userExist(req.body.email);
+
     if (!user) throw new httpError(404, 'user not exist');
     if (user.accountId !== 'none') await accountStatusCheck(user.accountId);
+
 
     await validPassword(req.body.password, user.password);
     await userStatusCheck(user);
@@ -37,7 +39,9 @@ const forgotPassControl = async (req, res , next) => {
   try {
     const user = await userExist(req.body.email);
     if (!user) throw new httpError(404,'user not exist');
+
     await userStatusCheck(user);
+
     const newPass = generatePassword();
     const hashedPassword = await bcrypt.hash(newPass, 12);
     await sendEmailPassword(newPass, user);

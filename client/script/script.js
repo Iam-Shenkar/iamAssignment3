@@ -478,11 +478,13 @@ const disableAccount = async (accotnt) => {
       },
     },
   );
+
   if (response.status === 200) {
     location.reload();
     alert('account closed',"primary" ,'liveAlertPlaceholder');
   }else {
     alert(`Cant delede this accotnt`,"danger" ,'liveAlertPlaceholder');
+
   }
 
 };
@@ -502,12 +504,14 @@ const deleteUser = async (email) => {
       },
     },
   );
+
   // const body = await response.json();
   if (response.status === 200) {
     location.reload();
     alert('account closed',"primary" ,'liveAlertPlaceholder');
   }else {
     alert(`Cant delede ${email} `,"danger" ,'liveAlertPlaceholder');
+
   }
 };
 

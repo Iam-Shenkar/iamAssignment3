@@ -27,15 +27,11 @@ const getAllAssets = async (req, res, next) => {
 };
 
 const getFeatures = async (req, res, next) => {
-  console.log(`3 ${req.user}`);
   try {
     const result = await assetsService.getFeatures(req.user.email);
-    console.log(`4 ${req.user}`);
     if (!result) throw new httpError(400, 'could not find features');
     res.status(result.status).json(result.data);
-    console.log(`11: ${req.user}` );
   } catch (err) {
-    console.log(`6 ${req.user}`);
     next(err);
   }
 };
@@ -44,10 +40,8 @@ const getSeats = async (req, res, next) => {
   try {
     const result = await assetsService.getSeats(req.user.email);
     if (!result) throw new httpError(400, 'could not find seats');
-    console.log(`222: ${result}` );
     res.status(result.status).json(result.data);
   } catch (err) {
-    console.log(`222: ${result}  ${err}` );
     next(err);
   }
 };
@@ -65,7 +59,6 @@ const getCredit = async (req, res, next) => {
 const setCredit = async (req, res, next) => {
   try {
     const result = await assetsService.setCredit(req.user.email, req.params.credit);
-    console.log(`444: ${result}` );
     res.status(result.status).json(result.data);
   } catch (err) {
     next(err);

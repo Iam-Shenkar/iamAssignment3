@@ -26,6 +26,16 @@ const getAllAssets = async (req, res, next) => {
   }
 };
 
+const coreDetails = async  (req, res, next) => {
+  try {
+    const result = await assetsService.coreDetails(req.user.email);
+    if (!result) throw new httpError(400, 'could not find assets');
+    res.status(result.status).json(result.data);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getFeatures = async (req, res, next) => {
   try {
     const result = await assetsService.getFeatures(req.user.email);
@@ -92,4 +102,5 @@ module.exports = {
   setFeature,
   setCredit,
   setSeats,
+  coreDetails
 };

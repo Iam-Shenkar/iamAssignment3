@@ -90,6 +90,7 @@ const setCredit = async (mail, count = 1) => {
 
 const setFeature = async (mail, feature) => {
   const assets = await getAssetsByUser(mail);
+
   const accountID = await getAccountByUser(mail);
   const currentFeatures = assets.features;
   const isFeatureExists = currentFeatures.includes(feature);

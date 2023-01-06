@@ -55,7 +55,6 @@ const checkPermission = async (req, res, next) => {
 const checkPermissionAdmin = async (req, res, next) => {
   const user = await User.retrieve(req.body.mail);
   try {
-    // eslint-disable-next-line no-shadow
     const { user } = req;
     if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
     // no need try and carch or throw- if type==user dredirect to homepage! thats it

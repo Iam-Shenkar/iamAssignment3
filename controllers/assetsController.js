@@ -55,6 +55,9 @@ const getCredit = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+  // catch (err) {
+  //   res.status(401);
+  // }
 };
 
 const setCredit = async (req, res, next) => {

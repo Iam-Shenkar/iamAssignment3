@@ -15,12 +15,15 @@ const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');
 const assets = require('./routes/assetsRoute');
 const dashboard = require('./routes/dashboardRoute');
-
 const accounts = require('./routes/accountsRouter');
+
 const { validation } = require('./middleware/validator');
 const { authenticateToken } = require('./middleware/authenticate');
 
 const { morgan } = require('./middleware/logger');
+
+const logPath = path.join(__dirname, '/log', 'access.log');
+
 
 const logPath = path.join(__dirname, '/log', 'access.log');
 const errorHandler = require('./middleware/errorHandler');
@@ -49,8 +52,7 @@ app.use('/auth', validation, auth.authRouter);
 app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', authenticateToken, users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
-app.get('/login', (req, res) => { res.sendFile(path.join(__dirname, './client/Login.html')); });
-app.use('/', authenticateToken, dashboard.dashboardRouter);
+app.use('/', dashboard.dashboardRouter);
 
 app.use(errorHandler);
 

@@ -2,6 +2,7 @@ const { User, userExist } = require('../services/authService');
 const { Account } = require('../services/accountService');
 const { oneTimePass, createAccount, createUser } = require('../services/registerService');
 
+
 async function getUsers(req, res , next) {
   try {
     const users = await User.find({});

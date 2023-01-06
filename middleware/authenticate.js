@@ -31,12 +31,15 @@ function generateAccessToken(user) {
 }
 
 const refreshTokenVerify = async (req, res) => {
+  console.log(`6 ${req.cookies.jwt}`)
+  console.log(`7 ${req.cookies}`)
   const refreshToken = req.cookies.jwt;
   if (refreshToken === undefined) { return res.redirect('/login'); }
 
   const user = await User.retrieve({ refreshToken });
   if (!user) return res.redirect('/login');
   await jwt.verify(user.refreshToken, process.env.REFRESH_TOKEN_SECRET, (err) => {
+    console.log(`8 ${user.email}`)
     if (err) return res.redirect('/login');
     const accessToken = generateAccessToken({ email: user.email });
 
@@ -44,6 +47,7 @@ const refreshTokenVerify = async (req, res) => {
     req.user = user;
 
     req.token = { accessToken: `Bearer ${accessToken}` };
+    console.log(`9 ${req.token}  10    ${req.user}`);
   });
 };
 

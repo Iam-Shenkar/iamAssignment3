@@ -25,11 +25,12 @@ const getFeatures = async (mail) => {
   const assets = await getAssetsByUser(email);
   const currentFeatures = assets.features;
   let result;
-  console.log(`2: ${result}` );
+
   if (currentFeatures) {
-    result = { status: 400, message: `OK, available features are: ${currentFeatures}`, data: currentFeatures };
+    result = { status: 200, message: `OK, available features are: ${currentFeatures}`, data: currentFeatures };
+    console.log(`2: ${result}` );
   } else {
-    result = { status: 200, message: 'No features available', data: 0 };
+    result = { status: 400, message: 'No features available', data: 0 };
   }
   return result;
 };

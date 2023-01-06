@@ -32,8 +32,8 @@ const getFeatures = async (req, res, next) => {
     const result = await assetsService.getFeatures(req.user.email);
     console.log(`4 ${req.user}`);
     if (!result) throw new httpError(400, 'could not find features');
-    res.status(result.status)
-      .json(result.data);
+    res.status(result.status).json(result.data);
+    console.log(`11: ${req.user}` );
   } catch (err) {
     console.log(`6 ${req.user}`);
     next(err);

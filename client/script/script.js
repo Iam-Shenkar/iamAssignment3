@@ -12,8 +12,9 @@ const alert = (message, type, id) => {
     '</div>',
   ].join('');
 
-  alertPlaceholder.append(wrapper);
+  alertPlaceholder.append(wrapper)
 };
+
 
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
@@ -27,6 +28,7 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
+
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
@@ -467,7 +469,6 @@ const updateDaysOfSuspension = () => {
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
 
-// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch(
     `${runningPath}/accounts/status/${accotnt}`,

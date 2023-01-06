@@ -8,6 +8,7 @@ const { userRole } = require('../middleware/validatorService');
 const { httpError } = require('../class/httpError');
 const { User } = require('../services/authService');
 
+
 const handleRegister = async (req, res, next) => {
   try {
     const newUser = req.body;

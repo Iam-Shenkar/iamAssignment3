@@ -65,6 +65,7 @@ const getCredit = async (req, res, next) => {
 const setCredit = async (req, res, next) => {
   try {
     const result = await assetsService.setCredit(req.user.email, req.params.credit);
+    console.log(`444: ${result}` );
     res.status(result.status).json(result.data);
   } catch (err) {
     next(err);

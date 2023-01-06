@@ -65,7 +65,7 @@ const setSeats = async (mail, count = 1) => {
   const accountID = await getAccountByUser(mail);
   const { usedSeats, seats } = assets;
   let result;
-  if (getSeats(mail).data >= count) {
+  if (getSeats(mail).data.seats >= count) {
     console.log(`2: ${result}` );
     const newSeats = usedSeats + count;
     await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': newSeats });
@@ -82,10 +82,11 @@ const setCredit = async (mail, count = 1) => {
   const accountID = await getAccountByUser(mail);
   const { credits } = assets;
   let result;
-  if (getCredit(mail).data >= count) {
+  if (getCredit(mail).data.credit >= count) {
     const newCredit = credits - count;
     await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': newCredit });
     result = { status: 200, message: `OK, used seats has been updated: ${newCredit}`, data: { credit: newCredit } };
+    console.log(`444: ${result}` );
   } else {
     result = { status: 400, message: 'ERROR, no available credit', data: { credit: -1 } };
   }

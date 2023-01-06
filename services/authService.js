@@ -2,10 +2,7 @@ const bcrypt = require('bcrypt');
 const generator = require('generate-password');
 const { httpError } = require('../class/httpError');
 const { sendEmail } = require('../sendEmail/sendEmail');
-const { Account } = require('./accountService');
-const UsersRepository = require('../repositories/users.repositories');
-
-const User = new UsersRepository();
+const { Account, User } = require('../repositories/repositories.init');
 
 const unSuspend = async (object, val) => {
   const model = val === 'user' ? User : Account;
@@ -26,9 +23,10 @@ const userExist = async (email) => {
   if (!user) return null;
   return user;
 };
+
 const accountStatusCheck = async (accountId) => {
-  const account = await Account.retrieve(accountId);
-  statusCheck(account, 'account');
+  const account = await Account.retrieve({ _id: accountId });
+  await statusCheck(account, 'account');
 };
 
 const statusCheck = async (object, model) => {

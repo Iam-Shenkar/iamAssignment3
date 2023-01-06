@@ -24,6 +24,8 @@ const { morgan } = require('./middleware/logger');
 
 const logPath = path.join(__dirname, '/log', 'access.log');
 
+
+const logPath = path.join(__dirname, '/log', 'access.log');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -52,6 +54,6 @@ app.use('/users', authenticateToken, users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 app.use('/', dashboard.dashboardRouter);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));

@@ -1,7 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const jwt = require('jsonwebtoken');
-const { User } = require('./authService');
+const { Account, User } = require('../repositories/repositories.init');
 
 const GOOGLE_CLIENT_ID = process.env.ClientId;
 const GOOGLE_CLIENT_SECRET = process.env.ClientSecret;

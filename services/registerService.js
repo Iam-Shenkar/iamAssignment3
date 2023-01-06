@@ -1,14 +1,11 @@
 const otpGenerator = require('otp-generator');
 const bcrypt = require('bcrypt');
-const OTPRepository = require('../repositories/oneTimePass.repositories');
+
 const { userRole } = require('../middleware/validatorService');
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { httpError } = require('../class/httpError');
 
-const { User } = require('./authService');
-const { Account } = require('./accountService');
-
-const oneTimePass = new OTPRepository();
+const { Account, User } = require('../repositories/repositories.init');
 
 const createOneTimePass = async (email) => {
   const sendCode = otpGenerator.generate(6, {

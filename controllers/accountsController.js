@@ -1,7 +1,7 @@
 const {
-  Account, sendInvitation, inviteAuthorization, inviteNewUser,
+  sendInvitation, inviteAuthorization, inviteNewUser,
 } = require('../services/accountService');
-const { User } = require('../services/authService');
+const { Account, User } = require('../repositories/repositories.init');
 const {
   getSeats, setSeats, setCredit, setFeature,
 } = require('../services/assetsService');
@@ -81,21 +81,23 @@ const getAccounts = async (req, res, next) => {
 const editAccount = async (req, res, next) => {
   try {
     if (!req.body) throw new httpError(400, 'bad Request');
-
-    const account = await Account.retrieve({ _id: req.params.id });
-    if (!account) throw new httpError(404, 'account doesnt exist');
-    if (account.status === 'closed') throw new httpError(400, 'disabled account');
+    // await editAuthorization(req.params.id);
 
     const { params: { id }, body } = req;
+    const data = {
+      'assets.credits': body.credits,
+      'assets.seats': body.seats,
+      plan: body.plan,
+    };
     if (req.body.features) {
       await Account.update(
         { _id: id },
-        { $push: { 'assets.features': req.body.features } },
+        { ...data, $push: { 'assets.features': req.body.features } },
       );
     }
-
-    const updatedAccount = await Account.update({ _id: id }, { ...body });
+    const updatedAccount = await Account.update({ _id: id }, { ...data });
     if (!updatedAccount) throw new httpError(400, 'Not updated');
+
     return res.status(200)
       .json({ message: 'account updated!' });
   } catch (err) {
@@ -111,11 +113,10 @@ const disableAccount = async (req, res, next) => {
     if (!account) throw new httpError(404, 'account doesnt exist');
     if (account.status === 'closed') throw new httpError(400, 'account already disabled');
 
-    // delete all users that are not type manager & update account status to closed
     await User.deleteMany({ accountId: req.params.id, type: { $ne: 'manager' } });
     await Account.update({ _id: req.params.id }, { status: 'closed' });
-    // update manager status to closed
     await User.update({ accountId: req.params.id }, { status: 'closed' });
+
     return res.status(200)
       .json({ message: 'account disabled' });
   } catch (err) {

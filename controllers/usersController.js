@@ -1,6 +1,8 @@
 const { User, userExist } = require('../services/authService');
 const { Account } = require('../services/accountService');
 const { oneTimePass, createAccount, createUser } = require('../services/registerService');
+const { httpError } = require('../class/httpError');
+const { updateName, adminUpdateUser } = require('../services/userService');
 
 async function getUsers(req, res , next) {
   try {
@@ -43,13 +45,12 @@ async function getUser(req, res , next) {
 
 async function updateUser(req, res, next) {
   try {
-    const userType = await User.retrieve({ email: req.body.email });
-    if (userType.type === 'admin' && req.body.status !== 'active') {
-      await User.update({ email: req.body.email }, { data: req.body, loginDate: new Date() });
-    } else if (userType.type === 'admin' && req.body.status === 'active') {
-      await User.update({ email: req.body.email }, { data: req.body });
+    const { user } = req;
+    const data = req.body;
+    if (user.type !== 'admin') {
+      await updateName(user, data);
     } else {
-      await User.update({ email: req.body.email }, { name: req.body.name });
+      await adminUpdateUser(user, data);
     }
     return res.status(200).json({ message: 'user update' });
   } catch (err) {
@@ -61,6 +62,9 @@ async function deleteUser(req, res , next) {
   try {
     const user = await User.retrieve({email: req.params.email});
     const account = await Account.retrieve({ _id: user.accountId });
+
+    if(!account) throw new httpError(400,'Cant delede this user');
+
     if (account.plan === 'free') {
       await Account.update({ _id: account._id }, { status: 'closed' });
       await User.update({ email: user.email } , { status: 'closed' });

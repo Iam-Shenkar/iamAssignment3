@@ -478,10 +478,10 @@ const disableAccount = async (accotnt) => {
       },
     },
   );
-  // eslint-disable-next-line no-unused-vars
   const body = await response.json();
   if (response.status === 200) {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
+
   }
 };
 
@@ -503,9 +503,15 @@ const deleteUser = async (email) => {
       },
     },
   );
-  const body = await response.json();
-  if (body.status === 200) {
-    alert('account closed', 'primary', 'liveAlertPlaceholder');
+
+  // const body = await response.json();
+  if (response.status === 200) {
+    location.reload();
+    alert('account closed',"primary" ,'liveAlertPlaceholder');
+  }else {
+    alert(`Cant delede ${email} `,"danger" ,'liveAlertPlaceholder');
+
+
   }
 };
 

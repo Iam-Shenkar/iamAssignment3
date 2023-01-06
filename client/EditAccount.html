@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>IAM </title>
+    <link rel="stylesheet"
+          href="https://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/feather/feather.css">
+    <link rel="stylesheet"
+          href="https://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet"
+          href="https://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet"
+          href="https://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/typicons/typicons.css">
+    <link rel="stylesheet"
+          href="https://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet"
+          href="https://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet"
+          href="https://www.bootstrapdash.com/demo/star-admin2-free/template/css/vertical-layout-light/style.css">
+    <link rel="shortcut icon" href="https://www.bootstrapdash.com/demo/star-admin2-free/template/images/favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../client/css/style.css">
+
+</head>
+
+<body>
+<div class="container-scroller">
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+            <div class="me-3">
+                <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+            <div >
+                <a id="logo" class="navbar-brand brand-logo"
+                >
+                    <span>IAM <font color="blue">Team</font></span>
+                </a>
+            </div>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-top">
+            <ul class="navbar-nav">
+                <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
+                    <h1 class="welcome-text" id="timeOfDay"> </h1>
+                    <h3 class="welcome-sub-text">Welcome to the IAM project </h3>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown d-none d-lg-block user-dropdown">
+                    <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="img-xs rounded-circle" src="https://cdn.onlinewebfonts.com/svg/img_569204.png"
+                             alt="Profile image"> </a>
+                    <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+                        <div class="dropdown-header text-center">
+                            <img class="img-xs rounded-circle" src="https://cdn.onlinewebfonts.com/svg/img_569204.png" alt="Profile image">
+                            <p class="mb-1 mt-3 font-weight-semibold" id="userNameProfile"></p>
+                            <p class="fw-light text-muted mb-0" id="userEmailProfile"></p>
+                        </div>
+                        <a class="dropdown-item"><i
+                                class="bi bi-person-circle dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i>
+                            My Profile</a>
+                        <a class="dropdown-item" id='logout'><i
+                                class="bi bi-box-arrow-right dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign
+                            Out</a>
+                    </div>
+                </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                    data-bs-toggle="offcanvas">
+                <span class="mdi mdi-menu"></span>
+            </button>
+        </div>
+    </nav>
+    <div class="container-fluid page-body-wrapper">
+        <div id="right-sidebar" class="settings-panel">
+            <div class="ps__rail-x">
+                <div class="ps__thumb-x" tabindex="0"></div>
+            </div>
+            <div class="ps__rail-y">
+                <div class="ps__thumb-y" tabindex="0"></div>
+            </div>
+        </div>
+
+
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav" id="navSideMenu" >
+
+            </ul>
+        </nav>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-8 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Edit Account</h4>
+                                <form class="forms-sample">
+                                    <div class="form-group row">
+                                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="exampleInputUsername2"
+                                                   placeholder="Account Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="exampleSelectType" class="col-sm-3 col-form-label">Plan</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="exampleSelectType">
+                                                <option>free</option>
+                                                <option>pro</option>
+                                                <option>premium</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="exampleUsersStatus" class="col-sm-3 col-form-label">Status</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="exampleUsersStatus" onchange="updateDaysOfSuspension()">
+                                                <option value="active">active</option>
+                                                <option value="suspended">suspended</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <h5>Assets</h5>
+                                        <label for="exampleSelectType" class="col-sm-3 col-form-label">add feature</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control">
+                                                <option>AB test</option>
+                                                <option>Flag test</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Seats</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" placeholder="Total Seats">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Credit</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" placeholder="Credit">
+                                        </div>
+                                    </div>
+                                    <div class="btnEditUser">
+                                    <button type="submit" class="btn btn-warning me-2">Edit</button>
+                                    <button class="btn btn-success">Save</button>
+                                    <button class="btn btn-danger">Delete</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="footer">
+                        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">IAM Team</span>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/js/vendor.bundle.base.js"></script>
+<script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/off-canvas.js"></script>
+<script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/hoverable-collapse.js"></script>
+<!--<script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/template.js"></script>-->
+<script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/settings.js"></script>
+<script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/todolist.js"></script>
+<script src="./script/script.js"></script>
+
+</body>
+</html>

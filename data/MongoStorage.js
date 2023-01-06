@@ -44,4 +44,8 @@ module.exports = class MongoStorage extends EventEmitter {
   update(param, data) {
     return this.Model.findOneAndUpdate(param, data);
   }
+
+  updateMany(param, data) {
+    return this.Model.updateMany(param, data);
+  }
 };

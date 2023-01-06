@@ -58,7 +58,7 @@ const login = async () => {
   // const body = await response.json();
   if (response.status === 200) {
   // alert((body.message));
-    window.location.href = `/`;
+    window.location.href = '/';
   }
 };
 

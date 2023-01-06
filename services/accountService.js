@@ -1,9 +1,21 @@
-const accountRepository = require('../repositories/account.repositories');
 const { sendEmail } = require('../sendEmail/sendEmail');
-const { User } = require('./authService');
+const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
 
-const Account = new accountRepository();
+const sendInvitation = async (manager, user) => {
+  const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
+  const mailData = {
+    path: '/sendEmail/invitationUser.ejs',
+    subject: 'Please Verify you Account',
+    email: user.email,
+  };
+  const details = {
+    name: `${user.name}`,
+    manager: `${manager.name}`,
+    path: `${path}`,
+  };
+  await sendEmail(mailData, details);
+};
 
 const inviteNewUser = async (account, email) => {
   try {
@@ -21,21 +33,6 @@ const inviteNewUser = async (account, email) => {
   }
 };
 
-const sendInvitation = async (manager, user) => {
-  const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
-  const mailData = {
-    path: '/sendEmail/invitationUser.ejs',
-    subject: 'Please Verify you Account',
-    email: user.email,
-  };
-  const details = {
-    name: `${user.name}`,
-    manager: `${manager.name}`,
-    path: `${path}`,
-  };
-  await sendEmail(mailData, details);
-};
-
 const inviteAuthorization = (account, invitedUser) => {
   if (account._id.toString() === invitedUser.accountId) throw new Error('User already in the account');
   if (account.role === 'admin') throw new httpError(400, 'Cant add Admins to an account');
@@ -44,6 +41,12 @@ const inviteAuthorization = (account, invitedUser) => {
   if (invitedUser.status !== 'active') throw new httpError(400, 'User is not active');
   if (account === null) throw new httpError(404, 'Account not found');
 };
+
+const editAuthorization = async (accountId) => {
+  const acc = await Account.retrieve({ _id: accountId });
+  if (!acc) throw new httpError(404, 'account doesnt exist');
+  if (acc.status === 'closed') throw new httpError(400, 'account disabled');
+}
 
 const createUserToAccount = async (email, account) => {
   const newUser = {
@@ -58,5 +61,5 @@ const createUserToAccount = async (email, account) => {
 };
 
 module.exports = {
-  Account, sendInvitation, inviteAuthorization, createUserToAccount, inviteNewUser,
+  Account, sendInvitation, inviteAuthorization, createUserToAccount, inviteNewUser, editAuthorization
 };

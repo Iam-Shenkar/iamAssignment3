@@ -30,4 +30,8 @@ module.exports = class UsersRepository {
   deleteMany(param) {
     return this.storage.deleteMany(param);
   }
+
+  updateMany(param, data) {
+    return this.storage.updateMany(param, data);
+  }
 };

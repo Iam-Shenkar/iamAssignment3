@@ -48,10 +48,6 @@ const refreshTokenVerify = async (req, res) => {
 };
 
 const authenticateToken = async (req, res, next) => {
-  if (req.path === '/login') {
-    return next();
-  }
-
   console.log('checked token');
 
   const authHeader = req.headers.authorization;

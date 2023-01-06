@@ -1,6 +1,6 @@
 const mailValidator = require('email-validator');
 const passwordValidator = require('password-validator');
-const { User } = require('../services/authService');
+const { User } = require('../repositories/repositories.init');
 
 const schema = new passwordValidator();
 

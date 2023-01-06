@@ -3,11 +3,10 @@ const bcrypt = require('bcrypt');
 const register = require('../services/registerService');
 const { userExist } = require('../services/authService');
 const { existCode, sendEmailOneTimePass } = require('../services/registerService');
-const { Account } = require('../services/accountService');
+
 const { userRole } = require('../middleware/validatorService');
 const { httpError } = require('../class/httpError');
-const { User } = require('../services/authService');
-
+const { Account, User } = require('../repositories/repositories.init');
 
 const handleRegister = async (req, res, next) => {
   try {

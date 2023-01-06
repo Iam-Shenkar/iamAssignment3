@@ -7,6 +7,7 @@ const { Account } = require('../services/accountService');
 const { userRole } = require('../middleware/validatorService');
 const { httpError } = require('../class/httpError');
 
+
 const handleRegister = async (req, res, next) => {
   try {
     const newUser = req.body;

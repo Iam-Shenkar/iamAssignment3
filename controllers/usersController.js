@@ -4,6 +4,7 @@ const { oneTimePass, createAccount, createUser } = require('../services/register
 const { httpError } = require('../class/httpError');
 const { updateName, adminUpdateUser } = require('../services/userService');
 
+
 async function getUsers(req, res , next) {
   try {
     const users = await User.find({});

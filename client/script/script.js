@@ -10,8 +10,9 @@ const alert = (message, type, id) => {
     '</div>',
   ].join('');
 
-  alertPlaceholder.append(wrapper);
+  alertPlaceholder.append(wrapper)
 };
+
 
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
@@ -25,6 +26,7 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
+
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
@@ -170,7 +172,7 @@ const adminAddUser = async () => {
 };
 
 const getUsers = async () => {
-  const response = await fetch(`${runningPath}/users/list`, {
+  const response = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -185,7 +187,7 @@ const getUsers = async () => {
 };
 
 const getAccounts = async () => {
-  const response = await fetch(`${runningPath}/accounts/list`, {
+  const response = await fetch(`${runningPath}/accounts`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -322,7 +324,7 @@ const logout = async () => {
 };
 
 const charts = async () => {
-  const responseUser = await fetch(`${runningPath}/users/list`, {
+  const responseUser = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -331,7 +333,7 @@ const charts = async () => {
   const users = await responseUser.json();
   typeChart(users);
 
-  const responseAccount = await fetch(`${runningPath}/accounts/list`, {
+  const responseAccount = await fetch(`${runningPath}/accounts/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -464,7 +466,6 @@ const updateDaysOfSuspension = () => {
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
 
-// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch(
     `${runningPath}/accounts/status/${accotnt}`,

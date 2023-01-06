@@ -51,7 +51,7 @@ async function updateUser(req, res, next) {
     if (user.type !== 'admin') {
       await updateName(user, data);
     } else {
-      await adminUpdateUser(user, data);
+      await adminUpdateUser(data);
     }
     return res.status(200).json({ message: 'user update' });
   } catch (err) {
@@ -63,9 +63,7 @@ async function deleteUser(req, res, next) {
   try {
     const user = await User.retrieve({ email: req.params.email });
     const account = await Account.retrieve({ _id: user.accountId });
-
     if (!account) throw new httpError(400, 'Cant delede this user');
-
     if (account.plan === 'free') {
       await Account.update({ _id: account._id }, { status: 'closed' });
       await User.update({ email: user.email }, { status: 'closed' });

@@ -20,7 +20,6 @@ const accounts = require('./routes/accountsRouter');
 const { validation } = require('./middleware/validator');
 const { authenticateToken } = require('./middleware/authenticate');
 
-// access logger
 const { morgan } = require('./middleware/logger');
 
 const logPath = path.join(__dirname, '/log', 'access.log');
@@ -53,6 +52,6 @@ app.use('/users', authenticateToken, users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 app.use('/', dashboard.dashboardRouter);
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));

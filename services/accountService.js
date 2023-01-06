@@ -5,6 +5,22 @@ const { httpError } = require('../class/httpError');
 
 const Account = new accountRepository();
 
+const inviteNewUser = async (account, email) => {
+  try {
+    const newUser = {
+      email,
+      name: 'stranger',
+      type: 'user',
+      status: 'pending',
+      accountId: account._id.toString(),
+    };
+    await User.create(newUser);
+    await sendInvitation(account.name, newUser);
+  } catch (err) {
+    throw new httpError(400, 'failed to invite user');
+  }
+};
+
 const sendInvitation = async (manager, user) => {
   const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
   const mailData = {

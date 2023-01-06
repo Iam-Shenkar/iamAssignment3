@@ -34,7 +34,6 @@ const getFeatures = async (mail) => {
 
 const getSeats = async (mail) => {
   const email = mail;
-
   const assets = await getAssetsByUser(email);
   const { usedSeats, seats } = assets;
   const remainSeats = seats - usedSeats;
@@ -59,19 +58,19 @@ const getCredit = async (mail) => {
   return result;
 };
 
-const setSeats = async (mail, count = 1) => {
-  const assets = await getAssetsByUser(mail);
-  accountID = await getAccountByUser(mail);
-  const { usedSeats, seats } = assets;
-  let result;
-  if (getSeats(mail).data > 0) {
-    const newSeats = usedSeats + count;
-    await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': newSeats });
-    result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: newSeats };
-  } else {
-    result = { status: 400, message: 'ERROR, no available seats' };
-  }
-  return result;
+const setSeats = async (mail, count=1) => {
+    const assets = await getAssetsByUser(mail);
+    accountID = await getAccountByUser(mail);
+    const { usedSeats, seats } = assets;
+    let result;
+    if (getSeats(mail).data>=count) {
+      const newSeats = usedSeats + count;
+      await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': newSeats });
+      result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: newSeats };
+    } else {
+      result = { status: 400, message: `ERROR, no available seats` }
+    }
+    return result;
 };
 
 const setCredit = async (mail, count = 1) => {
@@ -79,9 +78,9 @@ const setCredit = async (mail, count = 1) => {
   accountID = await getAccountByUser(mail);
   const { credits } = assets;
   let result;
-  if (getCredit(mail).data > 0) {
+  if (getCredit(mail).data>=count) {
     const newCredit = credits + count;
-    await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': count + credits });
+    await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': credits-count });
     result = { status: 200, message: `OK, used seats has been updated: ${newCredit}`, data: newCredit };
   } else {
     result = { status: 400, message: 'ERROR, no available credit' };

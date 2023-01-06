@@ -1,19 +1,19 @@
 const bcrypt = require('bcrypt');
 const generator = require('generate-password');
 const { httpError } = require('../class/httpError');
-const UsersRepository = require('../repositories/users.repositories');
 const { sendEmail } = require('../sendEmail/sendEmail');
-// const { Account } = require('./accountService');
+const { Account } = require('./accountService');
+const UsersRepository = require('../repositories/users.repositories');
 
 const User = new UsersRepository();
 
-const unSuspend = async (user) => {
-  const updatedUser = await User.update(user.email, {
+const unSuspend = async (object, val) => {
+  const model = val === 'user' ? User : Account;
+  await model.update(object._id, {
     status: 'active',
     suspensionTime: 0,
     suspensionDate: 0,
   });
-  if (!updatedUser) throw new httpError(400, 'not Updated');
 };
 
 const validPassword = async (pass, userPassword) => {
@@ -27,28 +27,26 @@ const userExist = async (email) => {
   return user;
 };
 const accountStatusCheck = async (accountId) => {
-  const account = await Account.retrieve({ _id: accountId });
-//   if (account.status !== 'active') throw new httpError(400, `Account is ${account.status}`);
+  const account = await Account.retrieve(accountId);
+  statusCheck(account, 'account');
 };
 
-const userStatusCheck = async (user) => {
-  switch (user.status) {
+const statusCheck = async (object, model) => {
+  switch (object.status) {
     case 'active':
       break;
     case 'closed':
-      throw new httpError(400, 'User is closed');
+      throw new httpError(403, 'User is closed');
 
     case 'suspended':
-      const suspendTime = parseInt(user.suspensionTime, 10);
-      const suspendStartDate = user.suspensionDate;
+      const suspendTime = object.suspensionTime;
+      const suspendStartDate = object.suspensionDate;
       const dateExpired = suspendStartDate;
-
       dateExpired.setDate(suspendStartDate.getDate() + suspendTime);
       if (dateExpired > new Date()) {
-        console.log(`user: ${user.email} is suspended- login failed`, 'ERROR');
-        throw new httpError(400, `User is suspended until ${dateExpired}`);
+        throw new httpError(403, `${model} ${object.name} is suspended until ${dateExpired}`);
       } else {
-        await unSuspend(user);
+        await unSuspend(object, model);
       }
       break;
     default:
@@ -77,11 +75,11 @@ const sendEmailPassword = async (newPass, user) => {
 };
 
 module.exports = {
-  userStatusCheck,
-  accountStatusCheck,
+  statusCheck,
   userExist,
   validPassword,
   generatePassword,
   sendEmailPassword,
+  accountStatusCheck,
   User,
 };

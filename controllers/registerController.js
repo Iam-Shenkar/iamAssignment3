@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt');
 // eslint-disable-next-line import/no-unresolved
 const register = require('../services/registerService');
-const { User, userExist } = require('../services/authService');
+const { userExist } = require('../services/authService');
 const { existCode, sendEmailOneTimePass } = require('../services/registerService');
 const { Account } = require('../services/accountService');
 const { userRole } = require('../middleware/validatorService');
 const { httpError } = require('../class/httpError');
+const { User } = require('../services/authService');
 
 
 const handleRegister = async (req, res, next) => {

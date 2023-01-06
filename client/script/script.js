@@ -4,16 +4,16 @@ const runningPath = window.location.origin;
 
 const alert = (message, type, id) => {
   const alertPlaceholder = document.getElementById(id);
-  const wrapper = document.createElement('div')
+  const wrapper = document.createElement('div');
   wrapper.innerHTML = [
     `<div class="alert alert-${type} alert-dismissible" role="alert">`,
     `   <div>${message}</div>`,
     '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-    '</div>'
-  ].join('')
+    '</div>',
+  ].join('');
 
-  alertPlaceholder.append(wrapper)
-}
+  alertPlaceholder.append(wrapper);
+};
 
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
@@ -27,14 +27,13 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
-
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
       const cell = row.insertCell();
       if (key === 'Edit') {
         const button = editButton(element.email);
-        const option = buttonOption(element.email, 'myProfile', 'email','deleteUser', element);
+        const option = buttonOption(element.email, 'myProfile', 'email', 'deleteUser', element);
         cell.appendChild(button);
         cell.appendChild(option);
       } else if (key === 'Status') {
@@ -56,7 +55,7 @@ const generateAccountTable = (table, data) => {
         const cell = row.insertCell();
         if (key === 'Edit') {
           const button = editButton(element.id);
-          const option = buttonOption(element.id, 'myAccount', 'id','disableAccount',element );
+          const option = buttonOption(element.id, 'myAccount', 'id', 'disableAccount', element);
           cell.appendChild(button);
           cell.appendChild(option);
         } else if (key === 'Status') {
@@ -106,12 +105,12 @@ const buttonOption = (email, path, val, removeFunc, element) => {
   remove.className = 'dropdown-item';
   view.className = 'dropdown-item';
 
-  if (element.Status === 'closed'){
-    view.setAttribute('onclick',`viewClose()` );
-  }else {
+  if (element.Status === 'closed') {
+    view.setAttribute('onclick', 'viewClose()');
+  } else {
     view.setAttribute('href', `${runningPath}/${path}?${val}=${email}`);
   }
-  remove.setAttribute("onclick", `${removeFunc}(\'${email}\')`);
+  remove.setAttribute('onclick', `${removeFunc}(\'${email}\')`);
   remove.setAttribute('value', email);
 
   list.appendChild(view);
@@ -468,6 +467,7 @@ const updateDaysOfSuspension = () => {
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
 
+// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch(
     `${runningPath}/accounts/status/${accotnt}`,
@@ -478,19 +478,22 @@ const disableAccount = async (accotnt) => {
       },
     },
   );
+  // eslint-disable-next-line no-unused-vars
   const body = await response.json();
   if (response.status === 200) {
-    alert('account closed','primary', 'liveAlertPlaceholder');
+    alert('account closed', 'primary', 'liveAlertPlaceholder');
   }
-
 };
 
-function viewClose(){
-  alert(`It is not possible to view a closed account!`, 'danger', 'liveAlertPlaceholder')
+// eslint-disable-next-line no-unused-vars
+function viewClose() {
+  alert('It is not possible to view a closed account!', 'danger', 'liveAlertPlaceholder');
 }
 
+// eslint-disable-next-line no-unused-vars
 const deleteUser = async (email) => {
-  console.log("deleteF")
+  // eslint-disable-next-line no-console
+  console.log('deleteF');
   const response = await fetch(
     `${runningPath}/users/${email}`,
     {
@@ -502,8 +505,175 @@ const deleteUser = async (email) => {
   );
   const body = await response.json();
   if (body.status === 200) {
-    alert('account closed',"primary" ,'liveAlertPlaceholder');
+    alert('account closed', 'primary', 'liveAlertPlaceholder');
   }
 };
+
+const dataArray = [
+  { date: 'January 1, 2023', users: 100 },
+  { date: 'January 2, 2023', users: 110 },
+  { date: 'January 3, 2023', users: 120 },
+];
+const monthArray = [
+  { date: 'January , 2022', users: 1000 },
+  { date: 'February, 2022', users: 1100 },
+  { date: 'March 2022', users: 1200 },
+  { date: 'April 2022', users: 1300 },
+  { date: 'May 2022', users: 1400 },
+  { date: 'June 2022', users: 1500 },
+  { date: 'July 2022', users: 1600 },
+  { date: 'August 2022', users: 1700 },
+  { date: 'September 2022', users: 1800 },
+  { date: 'October 2022', users: 1900 },
+  { date: 'November 2022', users: 2000 },
+  { date: 'December 2022', users: 2100 },
+];
+
+const buildTablePerDayAndMonth = (dataArray, monthArray) => {
+  const div1 = document.getElementById('tablesPerDay');
+  const div2 = document.getElementById('tablesPerMonth');
+
+  const table1 = document.createElement('table');
+  const table2 = document.createElement('table');
+  table1.className = 'table';
+  table2.className = 'table';
+
+  const headerRowDay = document.createElement('tr');
+  const headerRowMonth = document.createElement('tr');
+
+  const dayColumn = document.createElement('th');
+  const monthColumn = document.createElement('th');
+
+  dayColumn.textContent = 'Per Day';
+  monthColumn.textContent = 'Per Month';
+
+  const usersColumnDay = document.createElement('th');
+  usersColumnDay.textContent = 'Number of Registered Users';
+  const usersColumnMonth = document.createElement('th');
+  usersColumnMonth.textContent = 'Number of Registered Users';
+  headerRowDay.appendChild(dayColumn);
+  headerRowMonth.appendChild(monthColumn);
+  headerRowDay.appendChild(usersColumnDay);
+  headerRowMonth.appendChild(usersColumnMonth);
+  table1.appendChild(headerRowDay);
+  table2.appendChild(headerRowMonth);
+
+  for (const data of dataArray) {
+    const row = document.createElement('tr');
+    const dayCell = document.createElement('td');
+    dayCell.textContent = data.date;
+    const usersCell = document.createElement('td');
+    usersCell.textContent = data.users;
+    row.appendChild(dayCell);
+    row.appendChild(usersCell);
+    table1.appendChild(row);
+  }
+  for (const data of monthArray) {
+    const row = document.createElement('tr');
+    const monthCell = document.createElement('td');
+    monthCell.textContent = data.date;
+    const usersCellMonth = document.createElement('td');
+    usersCellMonth.textContent = data.users;
+    row.appendChild(monthCell);
+    row.appendChild(usersCellMonth);
+    table2.appendChild(row);
+  }
+if(div1 && div2){
+  div1.appendChild(table1);
+  div2.appendChild(table2);
+}
+};
+
+buildTablePerDayAndMonth(dataArray, monthArray);
+
+// eslint-disable-next-line no-shadow
+const buildTableForCredits = (dataArray1,dataArry2) => {
+  const day = document.getElementById('tablesPerDayPerUser');
+  const month = document.getElementById('tablesPerMonthPerUser');
+
+  const tableDay = document.createElement('table');
+  const tableMonth = document.createElement('table');
+
+  const headerRowDay = document.createElement('tr');
+  const headerRowMonth = document.createElement('tr');
+
+  const nameColumnDay = document.createElement('th');
+  nameColumnDay.textContent = 'Name';
+  const nameColumnMonth = document.createElement('th');
+  nameColumnMonth.textContent = 'Name';
+  const dateColumnDay = document.createElement('th');
+  dateColumnDay.textContent = 'Date';
+  const dateColumnMonth = document.createElement('th');
+  dateColumnMonth.textContent = 'Month';
+
+
+  const creditsColumnDay = document.createElement('th');
+  creditsColumnDay.textContent = 'Total Credits Used';
+  const creditsColumnMonth = document.createElement('th');
+  creditsColumnMonth.textContent = 'Total Credits Used';
+  headerRowDay.appendChild(nameColumnDay);
+  headerRowDay.appendChild(dateColumnDay);
+  headerRowDay.appendChild(creditsColumnDay);
+  headerRowMonth.appendChild(nameColumnMonth);
+  headerRowMonth.appendChild(dateColumnMonth);
+  headerRowMonth.appendChild(creditsColumnMonth);
+  tableDay.appendChild(headerRowDay);
+  tableMonth.appendChild(headerRowMonth);
+
+  for (const data of dataArray1) {
+    const rowDay = document.createElement('tr');
+    const nameCellDay = document.createElement('td');
+    nameCellDay.textContent = data.name;
+    const dateCellDay = document.createElement('td');
+    dateCellDay.textContent = data.date;
+    const creditsCellDay = document.createElement('td');
+    creditsCellDay.textContent = data.credits;
+    rowDay.appendChild(nameCellDay);
+    rowDay.appendChild(dateCellDay);
+    rowDay.appendChild(creditsCellDay);
+    tableDay.appendChild(rowDay);
+  }
+  for (const data of dataArray2) {
+    const rowMonth = document.createElement('tr');
+    const nameCellMonth = document.createElement('td');
+    nameCellMonth.textContent = data.name;
+    const dateCellMonth = document.createElement('td');
+    dateCellMonth.textContent = data.date;
+    const creditsCellMonth = document.createElement('td');
+    creditsCellMonth.textContent = data.credits;
+    rowMonth.appendChild(nameCellMonth);
+    rowMonth.appendChild(dateCellMonth);
+    rowMonth.appendChild(creditsCellMonth);
+    tableMonth.appendChild(rowMonth);
+  }
+
+  day.appendChild(tableDay);
+  month.appendChild(tableMonth);
+};
+
+// Define the data array for total credits usage per day per user
+const dataArray1 = [
+  { name: 'Alice', date: 'January 1, 2021', credits: 10 },
+  { name: 'Bob', date: 'January 1, 2021', credits: 20 },
+  { name: 'Charlie', date: 'January 1, 2021', credits: 30 },
+  { name: 'Alice', date: 'January 2, 2021', credits: 15 },
+  { name: 'Bob', date: 'January 2, 2021', credits: 25 },
+  { name: 'Charlie', date: 'January 2, 2021', credits: 35 },
+  // ...
+];
+const dataArray2 = [
+  { name: 'Alice', date: 'January 2021', credits: 100 },
+  { name: 'Bob', date: 'January 2021', credits: 200 },
+  { name: 'Charlie', date: 'January 2021', credits: 300 },
+  { name: 'Alice', date: 'February 2021', credits: 150 },
+  { name: 'Bob', date: 'February 2021', credits: 250 },
+  { name: 'Charlie', date: 'February 2021', credits: 350 },
+  // ...
+];
+
+// Build the table for total credits usage per day per user
+buildTableForCredits(dataArray1, dataArray2);
+
+// Define the data array for total credits usage per month per user
 
 

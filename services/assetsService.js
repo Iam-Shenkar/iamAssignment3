@@ -64,7 +64,9 @@ const setSeats = async (mail, count = 1) => {
   const accountID = await getAccountByUser(mail);
   const { usedSeats, seats } = assets;
   let result;
-  if (getSeats(mail).data.seats >= count) {
+  const remainSeats = await getSeats(mail);
+  const currentSeat= remainSeats.data.seats;
+  if (currentSeat >= count) {
     const newSeats = usedSeats + count;
     await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': newSeats });
     result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: { seats: seats-newSeats } };
@@ -79,7 +81,9 @@ const setCredit = async (mail, count = 1) => {
   const accountID = await getAccountByUser(mail);
   const { credits } = assets;
   let result;
-  if (getCredit(mail).data.credit >= count) {
+  const remainCredits = await getCredit(mail);
+  const currentCredit= remainCredits.data.credit;
+  if (currentCredit >= count) {
     const newCredit = parseInt(credits - count);
     await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': newCredit });
     result = { status: 200, message: `OK, used seats has been updated: ${newCredit}`, data: { credit: newCredit } };
@@ -106,15 +110,16 @@ const setFeature = async (mail, feature) => {
 
 const coreDetails = async(mail)=>{
   const assets = await getAssetsByUser(mail);
-  const user = await authService.userExist(email);
+  const user = await authService.userExist(mail);
   const account = await getAccountByUser(mail);
   if (!user) {
     throw new httpError(404, "user doesn't exist");
   }else {
-    result = { status: 200, message: `OK, details were sent`, data: { credit: account.credits , plan: account.plan,type: user.type} };
+    result = { status: 200, message: `OK, details were sent`, data: { credit: account.assets.credits , plan: account.plan,type: user.type} };
   }
+  return result;
 }
 
 module.exports = {
-  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature,coreDetails
+  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature,coreDetails,
 };

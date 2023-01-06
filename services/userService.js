@@ -1,5 +1,5 @@
 const { httpError } = require('../class/httpError');
-const { User } = require('./authService');
+const { User } = require('../repositories/repositories.init');
 
 const updateName = async (user, data) => {
   if (user.email !== data.email) throw new httpError(400, 'you cant update this user');

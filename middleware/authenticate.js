@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../services/authService');
+const { User } = require('../repositories/repositories.init');
 
 const generateToken = (req, res, next) => {
   try {

@@ -1,4 +1,4 @@
-const { User } = require('../services/authService');
+const { Account, User } = require('../repositories/repositories.init');
 
 const logout = async (req, res) => {
   console.log('logging out user: ', req.body.email);

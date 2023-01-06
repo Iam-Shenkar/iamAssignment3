@@ -10,6 +10,7 @@ const cors = require('cors');
 const passport = require('passport');
 
 const path = require('path');
+const fs = require('fs');
 const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');
 const assets = require('./routes/assetsRoute');
@@ -20,9 +21,8 @@ const { validation } = require('./middleware/validator');
 const { authenticateToken } = require('./middleware/authenticate');
 
 const { morgan } = require('./middleware/logger');
-const fs = require('fs');
-const logPath = path.join(__dirname, '/log', 'access.log');
 
+const logPath = path.join(__dirname, '/log', 'access.log');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -46,12 +46,12 @@ app.use(
 );
 
 app.use('/auth', validation, auth.authRouter);
-app.use('/assets',authenticateToken, assets.assetsRoute);
+app.use('/assets', authenticateToken, assets.assetsRoute);
 app.use('/users', authenticateToken, users.usersRouter);
 app.use('/accounts', authenticateToken, accounts.accountsRouter);
 app.get('/login', (req, res) => { res.sendFile(path.join(__dirname, './client/Login.html')); });
 app.use('/', authenticateToken, dashboard.dashboardRouter);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));

@@ -1,9 +1,21 @@
-const accountRepository = require('../repositories/account.repositories');
 const { sendEmail } = require('../sendEmail/sendEmail');
-const { User } = require('./authService');
+const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
 
-const Account = new accountRepository();
+const sendInvitation = async (manager, user) => {
+  const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
+  const mailData = {
+    path: '/sendEmail/invitationUser.ejs',
+    subject: 'Please Verify you Account',
+    email: user.email,
+  };
+  const details = {
+    name: `${user.name}`,
+    manager: `${manager.name}`,
+    path: `${path}`,
+  };
+  await sendEmail(mailData, details);
+};
 
 const inviteNewUser = async (account, email) => {
   try {
@@ -19,21 +31,6 @@ const inviteNewUser = async (account, email) => {
   } catch (err) {
     throw new httpError(400, 'failed to invite user');
   }
-};
-
-const sendInvitation = async (manager, user) => {
-  const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
-  const mailData = {
-    path: '/sendEmail/invitationUser.ejs',
-    subject: 'Please Verify you Account',
-    email: user.email,
-  };
-  const details = {
-    name: `${user.name}`,
-    manager: `${manager.name}`,
-    path: `${path}`,
-  };
-  await sendEmail(mailData, details);
 };
 
 const inviteAuthorization = (account, invitedUser) => {

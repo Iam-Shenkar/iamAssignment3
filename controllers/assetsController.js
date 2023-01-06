@@ -44,8 +44,10 @@ const getSeats = async (req, res, next) => {
   try {
     const result = await assetsService.getSeats(req.user.email);
     if (!result) throw new httpError(400, 'could not find seats');
-    res.status(result.status).json(result.message || result.data);
+    console.log(`222: ${result}` );
+    res.status(result.status).json(result.data);
   } catch (err) {
+    console.log(`222: ${result}  ${err}` );
     next(err);
   }
 };
@@ -54,13 +56,13 @@ const getCredit = async (req, res, next) => {
   try {
     const result = await assetsService.getCredit(req.user.email);
     if (!result) throw new httpError(400, 'could not find credits');
-    res.status(result.status).json(result.message || result.data);
+    res.status(result.status).json(result.data);
   } catch (err) {
     next(err);
   }
-  // catch (err) {
-  //   res.status(401);
-  // }
+  catch (err) {
+    next(err);
+  }
 };
 
 const setCredit = async (req, res, next) => {

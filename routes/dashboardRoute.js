@@ -12,10 +12,6 @@ dashboardRouter.all('/Users', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/Users.html'));
 });
 
-dashboardRouter.all('/AddUser', authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/AddUser.html'));
-});
-
 dashboardRouter.all('/Accounts', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/Accounts.html'));
 });

@@ -1,8 +1,9 @@
 
 const amqp = require('amqplib/callback_api');
 
-const {QUpdateAccount} = require("../services/accountService");
-const { QSuspendAccount } = require("../services/accountService");
+
+const { QUpdateAccount } = require('../services/accountService');
+const { QSuspendAccount } = require('../services/accountService');
 
 const { listenSubscription } = process.env;
 const { listenSuspendedAccount } = process.env;

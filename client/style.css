@@ -91,7 +91,7 @@ input , .gender {
 	background-color: #fff;
 	border-radius: 10px;
     border: 0.5px solid black;
-    box-shadow: 20px 16px rgb(34, 34, 34);
+    box-shadow: 20px 16px rgb(30, 39, 98);
 	position: relative;
 	overflow: hidden;
 	width: 768px;
@@ -157,9 +157,13 @@ input , .gender {
 .container.right-panel-active .overlay-container{
 	transform: translateX(-100%);
 }
+.signUp, .logIn{
+    color: white;
+    border-color: white;
+}
 
 .overlay {
-	background: linear-gradient(to right, #b8b8b8, #5b5b5b);
+	background: linear-gradient( #0c1a44, rgb(64, 77, 224));
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
@@ -211,7 +215,7 @@ input , .gender {
     background-color: #fff;
 	border-radius: 10px;
     border: 0.5px solid black;
-    box-shadow: 20px 16px rgb(34, 34, 34);
+    box-shadow: 20px 16px rgb(30, 39, 98);
 	position: absolute;
 	overflow: hidden;
 	width: 768px;
@@ -227,7 +231,7 @@ input , .gender {
     position: absolute;
     border-radius: 10px;
     border: 0.5px solid black;
-    box-shadow: 20px 16px rgb(34, 34, 34);
+    box-shadow: 20px 16px rgb(30, 39, 98);
 }
 
 
@@ -275,7 +279,20 @@ input , .gender {
     margin-bottom: 50px;
     width: 520px;
 }
+.secOptionlogin{
+    font-weight: normal;
+}
 
+.lineInLogin{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+    width: 100%;
+    padding-top: 40px;
+}
+
+.btnGoogle{
+    padding: 10px 20px;
+    border: 2px solid rgba(0, 0, 0, 0.94);
+}
 
 
 
@@ -403,6 +420,12 @@ footer a {
     font-weight: bolder;
     color: red;
 }
+
+.loginByGoogle{
+    padding: 8px;
+    margin: 5px;
+}
+
 .submitBtn{
     display: flex;
     justify-content: center;

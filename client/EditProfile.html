@@ -21,7 +21,7 @@
           href="https://www.bootstrapdash.com/demo/star-admin2-free/template/css/vertical-layout-light/style.css">
     <link rel="shortcut icon" href="https://www.bootstrapdash.com/demo/star-admin2-free/template/images/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../client/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
 
@@ -35,7 +35,7 @@
                 </button>
             </div>
             <div >
-                <a id="logo" class="navbar-brand brand-logo"
+                <a id="logo" href="/"  class="navbar-brand brand-logo"
                 >
                     <span>IAM <font color="blue">Team</font></span>
                 </a>
@@ -59,7 +59,7 @@
                             <p class="mb-1 mt-3 font-weight-semibold" id="userNameProfile"></p>
                             <p class="fw-light text-muted mb-0" id="userEmailProfile"></p>
                         </div>
-                        <a class="dropdown-item"><i
+                        <a class="dropdown-item" href="/myProfile"><i
                                 class="bi bi-person-circle dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i>
                             My Profile</a>
                         <a class="dropdown-item" onclick="logout()" id='logout'><i
@@ -96,6 +96,7 @@
                     <div class="col-8 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
+                                <div id="liveAlertEdit"></div>
                                 <h4 class="card-title">Edit User</h4>
                                 <form class="forms-sample">
                                     <div class="form-group row">
@@ -113,18 +114,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="exampleSelectType" class="col-sm-3 col-form-label">Type</label>
-                                        <div class="col-sm-9">
-                                            <select class="form-control" id="exampleSelectType">
-                                                <option>Admin</option>
-                                                <option>User</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
                                         <label for="exampleUsersStatus" class="col-sm-3 col-form-label">Status</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" id="exampleUsersStatus" onchange="updateDaysOfSuspension()">
+                                                <option value="" id="currentStatus"></option>
                                                 <option value="Active">Active</option>
                                                 <option value="Suspend">Suspend</option>
                                                 <option value="Close">Close</option>
@@ -138,9 +131,7 @@
                                         </div>
                                     </div>
                                     <div class="btnEditUser">
-                                    <button type="submit" class="btn btn-warning me-2">Edit</button>
-                                    <button class="btn btn-success">Save</button>
-                                    <button class="btn btn-danger">Delete</button>
+                                    <button class="btn btn-success" type="button" onclick="editAdmin()">Save</button>
                                     </div>
                                 </form>
                             </div>
@@ -164,6 +155,7 @@
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/settings.js"></script>
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/todolist.js"></script>
 <script src="./script/script.js"></script>
+<script>getUserAdmin()</script>
 
 </body>
 </html>

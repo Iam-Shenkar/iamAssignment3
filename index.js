@@ -26,7 +26,7 @@ const logPath = path.join(__dirname, '/log', 'access.log');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 app.use(cors('*'));
 app.use(express.static(path.join(__dirname, 'client')));
 

@@ -45,8 +45,36 @@ const inviteAuthorization = (account, invitedUser) => {
 const editAuthorization = async (accountId) => {
   const acc = await Account.retrieve({ _id: accountId });
   if (!acc) throw new httpError(404, 'account doesnt exist');
-  if (acc.status === 'closed') throw new httpError(400, 'account disabled');
-}
+  if (acc.status === 'closed') throw new httpError(400, 'account is closed!');
+  return acc;
+};
+
+const isFeatureExists = async (acc, feature) => {
+  const currentFeatures = acc.assets.features;
+  const isExists = currentFeatures.includes(feature);
+  if (isExists) throw new httpError(400, `${feature} already exists`);
+};
+
+const suspendAccount = async (acc, body) => {
+  const data = {
+    status: body.status,
+    suspensionDate: new Date(),
+    suspensionTime: body.suspensionTime,
+  };
+  const updatedAccount = await Account.update({ _id: acc._id }, { ...data });
+  if (!updatedAccount) throw new httpError(400, 'Not updated');
+  await User.updateMany({ accountId: acc._id }, { ...data });
+};
+
+const unSuspendAccount = async (acc, body) => {
+  const data = {
+    status: body.status,
+    suspensionTime: 0,
+  };
+  const updatedAccount = await Account.update({ _id: acc._id }, { ...data });
+  if (!updatedAccount) throw new httpError(400, 'Not updated');
+  await User.updateMany({ accountId: acc._id }, { status: 'active' });
+};
 
 const createUserToAccount = async (email, account) => {
   const newUser = {
@@ -61,5 +89,13 @@ const createUserToAccount = async (email, account) => {
 };
 
 module.exports = {
-  Account, sendInvitation, inviteAuthorization, createUserToAccount, inviteNewUser, editAuthorization
+  Account,
+  sendInvitation,
+  inviteAuthorization,
+  createUserToAccount,
+  inviteNewUser,
+  editAuthorization,
+  isFeatureExists,
+  suspendAccount,
+  unSuspendAccount,
 };

@@ -24,6 +24,7 @@ const listenToQ = () => {
         })
     })
 
+
     amqp.connect(listenSuspendedAccount, (err, conn) => {
         const q = 'CloudAMQP';
         conn.createChannel((err, ch) => {

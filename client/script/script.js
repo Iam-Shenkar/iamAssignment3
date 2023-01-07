@@ -1,7 +1,5 @@
 const runningPath = window.location.origin;
 
-// const Logout = document.getElementById('logout');
-
 const alert = (message, type, id) => {
   const alertPlaceholder = document.getElementById(id);
   const wrapper = document.createElement('div');
@@ -151,7 +149,6 @@ const editProfile = () => {
   name.removeAttribute('readonly');
 };
 
-
 const getUserAdmin = async () => {
   const url = new URL(window.location.href);
   let email = url.searchParams.get('email');
@@ -246,6 +243,9 @@ const editAdmin = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  if (response.status === 200) {
+    alert(`user ${email} has been updated`, 'success', 'liveAlertEdit');
+  }
 };
 
 const adminAddUser = async () => {
@@ -336,9 +336,8 @@ const userInvitation = async () => {
   let account = url.searchParams.get('id');
   if (!account) account = getCookie('account');
   const email = document.getElementById('userEmail').value;
-  console.log(`${runningPath}/accounts/${account}link/${email}`);
   const response = await fetch(`${runningPath}/accounts/${account}/link/${email}`, {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -413,22 +412,20 @@ window.onload = () => {
   userName.innerHTML = email.replace('%40', '&#064;');
 };
 
-// Logout.addEventListener('click', async () => {
-//   const data = {
-//     email: decodeURIComponent(getCookie('email')),
-//   };
-//   console.log(data);
-//   const response = await fetch(`${runningPath}/auth/logout`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   });
-//   // const body = await response.json();
-//   if (response.status !== 302) { console.log('redirect'); }
-//   window.location.href = `${runningPath}/`;
-// });
+const logout = async () => {
+  const data = {
+    email: decodeURIComponent(getCookie('email')),
+  };
+  const response = await fetch(`${runningPath}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (response.status !== 302) { console.log('redirect'); }
+  window.location.href = `${runningPath}/`;
+};
 
 const charts = async () => {
   const responseUser = await fetch(`${runningPath}/users/list`, {

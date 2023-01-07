@@ -52,7 +52,8 @@ const editAuthorization = async (accountId) => {
   return acc;
 };
 
-const isFeatureExists = async (acc, feature) => {
+const isFeatureExists = async (accountId, feature) => {
+  const acc = await Account.retrieve({ _id: accountId });
   const currentFeatures = acc.assets.features;
   const isExists = currentFeatures.includes(feature);
   if (isExists) throw new httpError(400, `${feature} already exists`);

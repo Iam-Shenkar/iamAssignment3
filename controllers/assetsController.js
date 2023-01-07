@@ -7,7 +7,7 @@ const verifyToken = (req, res) => {
   const { user } = req;
   res.status(200).json({
     message: 'User is approved',
-    data: user.accountId,
+    accountId: user.accountId,
   });
 };
 

@@ -1,4 +1,4 @@
-# iamAssignment3
+# IAM Team- Final Assignment I
 
 ## Description
 Identity & Access Management system stands at the entrance to an a/b tests system.
@@ -54,15 +54,15 @@ Accounts and users have the life cycle of: none → active → suspended → clo
 ```
 ## Local run - not recommended
 ```bash
-  git clone https://github.com/Iam-Shenkar/iamAssignment3.git
+git clone https://github.com/Iam-Shenkar/iamAssignment3.git
 ```
 ### Install
 ```bash
-  npm install
+npm install
 ```
 ### Start server
 ```bash
-  npm start
+npm start
 ```
 ### Start client
 ```bash
@@ -70,7 +70,7 @@ type in url borwser: http://localhost:5000
 ```
 ### Other dependancies
 ```bash
-  create .env file with secrets that will pass by demand 
+create .env file with secrets that will pass by demand 
 ```
 ## API documantion
 ```bash

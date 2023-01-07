@@ -1,6 +1,6 @@
 const amqp = require('amqplib/callback_api');
-// const { amqpCreateFreePlan } = process.env;
-// const { amqpSuspendedAccount } = process.env;
+const { amqpCreateFreePlan } = process.env;
+const { amqpSuspendedAccount } = process.env;
 
 // sending create free plan to the billing
 
@@ -37,9 +37,9 @@ const newStatus2Q = async (accountId, status) => {
   });
 }
 
-newStatus2Q("17774","suspended");
-
-freePlan2Q("1234");
+// newStatus2Q("17774","suspended");
+//
+// freePlan2Q("1234");
 
 
 module.exports = { freePlan2Q, newStatus2Q };

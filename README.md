@@ -36,6 +36,7 @@ Accounts and users have the life cycle of: none → active → suspended → clo
 * Admin users do not have accounts by definition.
 * Account name will be define by the user's email that created it.
 * To make tests using Postman you first **must** perform a login through our API (below) in order to receive the cookies.
+* Log in with Shenkar email makes you admin automatically. 
 
 ## Communication with other teams
 * Core - we recieve GET and PUT requests from the Core team to get or update features of certain account. <br>Idenitification of the user is beeing by the cookies the Core will recieve after login through our API.

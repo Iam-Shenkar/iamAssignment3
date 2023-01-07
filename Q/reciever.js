@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-unresolved
+
 const amqp = require('amqplib/callback_api');
 
 const {QUpdateAccount} = require("../services/accountService");
@@ -23,8 +23,6 @@ const listenToQ = () => {
             }, {noAck: true});
         })
     })
-
-//receive suspended account from the billing
 
     amqp.connect(listenSuspendedAccount, (err, conn) => {
         const q = 'CloudAMQP';

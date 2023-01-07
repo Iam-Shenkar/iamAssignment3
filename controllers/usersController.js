@@ -1,6 +1,9 @@
+const { hash } = require('bcrypt');
+const bcrypt = require('bcrypt');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
 const { updateName, adminUpdateUser } = require('../services/userService');
+const { validPassword } = require('../services/authService');
 
 const getUsers = async (req, res, next) => {
   try {
@@ -34,6 +37,7 @@ const getUser = async (req, res, next) => {
       email: user.email,
       role: user.type,
       gender: user.gender,
+      status: user.status,
       account: accountName,
     };
     res.status(200).json(del);
@@ -69,7 +73,7 @@ const deleteUser = async (req, res, next) => {
       throw new Error('Unable to delete this user');
     } else {
       await User.delete({ email: user.email });
-      await setSeats(user.accountId,-1);
+      await setSeats(user.accountId, -1);
     }
     return res.status(200).json({ message: 'The user has been deleted' });
   } catch (e) {
@@ -77,6 +81,19 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+const updatePass = async (req, res, next) => {
+  try {
+    const user = await User.retrieve({ email: req.body.email });
+    await validPassword(req.body.password, user.password);
+    const newPass = await bcrypt.hash(req.body.password, 12);
+    await User.update({ email: user.email }, { password: newPass });
+    console.log('password changed for ', user.email);
+    console.log('new password is: ', req.body.newPassword);
+    res.status(200).json('Password Updated');
+  } catch (e) {
+    res.status(403).json(e.message);
+  }
+};
 module.exports = {
-  getUsers, getUser, deleteUser, updateUser,
+  getUsers, getUser, deleteUser, updateUser, updatePass,
 };

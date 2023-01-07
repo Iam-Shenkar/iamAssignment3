@@ -8,22 +8,22 @@ const updateName = async (user, data) => {
 };
 
 const adminUpdateUser = async (data) => {
-  const user = await User.retrieve(data.email);
+  const user = await User.retrieve({ email: data.email });
   if (user.role === 'manager' && data.status === 'closed') throw new httpError(400, 'you cant update this user');
 
   const updateData = {
     name: data.name,
-    role: data.role,
+    // role: data.role,
     status: data.status,
   };
   if (data.status === 'suspended') {
     const suspensionData = {
       suspensionTime: data.suspensionTime,
-      suspensionDate: data.suspensionDate,
+      suspensionDate: new Date(),
     };
     Object.assign(updateData, suspensionData);
   }
-  await User.update({ email: user.email }, { updateData });
+  await User.update({ email: user.email }, { ...updateData });
 };
 
 module.exports = { updateName, adminUpdateUser };

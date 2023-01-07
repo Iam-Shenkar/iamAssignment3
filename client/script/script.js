@@ -149,6 +149,7 @@ const editProfile = () => {
   name.removeAttribute('readonly');
 };
 
+
 const getUserAdmin = async () => {
   const url = new URL(window.location.href);
   let email = url.searchParams.get('email');
@@ -333,7 +334,8 @@ const userInvitation = async () => {
   let account = url.searchParams.get('id');
   if (!account) account = getCookie('account');
   const email = document.getElementById('userEmail').value;
-  const response = await fetch(`${runningPath}/accounts/${account}/invite/${email}`, {
+  console.log(`${runningPath}/accounts/${account}link/${email}`);
+  const response = await fetch(`${runningPath}/accounts/${account}/link/${email}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -654,12 +656,12 @@ const deleteUser = async (email) => {
     },
   );
 
-  // const body = await response.json();
+  const body = await response.json();
   if (response.status === 200) {
-    location.reload();
+    window.location.reload();
     alert('account closed', 'primary', 'liveAlertPlaceholder');
   } else {
-    alert(`Cant delede ${email} `, 'danger', 'liveAlertPlaceholder');
+    alert(`Cant delede ${email}- ${body.message} `, 'danger', 'liveAlertPlaceholder');
   }
 };
 

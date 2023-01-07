@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const { User } = require('../repositories/repositories.init');
 const {
   userExist, statusCheck, validPassword, accountStatusCheck,

@@ -9,9 +9,8 @@ const { httpError } = require('../class/httpError');
 
 const { freePlan2Q } = require('../Q/sender');
 
-
 const { Account, User } = require('../repositories/repositories.init');
-
+const { setSeats } = require('../services/assetsService');
 
 const handleRegister = async (req, res, next) => {
   try {
@@ -74,12 +73,11 @@ const confirmationUser = async (req, res, next) => {
     const { email, accountId } = req.params;
     const user = await userExist(email);
 
-    if (user.status === 'pending') {
-      await User.update({ email }, { status: 'active' });
-    } else if (user.status === 'active') {
+    if (user.status === 'active') {
       await Account.delete({ _id: user.accountId });
       await User.update({ email }, { accountId });
-    } else {
+      await setSeats(accountId, 1);
+    } else if (user.status !== 'pending') {
       throw new httpError(401, 'Unable to confirm this user');
     }
 

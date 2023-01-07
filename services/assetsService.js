@@ -62,10 +62,10 @@ const setSeats = async (accountId, count = 1) => {
   const remainSeats = await getSeats(accountId);
   const currentSeat = remainSeats.data.seats;
   if (currentSeat >= count) {
-    const newSeats = usedSeats + count;
+    const newSeats = parseInt(usedSeats + count);
+    const remain = parseInt(seats - newSeats);
     await accountService.Account.update({ _id: accountId._id }, { 'assets.usedSeats': newSeats });
-
-    result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: { seats: seats - newSeats } };
+    result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: { seats: remain } };
   } else {
     result = { status: 400, message: 'ERROR, no available seats', data: { seats: -1 } };
   }

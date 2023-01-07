@@ -9,15 +9,15 @@ const { httpError } = require('../class/httpError');
 const inviteUser = async (req, res, next) => {
   try {
     const manager = req.user;
-    const { accountId, userEmail } = req.req.params;
+    const { accountId, email } = req.params;
     const account = await Account.retrieve({ _id: accountId });
-    const invitedUser = await User.retrieve({ email: userEmail });
-    if ((await getSeats(account.name)).data < 1) throw new httpError(400, 'There is not enough seats');
+    const invitedUser = await User.retrieve({ email });
+    if ((await getSeats(account._id)).data < 1) throw new httpError(400, 'There is not enough seats');
     if (invitedUser) {
       inviteAuthorization(account, invitedUser);
       await sendInvitation(manager, invitedUser);
     } else {
-      await inviteNewUser(manager, userEmail);
+      await inviteNewUser(manager, email);
     }
     await setSeats(account._id, 1);
     res.status(200).json({ message: 'user invited' });

@@ -63,12 +63,13 @@ const getAccounts = async (req, res, next) => {
         Name: accounts[i].name,
         Plan: accounts[i].plan,
         Credits: accounts[i].assets.credits,
-        Features: accounts[i].assets.features.length,
+        Users: accounts[i].assets.usedSeats,
         Status: accounts[i].status,
         Edit: '',
       };
       outputArray.push(account);
     }
+    console.log(outputArray);
     res.status(200)
       .json(outputArray);
   } catch (err) {
@@ -85,7 +86,7 @@ const editAccount = async (req, res, next) => {
     if (body.status === 'suspended' && acc.status !== 'suspended') {
       await suspendAccount(acc, body);
       return res.status(200)
-          .json({ message: 'account suspended!' });
+        .json({ message: 'account suspended!' });
     }
 
     if (body.status === 'active' && acc.status !== 'active') {
@@ -106,7 +107,7 @@ const editAccount = async (req, res, next) => {
     if (!updatedAccount) throw new httpError(400, 'Not updated');
 
     return res.status(200)
-        .json({ message: 'account updated!' });
+      .json({ message: 'account updated!' });
   } catch (err) {
     next(err);
   }

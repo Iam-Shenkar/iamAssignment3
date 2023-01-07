@@ -1,7 +1,5 @@
 const runningPath = window.location.origin;
 
-// const Logout = document.getElementById('logout');
-
 const alert = (message, type, id) => {
   const alertPlaceholder = document.getElementById(id);
   const wrapper = document.createElement('div');
@@ -151,7 +149,6 @@ const editProfile = () => {
   name.removeAttribute('readonly');
 };
 
-
 const getUserAdmin = async () => {
   const url = new URL(window.location.href);
   let email = url.searchParams.get('email');
@@ -246,6 +243,9 @@ const editAdmin = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  if (response.status === 200) {
+    alert(`user ${email} has been updated`, 'success', 'liveAlertEdit');
+  }
 };
 
 const adminAddUser = async () => {
@@ -296,8 +296,7 @@ const getAccounts = async () => {
 
   const body = await response.json();
   const table = document.querySelector('table');
-  const data = Object.keys(body[0])
-    .splice(1, 6);
+  const data = Object.keys(body[0]).splice(1, 6);
   generateTableHead(table, data);
   generateAccountTable(table, body);
 };
@@ -337,9 +336,8 @@ const userInvitation = async () => {
   let account = url.searchParams.get('id');
   if (!account) account = getCookie('account');
   const email = document.getElementById('userEmail').value;
-  console.log(`${runningPath}/accounts/${account}link/${email}`);
   const response = await fetch(`${runningPath}/accounts/${account}/link/${email}`, {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -414,22 +412,20 @@ window.onload = () => {
   userName.innerHTML = email.replace('%40', '&#064;');
 };
 
-// Logout.addEventListener('click', async () => {
-//   const data = {
-//     email: decodeURIComponent(getCookie('email')),
-//   };
-//   console.log(data);
-//   const response = await fetch(`${runningPath}/auth/logout`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   });
-//   // const body = await response.json();
-//   if (response.status !== 302) { console.log('redirect'); }
-//   window.location.href = `${runningPath}/`;
-// });
+const logout = async () => {
+  const data = {
+    email: decodeURIComponent(getCookie('email')),
+  };
+  const response = await fetch(`${runningPath}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (response.status !== 302) { console.log('redirect'); }
+  window.location.href = `${runningPath}/`;
+};
 
 const charts = async () => {
   const responseUser = await fetch(`${runningPath}/users/list`, {
@@ -516,8 +512,7 @@ const planChart = (accounts) => {
   for (const plan in plans) {
     plans[plan] = (plans[plan] / accounts.length) * 100;
   }
-  const ctx = document.getElementById('myPieChart')
-    .getContext('2d');
+  const ctx = document.getElementById('myPieChart').getContext('2d');
   const pieChart = new Chart(ctx, {
     type: 'pie',
     data: {
@@ -629,7 +624,6 @@ const updateDaysOfSuspension = () => {
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
 
-// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch(
     `${runningPath}/accounts/status/${accotnt}`,
@@ -640,7 +634,6 @@ const disableAccount = async (accotnt) => {
       },
     },
   );
-  // eslint-disable-next-line no-unused-vars
   const body = await response.json();
   if (response.status === 200) {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
@@ -665,7 +658,6 @@ const deleteUser = async (email) => {
       },
     },
   );
-<<<<<<< HEAD
 
   const body = await response.json();
   if (response.status === 200) {
@@ -673,11 +665,6 @@ const deleteUser = async (email) => {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
   } else {
     alert(`Cant delede ${email}- ${body.message} `, 'danger', 'liveAlertPlaceholder');
-=======
-  const body = await response.json();
-  if (body.status === 200) {
-    alert('account closed', 'primary', 'liveAlertPlaceholder');
->>>>>>> 73af0f5083b460c201f619af295af3e502b6907c
   }
 };
 

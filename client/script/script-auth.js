@@ -118,6 +118,11 @@ const confirmationCode = async () => {
   }
 };
 
+const googleLogIn = async () => {
+  console.log('google');
+  window.location.href = `${runningPath}/auth/google`;
+};
+
 const ResetPassweord = async () => {
   const data = {
     email: document.getElementById('emailResetPassword').value,

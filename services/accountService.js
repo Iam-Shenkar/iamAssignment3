@@ -1,7 +1,6 @@
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
-// const { FOREVER } = require('../utiles/constants');
 const {newStatus2Q} = require("../Q/sender")
 
 

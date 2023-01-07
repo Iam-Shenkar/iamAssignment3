@@ -73,9 +73,7 @@ const confirmationUser = async (req, res, next) => {
     const { email, accountId } = req.params;
     const user = await userExist(email);
 
-    if (user.status === 'pending') {
-      await User.update({ email }, { status: 'active' });
-    } else if (user.status === 'active') {
+    if (user.status === 'active') {
       await Account.delete({ _id: user.accountId });
       await User.update({ email }, { accountId });
       await setSeats(accountId, 1);

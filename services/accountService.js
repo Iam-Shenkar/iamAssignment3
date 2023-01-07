@@ -19,10 +19,10 @@ const sendInvitation = async (manager, user) => {
   await sendEmail(mailData, details);
 };
 
-const inviteNewUser = async (account, email) => {
+const inviteNewUser = async (account, mail) => {
   try {
     const newUser = {
-      email,
+      email: mail,
       name: 'stranger',
       type: 'user',
       status: 'pending',

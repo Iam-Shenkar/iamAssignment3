@@ -4,7 +4,6 @@ const accountsRouter = new express.Router();
 const accountController = require('../controllers/accountsController');
 const { checkPermissionAdmin } = require('../middleware/validatorService');
 
-accountsRouter.get('/Bupgrade', accountController.upgrade);
 accountsRouter.get('/', checkPermissionAdmin, accountController.getAccounts); // done
 accountsRouter.get('/:accountId/link/:email', accountController.inviteUser); // done
 accountsRouter.get('/:id/', accountController.getAccount); // done

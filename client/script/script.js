@@ -146,29 +146,6 @@ const editProfile = () => {
   name.removeAttribute('readonly');
 };
 
-const adminAddUser = async () => {
-  const data = {
-    name: document.getElementById('exampleInputName1').value,
-    email: document.getElementById('exampleInputEmail3').value,
-    password: document.getElementById('exampleInputPassword').value,
-    gender: document.getElementById('exampleSelectGender').value,
-  };
-  const response = await fetch(`${runningPath}/users/invite`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  const body = await response.json();
-  if (response.status === 200) {
-    document.getElementById('userAddedSuccessfully').style.display = 'block';
-    document.getElementById('userAddText').innerText = `${data.name} added successfully`;
-  } else if (body.message) {
-    alert((body.message));
-  }
-};
-
 const getUsers = async () => {
   const response = await fetch(`${runningPath}/users/`, {
     method: 'GET',
@@ -226,7 +203,7 @@ const getAccount = async () => {
     alert(body.message);
   }
 
-  planChartGender(body)
+  planChartGender(body);
 };
 
 const userInvitation = async () => {
@@ -234,7 +211,8 @@ const userInvitation = async () => {
   let account = url.searchParams.get('id');
   if (!account) account = getCookie('account');
   const email = document.getElementById('userEmail').value;
-  const response = await fetch(`${runningPath}/accounts/${account}/invite/${email}`, {
+  console.log(`${runningPath}/accounts/${account}link/${email}`);
+  const response = await fetch(`${runningPath}/accounts/${account}/link/${email}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -555,12 +533,12 @@ const deleteUser = async (email) => {
     },
   );
 
-  // const body = await response.json();
+  const body = await response.json();
   if (response.status === 200) {
-    location.reload();
+    window.location.reload();
     alert('account closed', 'primary', 'liveAlertPlaceholder');
   } else {
-    alert(`Cant delede ${email} `, 'danger', 'liveAlertPlaceholder');
+    alert(`Cant delede ${email}- ${body.message} `, 'danger', 'liveAlertPlaceholder');
   }
 };
 

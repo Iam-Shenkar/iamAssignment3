@@ -1,6 +1,7 @@
 require('dotenv').config({ path: '.env' });
 require('./services/googleStrategy');
 
+
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -11,6 +12,7 @@ const passport = require('passport');
 
 const path = require('path');
 const fs = require('fs');
+
 const constants = require('./utiles/constants');
 const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');

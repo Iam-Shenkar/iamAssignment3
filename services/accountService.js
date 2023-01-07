@@ -1,8 +1,7 @@
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
-const { FOREVER } = require('../utiles/constants');
-const { newStatus2Q } = require('../Q/sender');
+const {newStatus2Q} = require("../Q/sender")
 
 const sendInvitation = async (manager, user) => {
   const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;

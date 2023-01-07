@@ -17,7 +17,7 @@ const validation = (req, res, next) => {
       .json({
         success: false,
         message: err.message,
-      }); // redirect('auth/')
+      });
   }
 };
 

@@ -2,7 +2,7 @@
 
 ## Description
 Identity & Access Management system stands at the entrance to an a/b tests system.
-Account is a group of one or more users, which contains one or more account managers (a user with privileges).
+Account is a group of one or more users, which contains one account manager (a user with privileges).
 Accounts and users have the life cycle of: none → active → suspended → closed.
 
 #### We provide internal authentication service as a proxy for other teams. The service will support:

@@ -35,9 +35,11 @@ const newStatus2Q = async (accountId, status) => {
       await ch.sendToQueue(q, Buffer.from(stringMsg));
     });
   });
-};
 
-newStatus2Q('17774', 'suspended');
+
+// newStatus2Q("17774","suspended");
+//
+// freePlan2Q("1234");
 
 freePlan2Q('1234');
 

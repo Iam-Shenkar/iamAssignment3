@@ -37,8 +37,8 @@ const inviteNewUser = async (account, mail) => {
 
 const inviteAuthorization = (account, invitedUser) => {
   if (account._id.toString() === invitedUser.accountId) throw new Error('User already in the account');
-  if (account.role === 'admin') throw new httpError(400, 'Cant add Admins to an account');
-  if (account.role === 'user') throw new httpError(400, 'User already in an Account');
+  if (account.type === 'admin') throw new httpError(400, 'Cant add Admins to an account');
+  if (account.type === 'user') throw new httpError(400, 'User already in an Account');
   if (invitedUser.status !== 'active') throw new httpError(400, 'User is not active');
   if (account === null) throw new httpError(404, 'Account not found');
 };
@@ -92,22 +92,20 @@ const createUserToAccount = async (email, account) => {
 };
 
 const QUpdateAccount = async (msg) => {
+  await isFeatureExists(msg.accountId, msg.features); // if toAddFeature is already exists
+  const data = {
+    'assets.credits': msg.credits,
+    'assets.seats': msg.seats,
+    status: 'active',
+  };
 
-    await isFeatureExists(msg.accountId, msg.features); // if toAddFeature is already exists
-    const data = {
-      'assets.credits': msg.credits,
-      'assets.seats': msg.seats,
-      status: 'active'
-    };
-
-    const updatedAccount = await Account.update({_id: msg.accountId}, {
-      ...data,
-      $push: {'assets.features': msg.features}
-    });
-    await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
-    if (!updatedAccount) throw new Error("update failed");
-
-}
+  const updatedAccount = await Account.update({ _id: msg.accountId }, {
+    ...data,
+    $push: { 'assets.features': msg.features },
+  });
+  await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
+  if (!updatedAccount) throw new Error('update failed');
+};
 
 const QSuspendAccount = async (msg) => {
   const data = {
@@ -132,4 +130,5 @@ module.exports = {
   unSuspendAccount,
   QUpdateAccount,
   QSuspendAccount,
+
 };

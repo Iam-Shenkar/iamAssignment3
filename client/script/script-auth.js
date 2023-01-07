@@ -80,6 +80,9 @@ const register = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  if (response.status === 200 && body.message === 'user update') {
+    window.location.reload();
+  }
 };
 
 const confirmationCode = async () => {

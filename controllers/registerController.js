@@ -77,7 +77,7 @@ const confirmationUser = async (req, res, next) => {
       await Account.delete({ _id: user.accountId });
       await User.update({ email }, { accountId });
       await setSeats(accountId, 1);
-    } else {
+    } else if (user.status !== 'pending') {
       throw new httpError(401, 'Unable to confirm this user');
     }
 

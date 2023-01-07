@@ -165,6 +165,35 @@ const getUserAdmin = async () => {
   document.getElementById('currentStatus').value = body.status;
   document.getElementById('currentStatus').innerText = body.status;
 };
+
+const updatePass = async () => {
+  const email = document.getElementById('exampleInputEmail1').value;
+  const password = document.getElementById('inlineFormInputOldPassword').value;
+  const newPassword = document.getElementById('inlineFormInputNewPassword').value;
+  const data = {
+    email,
+    password,
+    newPassword,
+  };
+  const response = await fetch(`${runningPath}/users/pass`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+
+  });
+  const body = await response.json();
+  let res = document.getElementById('passRes');
+  if (res === null || res === undefined) {
+    res = document.createElement('label');
+    res.setAttribute('id', 'passRes');
+  }
+  res.innerHTML = body;
+  const div = document.getElementById('changePassword');
+  div.append(res);
+};
+
 const updateUser = async () => {
   const name = document.getElementById('exampleInputUsername1').value;
   const email = document.getElementById('exampleInputEmail1').value;
@@ -186,6 +215,7 @@ const updateUser = async () => {
   }
   if (response.status === 200) { window.location.reload(); }
 };
+
 const editAdmin = async () => {
   let name = document.getElementById('exampleInputUsername2').value;
   const email = document.getElementById('exampleInputEmail2').value;

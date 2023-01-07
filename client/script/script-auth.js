@@ -118,6 +118,7 @@ const ResetPassweord = async () => {
   const data = {
     email: document.getElementById('emailResetPassword').value,
   };
+  console.log(`${runningPath}/auth/login/password`);
   const response = await fetch(`${runningPath}/auth/login/password`, {
     method: 'POST',
     headers: {
@@ -126,6 +127,7 @@ const ResetPassweord = async () => {
     body: JSON.stringify(data),
   });
   const body = await response.json();
+  console.log('body: ', body, 'response: ', response);
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }

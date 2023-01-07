@@ -12,7 +12,7 @@ const googleController = require('../controllers/googleController');
 authRouter.post('/logout', logoutController.logout);
 
 authRouter.post('/login', generateToken, loginController.loginControl);
-authRouter.put('/login/password/:email', loginController.forgotPassControl);
+authRouter.put('/login/password', loginController.forgotPassControl);
 
 authRouter.post('/register', registerController.handleRegister);
 authRouter.post('/register/code', registerController.handleConfirmCode);

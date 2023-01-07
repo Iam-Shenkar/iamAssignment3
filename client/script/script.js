@@ -149,7 +149,6 @@ const editProfile = () => {
   name.removeAttribute('readonly');
 };
 
-
 const getUserAdmin = async () => {
   const url = new URL(window.location.href);
   let email = url.searchParams.get('email');
@@ -553,62 +552,8 @@ const planChart = (accounts) => {
   });
 };
 
-const planChartGender = (users) => {
-  const genders = {};
-  for (let i = 0; i < users.length; i++) {
-    const gender = users[i].Gender;
-    if (genders[gender] == null) {
-      genders[gender] = 0;
-    }
-    genders[gender]++;
-  }
-  for (const gender in genders) {
-    genders[gender] = (genders[gender] / users.length) * 100;
-  }
-
-  const ctx = document.getElementById('genderPieChart')
-    .getContext('2d');
-  const pieChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: Object.keys(genders),
-      datasets: [{
-        data: Object.values(genders),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1,
-      }],
-    },
-    options: {
-      legend: {
-        display: true,
-        position: 'right',
-        labels: {
-          fontSize: 14,
-        },
-      },
-      responsive: true,
-      aspectRatio: 1,
-    },
-  });
-};
-
-const logo = document.getElementById('logo');
-logo.setAttribute('href', `${runningPath}/`);
+// const logo = document.getElementById('logo'); // or grab it by tagname etc
+// logo.setAttribute('href', `${runningPath}/`);
 
 // eslint-disable-next-line no-unused-vars
 const positiveNumber = () => {
@@ -851,8 +796,8 @@ const buildTableForCredits = (dataArray1, dataArry2) => {
     tableMonth.appendChild(rowMonth);
   }
 
-  // day.appendChild(tableDay);
-  // month.appendChild(tableMonth);
+  day.appendChild(tableDay);
+  month.appendChild(tableMonth);
 };
 
 // Define the data array for total credits usage per day per user
@@ -950,37 +895,47 @@ async function getMonthlyExperiments(month, year) {
   } catch (error) {
     console.error(error);
   }
-
-  const printMonthAndYear = async () => {
-    const MandY = [{
-      type: '',
-      value: await getMonthlyExperiments(),
-    }, {
-      type: 'ARR',
-      value: await getARR(),
-    }];
-    const generateMonthAndyearExperiment = (data) => {
-      let html = '';
-      html += '<div id="mrr-arr">';
-      html += '<table>';
-      html += '<tr>';
-      html += '<th>Month</th>';
-      html += '<th>Year</th>';
-      html += '</tr>';
-      for (const datum of data) {
-        html += '<tr>';
-        html += `<td>${datum.value}</td>`;
-        html += `<td>${datum.value}</td>`;
-        html += '</tr>';
-      }
-      html += '</table>';
-      html += '</div>';
-      return html;
-    };
-    const container = document.getElementById('container');
-    container.innerHTML = generateMARR(MArr);
-  };
 }
+
+const printMonthAndYear = async () => {
+  const month = 'JAN';
+  const year = 2023;
+
+  const experiments = await getMonthlyExperiments(month, year);
+  console.log(experiments);
+
+  const MandY = [{
+    type: 'Month',
+    value: month,
+  }, {
+    type: 'Year',
+    value: year,
+  }];
+
+  // Generate a table with the month and year data
+  const generateMonthAndYearExperiment = (data) => {
+    let html = '';
+    html += '<div id="mrr-arr">';
+    html += '<table>';
+    html += '<tr>';
+    for (const datum of data) {
+      html += `<th>${datum.type}</th>`;
+    }
+    html += '</tr>';
+    html += '<tr>';
+    for (const datum of data) {
+      html += `<td>${datum.value}</td>`;
+    }
+    html += '</tr>';
+    html += '</table>';
+    html += '</div>';
+    return html;
+  };
+  const container = document.getElementById('experiments');
+  container.innerHTML = generateMonthAndYearExperiment(MandY);
+};
+
+printMonthAndYear();
 
 const requestData = {
   deviceDistribution: {

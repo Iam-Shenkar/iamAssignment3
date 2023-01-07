@@ -1,12 +1,8 @@
 // eslint-disable-next-line import/no-unresolved
 const amqp = require('amqplib/callback_api');
-const {QUpdateAccount, QSuspendAccount} = require("../services/accountService");
 
 const { amqpCreateFreePlan } = process.env;
 const { amqpSuspendedAccount } = process.env;
-
-// listenSuspendedAccount = "amqps://ojcxxjot:Rq04fJgu9hIxcrgkw-9pu8zCHN9RCQIR@rattlesnake.rmq.cloudamqp.com/ojcxxjot"
-
 
 // sending create free plan to the billing
 
@@ -15,7 +11,7 @@ const freePlan2Q = async (accountId) => {
     conn.createChannel(async (err, ch) => {
       const q = 'CloudAMQP';
       const freePlan = {
-        accountId
+        accountId: accountId
       };
       const stringMsg = JSON.stringify(freePlan);
       ch.assertQueue(q, { durable: false });
@@ -40,6 +36,5 @@ const newStatus2Q = async (accountId, status) => {
     });
   });
 };
-
 
 module.exports = { freePlan2Q, newStatus2Q };

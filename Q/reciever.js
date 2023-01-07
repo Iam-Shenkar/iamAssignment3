@@ -7,13 +7,10 @@ const { QSuspendAccount } = require("../services/accountService");
 const { listenSubscription } = process.env;
 const { listenSuspendedAccount } = process.env;
 
-// listenSubscription = "amqps://zjstebnk:IuwbScqxDJ68uBe0Ut7p7xTojpElpha3@rattlesnake.rmq.cloudamqp.com/zjstebnk"
-// listenSuspendedAccount = "amqps://ojcxxjot:Rq04fJgu9hIxcrgkw-9pu8zCHN9RCQIR@rattlesnake.rmq.cloudamqp.com/ojcxxjot"
-
 const listenToQ = () => {
 
     const q = 'CloudAMQP';
-    console.log(`waiting message from %s`, q);
+    console.log(`waiting for a message from Billing in %s`, q);
     amqp.connect(listenSubscription, (err, conn) => {
         conn.createChannel((err, ch) => {
             ch.consume(q, (msg) => {

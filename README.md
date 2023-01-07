@@ -50,7 +50,7 @@ Accounts and users have the life cycle of: none → active → suspended → clo
 ```
 ## Run with render
 ```bash
-  type in url browser: https://iam-team.onrender.com
+  type in url browser: https://iam-shenkar.onrender.com
 ```
 ## Local run - not recommended
 ```bash

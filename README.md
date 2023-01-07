@@ -1,70 +1,61 @@
 # iamAssignment3
 
-your ownership: 
-authentication - who can access 
-authorization - what can access, 
-account and user profile
-internal admin dashboard - moved from the BO
-
-
-account - a group of one or more users
-has one or more users (depends on his Billing plan)
-account can access features according to his Billing plan
-account life cycle: none → active → suspended → closed
-account must have a super privileges user (admin) 
-
-
-user - part of the account
-admin can invite or add another user to his account
-we require 2FA (two factors authentication)
-we support Google/ Github and username & password login
-we use JWT to secure our API calls
-IAM provides internal authentication service as a proxy for other teams 
-(example: user → api-key → core → i-a-m → no/go)
-we support common user events email notification (upon any account status change)
-
-
-
 ## Description
 Identity & Access Management system stands at the entrance to an a/b tests system.
-The service will support:
-<br>Authentication and authorization.
-<br>Account and user profile.
-<br>Internal admin dashboards- access only for admin users.
-<br>registration, login, forgot password and actions on users (suspension, edit details and more).
-<br>The service is using Google API to allow login in with gmail.
-<br>Users sessions and permission are managed by JWT.
-<br>Data is stored on Mongo Atlas cloud.
+Account is a group of one or more users, which contains one or more account managers (a user with privileges).
+Accounts and users have the life cycle of: none → active → suspended → closed.
+
+#### We provide internal authentication service as a proxy for other teams. The service will support:
+* Authentication and authorization.
+* Account and user profile.
+* Registration, login, forgot password and actions on users (suspension, edit details and more).
+* The service is using Google API to allow login in with gmail.
+* Users sessions and permission are managed by JWT.
+* Admin can view business statistics from internal services.
+* Account manager can invite or add another user to his account through inivitation link that sent to email.
 
 ## Flow
 1.  Login or registration.
     registration will demend authentication by email with verification code.
-    after registration you will be asked to log in.
+    After registration you will be asked to log in.
 2.  Information and features will be displayed according to user type:
-    * admin- internal system permissions: CRUD on all users and accounts in the system, and their properties. 
-      - all users
-      - all accounts
-      - profile
-    * manager- account permissions: CRUD on all properties (and users) of account.
-    * user- user permissions: CRUD only on it own properties.
+    * admin- internal system permissions: CRUD on all users and accounts in the system, and their properties. Admin pages: 
+      - Users - details and statistics 
+      - Accounts - details and statistics
+      - My Profile - rw
+    * manager- account permissions: CRUD on all properties (and users) of account. Manager pages:
+      - My Account - rw
+      - My Profile - rw
+    * user- user permissions: CRUD only on it own properties. User pages:
+      - My Account - r
+      - My Profile - rw
 
 ## FYIs:
-* passwords and codes sent to email can end up in the spam folder
-* api requests that contain body in postman should be formatted as JSON
-* admin users do not have accounts by definition
-* account name will be define by the user's email that created it
-* 
-* growth directory belongs to growth team. we use their api to send confirm registration mail and suspention announcement mail
-* our logo is SORT - stands for the capital letters of each of our last names. we are the IAM band :fox_face:
+* Passwords and codes sent to email can end up in the spam folder.
+* Api requests that contain body in postman should be formatted as JSON.
+* Admin users do not have accounts by definition.
+* Account name will be define by the user's email that created it.
+* To make tests using Postman you first **must** perform a login through our API (below) in order to receive the cookies.
+
+## Communication with other teams
+* Core - we recieve GET and PUT requests from the Core team to get or update features of certain account. <br>Idenitification of the user is beeing by the cookies the Core will recieve after login through our API.
+* Billing - communication through 2 RabbitMq queues to perform: 
+- When creating a new account (free plan) we send them the account details through the queue and they set up the account with the plan.
+- As soon as account makes an upgrade to its plan, we send the Billing the account details and they return the details of the updated plan.
+- Once an account has been set to suspended, we update the Billing that the account is no longer available.
+- If the Billing are unable to charge a certain account, they have the option to set it to suspended and updated us through the queue.
 ## Prerequisites
 ```bash
   Node.js 16v
 ```
 ## Run with render
 ```bash
-  https://iam-team.onrender.com
+  type in url browser: https://iam-team.onrender.com
 ```
-## Local run
+## Local run - not recommended
+```bash
+  git clone https://github.com/Iam-Shenkar/iamAssignment3.git
+```
 ### Install
 ```bash
   npm install
@@ -87,6 +78,7 @@ https://documenter.getpostman.com/view/24057770/2s8YzTTMkM
 ```
 ## Built with
 * nodejs
+* RabbitMq
 * express
 * mongoose
 * Google API

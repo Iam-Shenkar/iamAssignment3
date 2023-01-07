@@ -33,7 +33,7 @@ const getUser = async (req, res, next) => {
       name: user.name,
       email: user.email,
       role: user.type,
-      status: user.status,
+      gender: user.gender,
       account: accountName,
     };
     res.status(200).json(del);
@@ -61,7 +61,7 @@ const deleteUser = async (req, res, next) => {
   try {
     const user = await User.retrieve({ email: req.params.email });
     const account = await Account.retrieve({ _id: user.accountId });
-    if (!account) throw new httpError(400, 'Cant delede this user');
+    if (!account) throw new httpError(400, 'Cant delete this user');
     if (account.plan === 'free') {
       await Account.update({ _id: account._id }, { status: 'closed' });
       await User.update({ email: user.email }, { status: 'closed' });

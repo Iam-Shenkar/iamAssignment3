@@ -24,10 +24,11 @@ const getFeatures = async (mail) => {
   const assets = await getAssetsByUser(email);
   const currentFeatures = assets.features;
   let result;
+
   if (currentFeatures) {
-    result = { status: 400, message: `OK, available features are: ${currentFeatures}`, data: currentFeatures };
+    result = { status: 200, message: `OK, available features are: ${currentFeatures}`, data: { features: currentFeatures } };
   } else {
-    result = { status: 200, message: 'No features available', data: 0 };
+    result = { status: 400, message: 'No features available', data: { features: 0 } };
   }
   return result;
 };
@@ -39,9 +40,9 @@ const getSeats = async (mail) => {
   const remainSeats = seats - usedSeats;
   let result;
   if (remainSeats < 0) {
-    result = { status: 400, message: 'No seats available', data: 0 };
+    result = { status: 400, message: 'No seats available', data: { seats: -1 } };
   } else {
-    result = { status: 200, message: `OK, available seats: ${remainSeats}`, data: remainSeats };
+    result = { status: 200, message: `OK, available seats: ${remainSeats}`, data: { seats: remainSeats } };
   }
   return result;
 };
@@ -51,9 +52,9 @@ const getCredit = async (mail) => {
   const currentCredit = assetsAccount.credits;
   let result;
   if (currentCredit <= 0) {
-    result = { status: 400, message: 'No available credit', data: 0 };
+    result = { status: 400, message: 'No available credit', data: { credit: -1 } };
   } else {
-    result = { status: 200, message: `OK, available credit: ${currentCredit}`, data: currentCredit };
+    result = { status: 200, message: `OK, available credit: ${currentCredit}`, data: { credit: currentCredit } };
   }
   return result;
 };
@@ -63,12 +64,13 @@ const setSeats = async (mail, count = 1) => {
   const accountID = await getAccountByUser(mail);
   const { usedSeats, seats } = assets;
   let result;
-  if (getSeats(mail).data >= count) {
+  if (getSeats(mail).data.seats >= count) {
     const newSeats = usedSeats + count;
     await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': newSeats });
-    result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: newSeats };
+
+    result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: { seats: seats - newSeats } };
   } else {
-    result = { status: 400, message: 'ERROR, no available seats' };
+    result = { status: 400, message: 'ERROR, no available seats', data: { seats: -1 } };
   }
   return result;
 };
@@ -78,32 +80,43 @@ const setCredit = async (mail, count = 1) => {
   const accountID = await getAccountByUser(mail);
   const { credits } = assets;
   let result;
-  if (getCredit(mail).data >= count) {
-    const newCredit = credits + count;
-    await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': credits - count });
-    result = { status: 200, message: `OK, used seats has been updated: ${newCredit}`, data: newCredit };
+  if (getCredit(mail).data.credit >= count) {
+    const newCredit = parseInt(credits - count);
+    await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': newCredit });
+    result = { status: 200, message: `OK, used seats has been updated: ${newCredit}`, data: { credit: newCredit } };
   } else {
-    result = { status: 400, message: 'ERROR, no available credit' };
+    result = { status: 400, message: 'ERROR, no available credit', data: { credit: -1 } };
   }
   return result;
 };
 
 const setFeature = async (mail, feature) => {
   const assets = await getAssetsByUser(mail);
-
   const accountID = await getAccountByUser(mail);
   const currentFeatures = assets.features;
   const isFeatureExists = currentFeatures.includes(feature);
   let result;
   if (isFeatureExists) {
-    result = { status: 400, message: `ERROR, feature ${feature} already exists` };
+    result = { status: 400, message: `ERROR, feature ${feature} already exists`, data: { feature: -1 } };
   } else {
     await accountService.Account.update({ _id: accountID._id }, { $push: { 'assets.features': feature } });
-    result = { status: 200, message: `OK, feature ${feature} has been added`, data: feature };
+
+    result = { status: 200, message: `OK, feature ${feature} has been added`, data: { feature } };
   }
   return result;
 };
 
+const coreDetails = async (mail) => {
+  const assets = await getAssetsByUser(mail);
+  const user = await authService.userExist(email);
+  const account = await getAccountByUser(mail);
+  if (!user) {
+    throw new httpError(404, "user doesn't exist");
+  } else {
+    result = { status: 200, message: 'OK, details were sent', data: { credit: account.credits, plan: account.plan, type: user.type } };
+  }
+};
+
 module.exports = {
-  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature,
+  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature, coreDetails,
 };

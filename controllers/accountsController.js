@@ -1,10 +1,9 @@
 const {
-  sendInvitation, inviteAuthorization, inviteNewUser,
+  sendInvitation, inviteAuthorization,
+  inviteNewUser, editAuthorization, isFeatureExists, suspendAccount, unSuspendAccount,
 } = require('../services/accountService');
 const { Account, User } = require('../repositories/repositories.init');
-const {
-  getSeats, setSeats,
-} = require('../services/assetsService');
+const { getSeats, setSeats } = require('../services/assetsService');
 const { httpError } = require('../class/httpError');
 
 const inviteUser = async (req, res, next) => {
@@ -80,28 +79,29 @@ const getAccounts = async (req, res, next) => {
 
 const editAccount = async (req, res, next) => {
   try {
-    if (!req.body) throw new httpError(400, 'bad Request');
-    const account = await Account.retrieve({ _id: req.params.id });
-    if (!account) throw new httpError(404, 'account doesnt exist');
-    if (account.status === 'closed') throw new httpError(400, 'disabled account');
-    const currentFeatures = account.assets.features;
-    const isFeatureExists = currentFeatures.includes(currentFeatures);
-    if (isFeatureExists) throw new httpError(400, `ERROR, feature ${currentFeatures} already exists`);
-
+    if (!req.body || !req.params.id) throw new httpError(400, 'bad Request');
+    const acc = await editAuthorization(req.params.id); // check account's status
     const { params: { id }, body } = req;
+
+    if (body.status === 'suspended' && acc.status !== 'suspended') {
+      await suspendAccount(acc, body);
+      return res.status(200)
+        .json({ message: 'account suspended!' });
+    }
+
+    if (body.status === 'active' && acc.status !== 'active') {
+      await unSuspendAccount(acc, body);
+    }
+
+    await isFeatureExists(acc, body.features); // if toAddFeature is already exists
     const data = {
       'assets.credits': body.credits,
       'assets.seats': body.seats,
       plan: body.plan,
       status: body.status,
     };
-    if (req.body.features) {
-      await Account.update(
-        { _id: id },
-        { ...data, $push: { 'assets.features': req.body.features } },
-      );
-    }
-    const updatedAccount = await Account.update({ _id: id }, { ...data });
+
+    const updatedAccount = await Account.update({ _id: id }, { ...data, $push: { 'assets.features': body.features } });
     if (!updatedAccount) throw new httpError(400, 'Not updated');
 
     return res.status(200)
@@ -111,16 +111,13 @@ const editAccount = async (req, res, next) => {
   }
 };
 
+// change account status to closed
 const disableAccount = async (req, res, next) => {
   try {
     if (!req.params) throw new httpError(400, 'Bad request');
-
-    const account = await Account.retrieve({ _id: req.params.id });
-    if (!account) throw new httpError(404, 'account doesnt exist');
-    if (account.status === 'closed') throw new httpError(400, 'account already disabled');
-
+    const acc = await editAuthorization(req.params.id);
     await User.deleteMany({ accountId: req.params.id, type: { $ne: 'manager' } });
-    await Account.update({ _id: req.params.id }, { status: 'closed' });
+    await Account.update({ _id: acc._id }, { status: 'closed' });
     await User.update({ accountId: req.params.id }, { status: 'closed' });
 
     return res.status(200)

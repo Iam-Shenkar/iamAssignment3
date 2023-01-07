@@ -112,7 +112,7 @@ const buttonOption = (email, path, val, removeFunc, element) => {
   remove.setAttribute('value', email);
 
   list.appendChild(view);
-  if (getCookie('role') === 'admin') list.appendChild(remove);
+  if (getCookie('role') !== 'user') list.appendChild(remove);
   return list;
 };
 

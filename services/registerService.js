@@ -5,7 +5,7 @@ const { userRole } = require('../middleware/validatorService');
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { httpError } = require('../class/httpError');
 
-const { Account, User } = require('../repositories/repositories.init');
+const { User, oneTimePass } = require('../repositories/repositories.init');
 
 const createOneTimePass = async (email) => {
   const sendCode = otpGenerator.generate(6, {
@@ -30,7 +30,6 @@ const deleteFormOTP = async (data) => {
 const existCode = async (email) => {
   const userEmail = email.toLowerCase();
   const userCode = await oneTimePass.retrieve({ email: userEmail });
-  if (!userCode) throw new httpError(400, 'Unable to find OTP');
   return userCode;
 };
 

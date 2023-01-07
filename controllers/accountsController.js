@@ -1,8 +1,9 @@
 const {
-  Account, sendInvitation, inviteAuthorization, inviteNewUser,
+  sendInvitation, inviteAuthorization,
+  inviteNewUser, editAuthorization, isFeatureExists, suspendAccount, unSuspendAccount,
 } = require('../services/accountService');
-const { User } = require('../services/authService');
-const { getSeats, setSeats, setCredit ,setFeature } = require('../services/assetsService');
+const { Account, User } = require('../repositories/repositories.init');
+const { getSeats, setSeats } = require('../services/assetsService');
 const { httpError } = require('../class/httpError');
 
 const inviteUser = async (req, res, next) => {
@@ -11,7 +12,7 @@ const inviteUser = async (req, res, next) => {
     const { accountId, userEmail } = req.req.params;
     const account = await Account.retrieve({ _id: accountId });
     const invitedUser = await User.retrieve({ email: userEmail });
-    if ((await getSeats(account.name)).data < 1) throw new httpError(400,'There is not enough seats');
+    if ((await getSeats(account.name)).data < 1) throw new httpError(400, 'There is not enough seats');
 
     if (invitedUser) {
       inviteAuthorization(account, invitedUser);
@@ -26,12 +27,12 @@ const inviteUser = async (req, res, next) => {
   }
 };
 
-const getAccount = async (req, res , next) => {
+const getAccount = async (req, res, next) => {
   try {
-    if (req.params.accountId === 'none') throw new httpError(404,'The admin does not have an account');
+    if (req.params.accountId === 'none') throw new httpError(404, 'The admin does not have an account');
     const acc = await Account.retrieve({ _id: req.params.id });
-    if(!acc) throw new httpError(404,"account doesnt exist");
-    if(acc.status === 'closed') throw new httpError(400,"account disabled");
+    if (!acc) throw new httpError(404, 'account doesnt exist');
+    if (acc.status === 'closed') throw new httpError(400, 'account disabled');
 
     const users = await User.find({ accountId: req.params.id });
     const outputArray = users.reduce((accumulator, currentValue) => [...accumulator,
@@ -71,53 +72,56 @@ const getAccounts = async (req, res, next) => {
     }
     res.status(200)
       .json(outputArray);
-  } catch(err) {
+  } catch (err) {
     next(err);
   }
 };
 
 const editAccount = async (req, res, next) => {
-    try {
-      if (!req.body) throw new httpError(400,"bad Request");
+  try {
+    if (!req.body || !req.params.id) throw new httpError(400, 'bad Request');
+    const acc = await editAuthorization(req.params.id); // check account's status
+    const { params: { id }, body } = req;
 
-      const account = await Account.retrieve({_id: req.params.id});
-      if(!account)
-        throw new httpError(404,"account doesnt exist");
-      if(account.status === 'closed')
-        throw new httpError(400,"disabled account");
-
-      const { params: { id }, body } = req;
-      if(req.body.features) {
-        await Account.update({ _id: id },
-          { $push: { "assets.features": req.body.features } });
-      }
-
-      const updatedAccount =   await Account.update({ _id: id }, {...body});
-      if (!updatedAccount) throw new httpError(400,"Not updated");
+    if (body.status === 'suspended' && acc.status !== 'suspended') {
+      await suspendAccount(acc, body);
       return res.status(200)
-        .json({ message: "account updated!" });
-    } catch (err) {
-      next(err);
+        .json({ message: 'account suspended!' });
     }
-  };
 
+    if (body.status === 'active' && acc.status !== 'active') {
+      await unSuspendAccount(acc, body);
+    }
+
+    await isFeatureExists(acc, body.features); // if toAddFeature is already exists
+    const data = {
+      'assets.credits': body.credits,
+      'assets.seats': body.seats,
+      plan: body.plan,
+      status: body.status,
+    };
+
+    const updatedAccount = await Account.update({ _id: id }, { ...data, $push: { 'assets.features': body.features } });
+    if (!updatedAccount) throw new httpError(400, 'Not updated');
+
+    return res.status(200)
+      .json({ message: 'account updated!' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// change account status to closed
 const disableAccount = async (req, res, next) => {
   try {
-    if (!req.params) throw new httpError(400,'Bad request');
+    if (!req.params) throw new httpError(400, 'Bad request');
+    const acc = await editAuthorization(req.params.id);
+    await User.deleteMany({ accountId: req.params.id, type: { $ne: 'manager' } });
+    await Account.update({ _id: acc._id }, { status: 'closed' });
+    await User.update({ accountId: req.params.id }, { status: 'closed' });
 
-    const account = await Account.retrieve({_id: req.params.id});
-    if(!account)
-      throw new httpError(404,"account doesnt exist");
-    if(account.status === 'closed')
-      throw new httpError(400,"account already disabled");
-
-    // delete all users that are not type manager & update account status to closed
-    await User.deleteMany({ accountId: req.params.id ,type: { $ne: "manager" } });
-    await Account.update({ _id: req.params.id }, { status: 'closed' });
-    // update manager status to closed
-    await User.update({ accountId: req.params.id } , { status: 'closed' })
     return res.status(200)
-      .json({ message: "account disabled" });
+      .json({ message: 'account disabled' });
   } catch (err) {
     next(err);
   }

@@ -1,14 +1,11 @@
 const otpGenerator = require('otp-generator');
 const bcrypt = require('bcrypt');
-const OTPRepository = require('../repositories/oneTimePass.repositories');
+
 const { userRole } = require('../middleware/validatorService');
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { httpError } = require('../class/httpError');
 
-const { User } = require('./authService');
-const { Account } = require('./accountService');
-
-const oneTimePass = new OTPRepository();
+const { User, oneTimePass } = require('../repositories/repositories.init');
 
 const createOneTimePass = async (email) => {
   const sendCode = otpGenerator.generate(6, {
@@ -17,7 +14,7 @@ const createOneTimePass = async (email) => {
     specialChars: false,
   });
   const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
-  if (!newOneTimePass) throw new httpError(400,'No new OTP created');
+  if (!newOneTimePass) throw new httpError(400, 'No new OTP created');
   await oneTimePass.create(newOneTimePass);
   return newOneTimePass;
 };
@@ -33,12 +30,11 @@ const deleteFormOTP = async (data) => {
 const existCode = async (email) => {
   const userEmail = email.toLowerCase();
   const userCode = await oneTimePass.retrieve({ email: userEmail });
-  if (!userCode) throw new httpError(400, 'Unable to find OTP');
   return userCode;
 };
 
 const otpCompare = async (UserCode, userCode) => {
-  if (userCode !== UserCode) if (userCode !== UserCode) throw new httpError(400, 'Incorrect code');;
+  if (userCode !== UserCode) if (userCode !== UserCode) throw new httpError(400, 'Incorrect code');
 };
 
 const sendEmailOneTimePass = async (user, newCode) => {
@@ -59,6 +55,7 @@ const createUser = async (user) => {
   const newUser = {
     name: user.name,
     email: user.email,
+    gender: user.gender,
     accountId: 'none',
     password: hashPassword,
   };

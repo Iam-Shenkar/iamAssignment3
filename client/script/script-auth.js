@@ -56,9 +56,9 @@ const login = async () => {
     body: JSON.stringify(data),
   });
   // const body = await response.json();
-  if (response.status !== 302) {
+  if (response.status === 200) {
   // alert((body.message));
-    window.location.href = `/dashboard`;
+    window.location.href = '/';
   }
 };
 
@@ -67,6 +67,7 @@ const register = async () => {
     name: document.getElementById('newUsername').value,
     email: document.getElementById('newUserEmail').value,
     password: document.getElementById('pass').value,
+    gender: document.getElementById('pass').value,
   };
   const response = await fetch(`${runningPath}/auth/register`, {
     method: 'POST',

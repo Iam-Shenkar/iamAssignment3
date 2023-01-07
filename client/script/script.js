@@ -1,7 +1,5 @@
 const runningPath = window.location.origin;
 
-// const Logout = document.getElementById('logout');
-
 const alert = (message, type, id) => {
   const alertPlaceholder = document.getElementById (id);
   const wrapper = document.createElement ('div');
@@ -113,8 +111,9 @@ const buttonOption = (email, path, val, removeFunc, element) => {
   remove.setAttribute ('onclick', `${removeFunc}(\'${email}\')`);
   remove.setAttribute ('value', email);
 
-  list.appendChild (view);
-  if (getCookie ('role') === 'admin') list.appendChild (remove);
+
+  list.appendChild(view);
+  if (getCookie('role') !== 'user') list.appendChild(remove);
   return list;
 };
 
@@ -172,7 +171,8 @@ const adminAddUser = async () => {
 };
 
 const getUsers = async () => {
-  const response = await fetch (`${runningPath}/users/list`, {
+
+  const response = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -187,7 +187,8 @@ const getUsers = async () => {
 };
 
 const getAccounts = async () => {
-  const response = await fetch (`${runningPath}/accounts/list`, {
+
+  const response = await fetch(`${runningPath}/accounts`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -312,25 +313,25 @@ window.onload = () => {
   userName.innerHTML = email.replace ('%40', '&#064;');
 };
 
-// Logout.addEventListener('click', async () => {
-//   const data = {
-//     email: decodeURIComponent(getCookie('email')),
-//   };
-//   console.log(data);
-//   const response = await fetch(`${runningPath}/auth/logout`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   });
-//   // const body = await response.json();
-//   if (response.status !== 302) { console.log('redirect'); }
-//   window.location.href = `${runningPath}/`;
-// });
+const logout = async () => {
+  const data = {
+    email: decodeURIComponent(getCookie('email')),
+  };
+  console.log(data);
+  const response = await fetch(`${runningPath}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (response.status !== 302) { console.log('redirect'); }
+  window.location.href = `${runningPath}/`;
+};
 
 const charts = async () => {
-  const responseUser = await fetch (`${runningPath}/users/list`, {
+
+  const responseUser = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -339,7 +340,8 @@ const charts = async () => {
   const users = await responseUser.json ();
   typeChart (users);
 
-  const responseAccount = await fetch (`${runningPath}/accounts/list`, {
+
+  const responseAccount = await fetch(`${runningPath}/accounts/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -473,7 +475,6 @@ const updateDaysOfSuspension = () => {
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
 
-// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch (
     `${runningPath}/accounts/status/${accotnt}`,
@@ -484,21 +485,20 @@ const disableAccount = async (accotnt) => {
       },
     },
   );
-  // eslint-disable-next-line no-unused-vars
+
   const body = await response.json ();
+
   if (response.status === 200) {
     alert ('account closed', 'primary', 'liveAlertPlaceholder');
   }
 };
 
-// eslint-disable-next-line no-unused-vars
 function viewClose() {
   alert ('It is not possible to view a closed account!', 'danger', 'liveAlertPlaceholder');
 }
 
-// eslint-disable-next-line no-unused-vars
+
 const deleteUser = async (email) => {
-  // eslint-disable-next-line no-console
   console.log ('deleteF');
   const response = await fetch (
     `${runningPath}/users/${email}`,
@@ -509,9 +509,14 @@ const deleteUser = async (email) => {
       },
     },
   );
-  const body = await response.json ();
-  if (body.status === 200) {
-    alert ('account closed', 'primary', 'liveAlertPlaceholder');
+
+  // const body = await response.json();
+  if (response.status === 200) {
+    location.reload();
+    alert('account closed', 'primary', 'liveAlertPlaceholder');
+  } else {
+    alert(`Cant delede ${email} `, 'danger', 'liveAlertPlaceholder');
+
   }
 };
 
@@ -633,14 +638,22 @@ const buildTablePerDayAndMonth = (dataArray, monthArray) => {
     div1.appendChild (table1);
     div2.appendChild (table2);
   }
+
+  if (div1 && div2) {
+    div1.appendChild(table1);
+    div2.appendChild(table2);
+  }
+
 };
 
 buildTablePerDayAndMonth (dataArray, monthArray);
 
 // eslint-disable-next-line no-shadow
 const buildTableForCredits = (dataArray1, dataArry2) => {
+
   const day = document.getElementById ('tablesPerDayPerUser');
   const month = document.getElementById ('tablesPerMonthPerUser');
+
 
   const tableDay = document.createElement ('table');
   const tableMonth = document.createElement ('table');
@@ -657,7 +670,9 @@ const buildTableForCredits = (dataArray1, dataArry2) => {
   const dateColumnMonth = document.createElement ('th');
   dateColumnMonth.textContent = 'Month';
 
+
   const creditsColumnDay = document.createElement ('th');
+
   creditsColumnDay.textContent = 'Total Credits Used';
   const creditsColumnMonth = document.createElement ('th');
   creditsColumnMonth.textContent = 'Total Credits Used';
@@ -876,7 +891,6 @@ const generateMARR = (data) => {
   return html;
 }
 
-
 const container = document.getElementById('container');
 container.innerHTML = generateMARR (MArr);
 
@@ -909,3 +923,4 @@ const generatePaymentView = (paymentData) => {
 
 const wrapper = document.getElementById('wrapper');
 wrapper.innerHTML = generatePaymentView(paymentData);
+

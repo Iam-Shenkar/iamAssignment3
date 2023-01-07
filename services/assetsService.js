@@ -26,9 +26,9 @@ const getFeatures = async (mail) => {
   let result;
 
   if (currentFeatures) {
-    result = { status: 200, message: `OK, available features are: ${currentFeatures}`, data: {features: currentFeatures} };
+    result = { status: 200, message: `OK, available features are: ${currentFeatures}`, data: { features: currentFeatures } };
   } else {
-    result = { status: 400, message: 'No features available', data: {features: 0} };
+    result = { status: 400, message: 'No features available', data: { features: 0 } };
   }
   return result;
 };
@@ -69,9 +69,10 @@ const setSeats = async (mail, count = 1) => {
   if (currentSeat >= count) {
     const newSeats = usedSeats + count;
     await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': newSeats });
-    result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: { seats: seats-newSeats } };
+
+    result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: { seats: seats - newSeats } };
   } else {
-    result = { status: 400, message: 'ERROR, no available seats',data: { seats: -1} };
+    result = { status: 400, message: 'ERROR, no available seats', data: { seats: -1 } };
   }
   return result;
 };
@@ -103,12 +104,13 @@ const setFeature = async (mail, feature) => {
     result = { status: 400, message: `ERROR, feature ${feature} already exists`, data: { feature: -1 } };
   } else {
     await accountService.Account.update({ _id: accountID._id }, { $push: { 'assets.features': feature } });
-    result = { status: 200, message: `OK, feature ${feature} has been added`, data: { 'feature': feature } };
+
+    result = { status: 200, message: `OK, feature ${feature} has been added`, data: { feature } };
   }
   return result;
 };
 
-const coreDetails = async(mail)=>{
+const coreDetails = async (mail) => {
   const assets = await getAssetsByUser(mail);
   const user = await authService.userExist(mail);
   const account = await getAccountByUser(mail);
@@ -122,5 +124,4 @@ const coreDetails = async(mail)=>{
 }
 
 module.exports = {
-  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature,coreDetails,
-};
+  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature,coreDetails,};

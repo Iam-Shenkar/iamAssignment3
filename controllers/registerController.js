@@ -6,7 +6,12 @@ const { existCode, sendEmailOneTimePass } = require('../services/registerService
 
 const { userRole } = require('../middleware/validatorService');
 const { httpError } = require('../class/httpError');
+
+const { freePlan2Q } = require('../Q/sender');
+
+
 const { Account, User } = require('../repositories/repositories.init');
+
 
 const handleRegister = async (req, res, next) => {
   try {
@@ -51,6 +56,7 @@ const handleConfirmCode = async (req, res, next) => {
     if (userRole(userEmail) !== 'admin') {
       const account = await Account.retrieve({ name: userEmail });
       await Account.update({ accountId: account._id.toString() }, { status: 'active' });
+      await freePlan2Q(account._id.toString());
       await User.update({ email: userEmail }, { accountId: account._id.toString(), status: 'active' });
     }
 

@@ -1,4 +1,6 @@
+// eslint-disable-next-line import/no-unresolved
 const amqp = require('amqplib/callback_api');
+
 const { amqpCreateFreePlan } = process.env;
 const { amqpSuspendedAccount } = process.env;
 
@@ -6,15 +8,14 @@ const { amqpSuspendedAccount } = process.env;
 
 const freePlan2Q = async (accountId) => {
   amqp.connect(amqpCreateFreePlan, (err, conn) => {
-    conn.createChannel(async (err,ch) => {
+    conn.createChannel(async (err, ch) => {
       const q = 'CloudAMQP';
       const freePlan = {
-        "accountId": {accountId},
+        accountId: { accountId },
       };
       const stringMsg = JSON.stringify(freePlan);
       ch.assertQueue(q, { durable: false });
       await ch.sendToQueue(q, Buffer.from(stringMsg));
-
     });
   });
 };
@@ -23,23 +24,23 @@ const freePlan2Q = async (accountId) => {
 
 const newStatus2Q = async (accountId, status) => {
   amqp.connect(amqpSuspendedAccount, (err, conn) => {
-    conn.createChannel(async (err,ch) => {
+    conn.createChannel(async (err, ch) => {
       const q = 'CloudAMQP';
       const suspendedAccount = {
-        "accountId": {accountId},
-        "status": {status},
+        accountId: { accountId },
+        status: { status },
       };
       const stringMsg = JSON.stringify(suspendedAccount);
       ch.assertQueue(q, { durable: false });
       await ch.sendToQueue(q, Buffer.from(stringMsg));
-
     });
   });
-}
+
 
 // newStatus2Q("17774","suspended");
 //
 // freePlan2Q("1234");
 
+freePlan2Q('1234');
 
 module.exports = { freePlan2Q, newStatus2Q };

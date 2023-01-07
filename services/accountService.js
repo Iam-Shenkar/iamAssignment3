@@ -1,7 +1,7 @@
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
-const { FOREVER } = require('../utiles/constants');
+// const { FOREVER } = require('../utiles/constants');
 const {newStatus2Q} = require("../Q/sender")
 
 
@@ -56,7 +56,7 @@ const isFeatureExists = async (accountId, feature) => {
   const acc = await Account.retrieve({ _id: accountId });
   const currentFeatures = acc.assets.features;
   const isExists = currentFeatures.includes(feature);
-  if (isExists) throw new httpError(400, `${feature} already exists`);
+  return isExists;
 };
 
 const suspendAccount = async (acc, body) => {
@@ -94,28 +94,27 @@ const createUserToAccount = async (email, account) => {
 };
 
 const QUpdateAccount = async (msg) => {
+  const isExists = await isFeatureExists(msg.accountId, msg.features); // if toAddFeature is already exists
+  if (isExists) throw new Error('feature already exists');
+  const data = {
+    'assets.credits': msg.credits,
+    'assets.seats': msg.seats,
+    status: 'active',
+  };
 
-    await isFeatureExists(msg.accountId, msg.features); // if toAddFeature is already exists
-    const data = {
-      'assets.credits': msg.credits,
-      'assets.seats': msg.seats,
-      status: 'active'
-    };
-
-    const updatedAccount = await Account.update({_id: msg.accountId}, {
-      ...data,
-      $push: {'assets.features': msg.features}
-    });
-    await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
-    if (!updatedAccount) throw new Error("update failed");
-
-}
+  const updatedAccount = await Account.update({ _id: msg.accountId }, {
+    ...data,
+    $push: { 'assets.features': msg.features },
+  });
+  await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
+  if (!updatedAccount) throw new Error('update failed');
+};
 
 const QSuspendAccount = async (msg) => {
   const data = {
     status: "suspended",
     suspensionDate: new Date(),
-    suspensionTime: FOREVER,
+    suspensionTime: 10000000,
   };
   const updatedAccount = await Account.update({ _id: msg.accountId }, { ...data });
   if (!updatedAccount) throw new Error("failed to suspend account");

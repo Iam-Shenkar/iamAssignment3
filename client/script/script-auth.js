@@ -80,10 +80,6 @@ const register = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
-  if (response.status === 200) {
-    const res = document.createElement('h3').innerHTML = body.message;
-    document.getElementById('emailConfirmation').append(res);
-  }
 };
 
 const confirmationCode = async () => {
@@ -103,6 +99,18 @@ const confirmationCode = async () => {
   const body = await response.json();
   if (response.status !== 200 && body.message) {
     alert((body.message));
+  }
+  if (response.status === 200) {
+    const res = document.createElement('h3');
+    res.innerHTML = body.message;
+    document.getElementById('emailConfirmation-div').append(res);
+    const backButton = document.createElement('a');
+    backButton.innerHTML = 'back to log in';
+    backButton.setAttribute('href', '/login');
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.append(backButton);
+    document.getElementById('emailConfirmation-div').append(button);
   }
 };
 

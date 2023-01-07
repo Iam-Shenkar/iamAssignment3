@@ -80,6 +80,10 @@ const register = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  if (response.status === 200) {
+    const res = document.createElement('h3').innerHTML = body.message;
+    document.getElementById('emailConfirmation').append(res);
+  }
 };
 
 const confirmationCode = async () => {

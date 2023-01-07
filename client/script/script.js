@@ -162,22 +162,26 @@ const getUserAdmin = async () => {
   const body = await response.json();
   document.getElementById('exampleInputUsername2').value = body.name;
   document.getElementById('exampleInputEmail2').value = body.email;
+  document.getElementById('currentStatus').value = body.status;
   document.getElementById('currentStatus').innerText = body.status;
 };
 
 const editAdmin = async () => {
   let name = document.getElementById('exampleInputUsername2').value;
   const email = document.getElementById('exampleInputEmail2').value;
-  let status = document.getElementById('currentStatus').value;
+  let status = document.getElementById('exampleUsersStatus').value;
+  console.log(document.getElementById('exampleUsersStatus').value);
   if (!name) {
     name = document.getElementById('exampleInputEmail1').value;
   }
   if (status === 'Suspend') { status = 'suspended'; }
   const data = {
+    email,
     name,
     status,
     suspensionTime: document.getElementById('exampleAmountOfDays').value,
   };
+  console.log(`${runningPath}/users/${email}`);
   const response = await fetch(`${runningPath}/users/${email}`, {
     method: 'PUT',
     headers: {

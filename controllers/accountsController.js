@@ -9,18 +9,17 @@ const { httpError } = require('../class/httpError');
 const inviteUser = async (req, res, next) => {
   try {
     const manager = req.user;
-    const { accountId, userEmail } = req.req.params;
+    const { accountId, email } = req.params;
     const account = await Account.retrieve({ _id: accountId });
-    const invitedUser = await User.retrieve({ email: userEmail });
-    if ((await getSeats(account.name)).data < 1) throw new httpError(400, 'There is not enough seats');
-
+    const invitedUser = await User.retrieve({ email });
+    if ((await getSeats(account._id)).data < 1) throw new httpError(400, 'There is not enough seats');
     if (invitedUser) {
       inviteAuthorization(account, invitedUser);
       await sendInvitation(manager, invitedUser);
     } else {
-      await inviteNewUser(manager, userEmail);
+      await inviteNewUser(manager, email);
     }
-    await setSeats(account.name, manager.type, 1);
+    await setSeats(account._id, 1);
     res.status(200).json({ message: 'user invited' });
   } catch (err) {
     next(err);
@@ -40,8 +39,8 @@ const getAccount = async (req, res, next) => {
         Name: currentValue.name,
         email: currentValue.email,
         Role: currentValue.type,
-        Status: currentValue.status,
         Gender: currentValue.gender,
+        Status: currentValue.status,
         Edit: '',
       }], []);
     const { features } = acc.assets;
@@ -86,14 +85,16 @@ const editAccount = async (req, res, next) => {
     if (body.status === 'suspended' && acc.status !== 'suspended') {
       await suspendAccount(acc, body);
       return res.status(200)
-        .json({ message: 'account suspended!' });
+          .json({ message: 'account suspended!' });
     }
 
     if (body.status === 'active' && acc.status !== 'active') {
       await unSuspendAccount(acc, body);
     }
 
-    await isFeatureExists(acc, body.features); // if toAddFeature is already exists
+    // eslint-disable-next-line max-len
+    const result = await isFeatureExists(acc._id, body.features);
+    if (result) throw new httpError(400, `${body.features}' already exists`);
     const data = {
       'assets.credits': body.credits,
       'assets.seats': body.seats,
@@ -105,7 +106,7 @@ const editAccount = async (req, res, next) => {
     if (!updatedAccount) throw new httpError(400, 'Not updated');
 
     return res.status(200)
-      .json({ message: 'account updated!' });
+        .json({ message: 'account updated!' });
   } catch (err) {
     next(err);
   }

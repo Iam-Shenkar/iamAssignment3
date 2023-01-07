@@ -1,7 +1,5 @@
 const runningPath = window.location.origin;
 
-// const Logout = document.getElementById('logout');
-
 const alert = (message, type, id) => {
   const alertPlaceholder = document.getElementById(id);
   const wrapper = document.createElement('div');
@@ -114,7 +112,7 @@ const buttonOption = (email, path, val, removeFunc, element) => {
   remove.setAttribute('value', email);
 
   list.appendChild(view);
-  if (getCookie('role') === 'admin') list.appendChild(remove);
+  if (getCookie('role') !== 'user') list.appendChild(remove);
   return list;
 };
 
@@ -132,7 +130,7 @@ const getUser = async () => {
 
   const editButton = document.getElementById('editButton');
   const role = getCookie('role');
-  if (role === 'admin') editButton.setAttribute('href', `${runningPath}/EditProfile=${email}`);
+  if (role === 'admin') editButton.setAttribute('onclick', `editProfileAdmin('${email}')`);
   if (role !== 'admin') editButton.setAttribute('onclick', 'editProfile()');
 
   document.getElementById('exampleInputUsername1').value = body.name;
@@ -141,11 +139,111 @@ const getUser = async () => {
   document.getElementById('exampleInputAccount').value = body.account;
 };
 
+const editProfileAdmin = async (email) => {
+  window.location.href = `${runningPath}/EditProfile?email=${email}`;
+};
 // eslint-disable-next-line no-unused-vars
 const editProfile = () => {
   console.log('edit');
   const name = document.getElementById('exampleInputUsername1');
   name.removeAttribute('readonly');
+};
+
+
+const getUserAdmin = async () => {
+  const url = new URL(window.location.href);
+  let email = url.searchParams.get('email');
+  if (!email) email = getCookie('email');
+  const response = await fetch(`${runningPath}/users/${email}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.json();
+  document.getElementById('exampleInputUsername2').value = body.name;
+  document.getElementById('exampleInputEmail2').value = body.email;
+  document.getElementById('currentStatus').value = body.status;
+  document.getElementById('currentStatus').innerText = body.status;
+};
+
+const updatePass = async () => {
+  const email = document.getElementById('exampleInputEmail1').value;
+  const password = document.getElementById('inlineFormInputOldPassword').value;
+  const newPassword = document.getElementById('inlineFormInputNewPassword').value;
+  const data = {
+    email,
+    password,
+    newPassword,
+  };
+  const response = await fetch(`${runningPath}/users/pass`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+
+  });
+  const body = await response.json();
+  let res = document.getElementById('passRes');
+  if (res === null || res === undefined) {
+    res = document.createElement('label');
+    res.setAttribute('id', 'passRes');
+  }
+  res.innerHTML = body;
+  const div = document.getElementById('changePassword');
+  div.append(res);
+};
+
+const updateUser = async () => {
+  const name = document.getElementById('exampleInputUsername1').value;
+  const email = document.getElementById('exampleInputEmail1').value;
+  const data = {
+    name,
+    email,
+  };
+  console.log(email);
+  const response = await fetch(`${runningPath}/users/${email}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const body = await response.json();
+  if (response.status !== 200 && body.message) {
+    alert((body.message));
+  }
+  if (response.status === 200) { window.location.reload(); }
+};
+
+const editAdmin = async () => {
+  let name = document.getElementById('exampleInputUsername2').value;
+  const email = document.getElementById('exampleInputEmail2').value;
+  let status = document.getElementById('exampleUsersStatus').value;
+  console.log(document.getElementById('exampleUsersStatus').value);
+  if (!name) {
+    name = document.getElementById('exampleInputEmail1').value;
+  }
+  if (status === 'Suspend') { status = 'suspended'; }
+  const data = {
+    email,
+    name,
+    status,
+    suspensionTime: document.getElementById('exampleAmountOfDays').value,
+  };
+  console.log(`${runningPath}/users/${email}`);
+  const response = await fetch(`${runningPath}/users/${email}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  const body = await response.json();
+  if (response.status !== 200 && body.message) {
+    alert((body.message));
+  }
 };
 
 const adminAddUser = async () => {
@@ -172,7 +270,7 @@ const adminAddUser = async () => {
 };
 
 const getUsers = async () => {
-  const response = await fetch(`${runningPath}/users/list`, {
+  const response = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -187,7 +285,7 @@ const getUsers = async () => {
 };
 
 const getAccounts = async () => {
-  const response = await fetch(`${runningPath}/accounts/list`, {
+  const response = await fetch(`${runningPath}/accounts`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -196,8 +294,7 @@ const getAccounts = async () => {
 
   const body = await response.json();
   const table = document.querySelector('table');
-  const data = Object.keys(body[0])
-    .splice(1, 6);
+  const data = Object.keys(body[0]).splice(1, 6);
   generateTableHead(table, data);
   generateAccountTable(table, body);
 };
@@ -228,6 +325,8 @@ const getAccount = async () => {
   } else {
     alert(body.message);
   }
+
+  planChartGender(body);
 };
 
 const userInvitation = async () => {
@@ -235,7 +334,8 @@ const userInvitation = async () => {
   let account = url.searchParams.get('id');
   if (!account) account = getCookie('account');
   const email = document.getElementById('userEmail').value;
-  const response = await fetch(`${runningPath}/accounts/${account}/invite/${email}`, {
+  console.log(`${runningPath}/accounts/${account}link/${email}`);
+  const response = await fetch(`${runningPath}/accounts/${account}/link/${email}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -329,7 +429,7 @@ window.onload = () => {
 // });
 
 const charts = async () => {
-  const responseUser = await fetch(`${runningPath}/users/list`, {
+  const responseUser = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -338,7 +438,7 @@ const charts = async () => {
   const users = await responseUser.json();
   typeChart(users);
 
-  const responseAccount = await fetch(`${runningPath}/accounts/list`, {
+  const responseAccount = await fetch(`${runningPath}/accounts/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -413,8 +513,7 @@ const planChart = (accounts) => {
   for (const plan in plans) {
     plans[plan] = (plans[plan] / accounts.length) * 100;
   }
-  const ctx = document.getElementById('myPieChart')
-    .getContext('2d');
+  const ctx = document.getElementById('myPieChart').getContext('2d');
   const pieChart = new Chart(ctx, {
     type: 'pie',
     data: {
@@ -454,8 +553,62 @@ const planChart = (accounts) => {
   });
 };
 
-// const logo = document.getElementById('logo'); // or grab it by tagname etc
-// logo.setAttribute('href', `${runningPath}/`);
+const planChartGender = (users) => {
+  const genders = {};
+  for (let i = 0; i < users.length; i++) {
+    const gender = users[i].Gender;
+    if (genders[gender] == null) {
+      genders[gender] = 0;
+    }
+    genders[gender]++;
+  }
+  for (const gender in genders) {
+    genders[gender] = (genders[gender] / users.length) * 100;
+  }
+
+  const ctx = document.getElementById('genderPieChart')
+    .getContext('2d');
+  const pieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: Object.keys(genders),
+      datasets: [{
+        data: Object.values(genders),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          fontSize: 14,
+        },
+      },
+      responsive: true,
+      aspectRatio: 1,
+    },
+  });
+};
+
+const logo = document.getElementById('logo');
+logo.setAttribute('href', `${runningPath}/`);
 
 // eslint-disable-next-line no-unused-vars
 const positiveNumber = () => {
@@ -472,7 +625,6 @@ const updateDaysOfSuspension = () => {
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
 
-// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch(
     `${runningPath}/accounts/status/${accotnt}`,
@@ -483,7 +635,6 @@ const disableAccount = async (accotnt) => {
       },
     },
   );
-  // eslint-disable-next-line no-unused-vars
   const body = await response.json();
   if (response.status === 200) {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
@@ -508,9 +659,13 @@ const deleteUser = async (email) => {
       },
     },
   );
+
   const body = await response.json();
-  if (body.status === 200) {
+  if (response.status === 200) {
+    window.location.reload();
     alert('account closed', 'primary', 'liveAlertPlaceholder');
+  } else {
+    alert(`Cant delede ${email}- ${body.message} `, 'danger', 'liveAlertPlaceholder');
   }
 };
 
@@ -696,8 +851,8 @@ const buildTableForCredits = (dataArray1, dataArry2) => {
     tableMonth.appendChild(rowMonth);
   }
 
-  day.appendChild(tableDay);
-  month.appendChild(tableMonth);
+  // day.appendChild(tableDay);
+  // month.appendChild(tableMonth);
 };
 
 // Define the data array for total credits usage per day per user

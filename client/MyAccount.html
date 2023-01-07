@@ -36,7 +36,7 @@
                 </button>
             </div>
             <div >
-                <a id="logo" class="navbar-brand brand-logo"
+                <a id="logo" href="/"  class="navbar-brand brand-logo"
                 >
                     <span>IAM <font color="blue">Team</font></span>
                 </a>
@@ -60,7 +60,7 @@
                             <p class="mb-1 mt-3 font-weight-semibold" id="userNameProfile"></p>
                             <p class="fw-light text-muted mb-0" id="userEmailProfile"></p>
                         </div>
-                        <a class="dropdown-item"><i
+                        <a class="dropdown-item" href="/myProfile"><i
                                 class="bi bi-person-circle dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i>
                             My Profile</a>
                         <a class="dropdown-item" onclick="logout()" id='logout'><i
@@ -115,6 +115,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
                 <div class="col-lg-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
@@ -146,6 +147,16 @@
                     </div>
                 </div>
 
+                <div class="col-md-6 grid-margin stretch-card">
+
+                    <div class="card">
+                        <div class="card-body" style="width: 100%; height: 100%">
+                            <h4>Users Genders 2023</h4>
+                            <canvas id="genderPieChart" width="1100" height="400" ></canvas>
+                        </div>
+                    </div>
+                </div>
+                </div>
                 <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">IAM Team</span>

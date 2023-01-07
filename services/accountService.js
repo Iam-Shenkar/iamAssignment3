@@ -2,8 +2,7 @@ const { sendEmail } = require('../sendEmail/sendEmail');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
 const { FOREVER } = require('../utiles/constants');
-const {newStatus2Q} = require("../Q/sender")
-
+const { newStatus2Q } = require('../Q/sender');
 
 const sendInvitation = async (manager, user) => {
   const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
@@ -20,10 +19,10 @@ const sendInvitation = async (manager, user) => {
   await sendEmail(mailData, details);
 };
 
-const inviteNewUser = async (account, email) => {
+const inviteNewUser = async (account, mail) => {
   try {
     const newUser = {
-      email,
+      email: mail,
       name: 'stranger',
       type: 'user',
       status: 'pending',
@@ -38,9 +37,8 @@ const inviteNewUser = async (account, email) => {
 
 const inviteAuthorization = (account, invitedUser) => {
   if (account._id.toString() === invitedUser.accountId) throw new Error('User already in the account');
-  if (account.role === 'admin') throw new httpError(400, 'Cant add Admins to an account');
-  if (account.plan !== 'free') throw new httpError(400, 'User already in an Account');
-  if (account.role !== 'user') throw new httpError(400, 'User already in an Account');
+  if (account.type === 'admin') throw new httpError(400, 'Cant add Admins to an account');
+  if (account.type === 'user') throw new httpError(400, 'User already in an Account');
   if (invitedUser.status !== 'active') throw new httpError(400, 'User is not active');
   if (account === null) throw new httpError(404, 'Account not found');
 };
@@ -52,10 +50,11 @@ const editAuthorization = async (accountId) => {
   return acc;
 };
 
-const isFeatureExists = async (acc, feature) => {
+const isFeatureExists = async (accountId, feature) => {
+  const acc = await Account.retrieve({ _id: accountId });
   const currentFeatures = acc.assets.features;
   const isExists = currentFeatures.includes(feature);
-  if (isExists) throw new httpError(400, `${feature} already exists`);
+  return isExists;
 };
 
 const suspendAccount = async (acc, body) => {
@@ -93,33 +92,31 @@ const createUserToAccount = async (email, account) => {
 };
 
 const QUpdateAccount = async (msg) => {
+  await isFeatureExists(msg.accountId, msg.features); // if toAddFeature is already exists
+  const data = {
+    'assets.credits': msg.credits,
+    'assets.seats': msg.seats,
+    status: 'active',
+  };
 
-    await isFeatureExists(msg.accountId, msg.features); // if toAddFeature is already exists
-    const data = {
-      'assets.credits': msg.credits,
-      'assets.seats': msg.seats,
-      status: 'active'
-    };
-
-    const updatedAccount = await Account.update({_id: msg.accountId}, {
-      ...data,
-      $push: {'assets.features': msg.features}
-    });
-    await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
-    if (!updatedAccount) throw new Error("update failed");
-
-}
+  const updatedAccount = await Account.update({ _id: msg.accountId }, {
+    ...data,
+    $push: { 'assets.features': msg.features },
+  });
+  await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
+  if (!updatedAccount) throw new Error('update failed');
+};
 
 const QSuspendAccount = async (msg) => {
   const data = {
-    status: "suspended",
+    status: 'suspended',
     suspensionDate: new Date(),
     suspensionTime: FOREVER,
   };
   const updatedAccount = await Account.update({ _id: msg.accountId }, { ...data });
-  if (!updatedAccount) throw new Error("failed to suspend account");
+  if (!updatedAccount) throw new Error('failed to suspend account');
   await User.updateMany({ accountId: msg.accountId }, { ...data });
-}
+};
 
 module.exports = {
   Account,
@@ -132,5 +129,6 @@ module.exports = {
   suspendAccount,
   unSuspendAccount,
   QUpdateAccount,
-  QSuspendAccount
+  QSuspendAccount,
+
 };

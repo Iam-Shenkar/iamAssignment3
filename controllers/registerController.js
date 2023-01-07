@@ -1,14 +1,10 @@
 const bcrypt = require('bcrypt');
-// eslint-disable-next-line import/no-unresolved
 const register = require('../services/registerService');
 const { userExist } = require('../services/authService');
 const { existCode, sendEmailOneTimePass } = require('../services/registerService');
-
 const { userRole } = require('../middleware/validatorService');
 const { httpError } = require('../class/httpError');
-
 const { freePlan2Q } = require('../Q/sender');
-
 const { Account, User } = require('../repositories/repositories.init');
 const { setSeats } = require('../services/assetsService');
 

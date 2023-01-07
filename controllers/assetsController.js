@@ -102,5 +102,5 @@ module.exports = {
   setFeature,
   setCredit,
   setSeats,
-  coreDetails
+  coreDetails,
 };

@@ -80,6 +80,9 @@ const register = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  if (response.status === 200 && body.message === 'user update') {
+    window.location.reload();
+  }
 };
 
 const confirmationCode = async () => {
@@ -88,6 +91,7 @@ const confirmationCode = async () => {
     email: document.getElementById('newUserEmail').value,
     password: document.getElementById('pass').value,
     code: document.getElementById('oneTimePassword').value,
+    gender: document.getElementById('gender').value,
   };
   const response = await fetch(`${runningPath}/auth/register/code`, {
     method: 'POST',
@@ -112,6 +116,11 @@ const confirmationCode = async () => {
     button.append(backButton);
     document.getElementById('emailConfirmation-div').append(button);
   }
+};
+
+const googleLogIn = async () => {
+  console.log('google');
+  window.location.href = `${runningPath}/auth/google`;
 };
 
 const ResetPassweord = async () => {

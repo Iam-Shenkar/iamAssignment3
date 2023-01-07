@@ -1,7 +1,5 @@
 const runningPath = window.location.origin;
 
-// const Logout = document.getElementById('logout');
-
 const alert = (message, type, id) => {
   const alertPlaceholder = document.getElementById(id);
   const wrapper = document.createElement('div');
@@ -12,8 +10,9 @@ const alert = (message, type, id) => {
     '</div>',
   ].join('');
 
-  alertPlaceholder.append(wrapper);
+  alertPlaceholder.append(wrapper)
 };
+
 
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
@@ -27,6 +26,7 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
+
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
@@ -172,7 +172,7 @@ const adminAddUser = async () => {
 };
 
 const getUsers = async () => {
-  const response = await fetch(`${runningPath}/users/list`, {
+  const response = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ const getUsers = async () => {
 };
 
 const getAccounts = async () => {
-  const response = await fetch(`${runningPath}/accounts/list`, {
+  const response = await fetch(`${runningPath}/accounts`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -307,25 +307,24 @@ window.onload = () => {
   userName.innerHTML = email.replace('%40', '&#064;');
 };
 
-// Logout.addEventListener('click', async () => {
-//   const data = {
-//     email: decodeURIComponent(getCookie('email')),
-//   };
-//   console.log(data);
-//   const response = await fetch(`${runningPath}/auth/logout`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   });
-//   // const body = await response.json();
-//   if (response.status !== 302) { console.log('redirect'); }
-//   window.location.href = `${runningPath}/`;
-// });
+const logout = async () => {
+  const data = {
+    email: decodeURIComponent(getCookie('email')),
+  };
+  console.log(data);
+  const response = await fetch(`${runningPath}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (response.status !== 302) { console.log('redirect'); }
+  window.location.href = `${runningPath}/`;
+};
 
 const charts = async () => {
-  const responseUser = await fetch(`${runningPath}/users/list`, {
+  const responseUser = await fetch(`${runningPath}/users/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -334,7 +333,7 @@ const charts = async () => {
   const users = await responseUser.json();
   typeChart(users);
 
-  const responseAccount = await fetch(`${runningPath}/accounts/list`, {
+  const responseAccount = await fetch(`${runningPath}/accounts/`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -467,7 +466,6 @@ const updateDaysOfSuspension = () => {
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
 
-// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch(
     `${runningPath}/accounts/status/${accotnt}`,
@@ -481,7 +479,6 @@ const disableAccount = async (accotnt) => {
   const body = await response.json();
   if (response.status === 200) {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
-
   }
 };
 
@@ -507,11 +504,9 @@ const deleteUser = async (email) => {
   // const body = await response.json();
   if (response.status === 200) {
     location.reload();
-    alert('account closed',"primary" ,'liveAlertPlaceholder');
-  }else {
-    alert(`Cant delede ${email} `,"danger" ,'liveAlertPlaceholder');
-
-
+    alert('account closed', 'primary', 'liveAlertPlaceholder');
+  } else {
+    alert(`Cant delede ${email} `, 'danger', 'liveAlertPlaceholder');
   }
 };
 
@@ -584,16 +579,16 @@ const buildTablePerDayAndMonth = (dataArray, monthArray) => {
     row.appendChild(usersCellMonth);
     table2.appendChild(row);
   }
-if(div1 && div2){
-  div1.appendChild(table1);
-  div2.appendChild(table2);
-}
+  if (div1 && div2) {
+    div1.appendChild(table1);
+    div2.appendChild(table2);
+  }
 };
 
 buildTablePerDayAndMonth(dataArray, monthArray);
 
 // eslint-disable-next-line no-shadow
-const buildTableForCredits = (dataArray1,dataArry2) => {
+const buildTableForCredits = (dataArray1, dataArry2) => {
   const day = document.getElementById('tablesPerDayPerUser');
   const month = document.getElementById('tablesPerMonthPerUser');
 
@@ -611,7 +606,6 @@ const buildTableForCredits = (dataArray1,dataArry2) => {
   dateColumnDay.textContent = 'Date';
   const dateColumnMonth = document.createElement('th');
   dateColumnMonth.textContent = 'Month';
-
 
   const creditsColumnDay = document.createElement('th');
   creditsColumnDay.textContent = 'Total Credits Used';
@@ -681,5 +675,3 @@ const dataArray2 = [
 buildTableForCredits(dataArray1, dataArray2);
 
 // Define the data array for total credits usage per month per user
-
-

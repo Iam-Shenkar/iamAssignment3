@@ -1,6 +1,6 @@
 const mailValidator = require('email-validator');
 const passwordValidator = require('password-validator');
-const { User } = require('../services/authService');
+const { User } = require('../repositories/repositories.init');
 
 const schema = new passwordValidator();
 
@@ -46,20 +46,19 @@ const codeValidator = (code) => {
 };
 
 const checkPermission = async (req, res, next) => {
-  const user = req.user;
-  if (user.type === 'user') throw new Error('Not authorized'); 
-  //no need try and carch or throw- if type==user dredirect to homepage! thats it
+  const { user } = req;
+  if (user.type === 'user') throw new Error('Not authorized');
+  // no need try and carch or throw- if type==user dredirect to homepage! thats it
   next();
 };
 
 const checkPermissionAdmin = async (req, res, next) => {
   const user = await User.retrieve(req.body.mail);
   try {
-    const user = req.user;
+    const { user } = req;
     if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
-    //no need try and carch or throw- if type==user dredirect to homepage! thats it
-  }
-  catch(err){
+    // no need try and carch or throw- if type==user dredirect to homepage! thats it
+  } catch (err) {
     res.status(403);
   }
   // check sit

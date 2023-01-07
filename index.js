@@ -1,5 +1,6 @@
 require('dotenv').config({ path: '.env' });
 require('./services/googleStrategy');
+const constants = require('./utiles/constants');
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');

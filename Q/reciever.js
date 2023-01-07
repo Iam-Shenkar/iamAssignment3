@@ -29,7 +29,6 @@ const listenToQ = () => {
 //receive suspended acoount from the billing
 
     amqp.connect(listenSuspendedAccount, (err, conn) => {
-        console.log('test');
         conn.createChannel((err, ch) => {
             const q = 'CloudAMQP';
             console.log(`waiting message from %s`, q);

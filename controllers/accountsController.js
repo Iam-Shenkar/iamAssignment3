@@ -13,14 +13,13 @@ const inviteUser = async (req, res, next) => {
     const account = await Account.retrieve({ _id: accountId });
     const invitedUser = await User.retrieve({ email: userEmail });
     if ((await getSeats(account.name)).data < 1) throw new httpError(400, 'There is not enough seats');
-
     if (invitedUser) {
       inviteAuthorization(account, invitedUser);
       await sendInvitation(manager, invitedUser);
     } else {
       await inviteNewUser(manager, userEmail);
     }
-    await setSeats(account.name, manager.type, 1);
+    await setSeats(account._id, 1);
     res.status(200).json({ message: 'user invited' });
   } catch (err) {
     next(err);
@@ -40,8 +39,8 @@ const getAccount = async (req, res, next) => {
         Name: currentValue.name,
         email: currentValue.email,
         Role: currentValue.type,
-        Status: currentValue.status,
         Gender: currentValue.gender,
+        Status: currentValue.status,
         Edit: '',
       }], []);
     const { features } = acc.assets;

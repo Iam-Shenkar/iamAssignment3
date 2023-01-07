@@ -10,9 +10,8 @@ const alert = (message, type, id) => {
     '</div>',
   ].join('');
 
-  alertPlaceholder.append(wrapper)
+  alertPlaceholder.append(wrapper);
 };
-
 
 const generateTableHead = (table, data) => {
   const thead = table.createTHead();
@@ -26,7 +25,6 @@ const generateTableHead = (table, data) => {
 };
 
 const generateUserTable = (table, data) => {
-
   for (const element of data) {
     const row = table.insertRow();
     for (const key in element) {
@@ -114,7 +112,7 @@ const buttonOption = (email, path, val, removeFunc, element) => {
   remove.setAttribute('value', email);
 
   list.appendChild(view);
-  if (getCookie('role') === 'admin') list.appendChild(remove);
+  if (getCookie('role') !== 'user') list.appendChild(remove);
   return list;
 };
 

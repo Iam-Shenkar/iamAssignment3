@@ -112,10 +112,11 @@ const coreDetails = async(mail)=>{
   const assets = await getAssetsByUser(mail);
   const user = await authService.userExist(mail);
   const account = await getAccountByUser(mail);
+  let result;
   if (!user) {
     throw new httpError(404, "user doesn't exist");
   }else {
-    result = { status: 200, message: `OK, details were sent`, data: { credit: account.assets.credits , plan: account.plan,type: user.type} };
+    result = { status: 200, message: `OK, details were sent`, data: { accountId : account._id, credit: account.assets.credits , plan: account.plan,type: user.type} };
   }
   return result;
 }

@@ -12,7 +12,7 @@ const getAccountByaccountId = async (accountId) => {
   return account;
 };
 
-const getAssetsByAccountId= async (accountId) => {
+const getAssetsByAccountId = async (accountId) => {
   const account = await getAccountByaccountId(accountId);
   return account.assets;
 };
@@ -60,7 +60,7 @@ const setSeats = async (accountId, count = 1) => {
   const { usedSeats, seats } = assets;
   let result;
   const remainSeats = await getSeats(accountId);
-  const currentSeat= remainSeats.data.seats;
+  const currentSeat = remainSeats.data.seats;
   if (currentSeat >= count) {
     const newSeats = parseInt(usedSeats + count);
     const remain = parseInt(seats - newSeats);
@@ -77,7 +77,7 @@ const setCredit = async (accountId, count = 1) => {
   const { credits } = assets;
   let result;
   const remainCredits = await getCredit(accountId);
-  const currentCredit= remainCredits.data.credit;
+  const currentCredit = remainCredits.data.credit;
   if (currentCredit >= count) {
     const newCredit = parseInt(credits - count);
     await accountService.Account.update({ _id: accountId._id }, { 'assets.credits': newCredit });
@@ -105,18 +105,25 @@ const setFeature = async (accountId, feature) => {
 
 const coreDetails = async (user) => {
   if (!user) {
-    throw new httpError(404, `user doesn't exist`);
-  }else {
-    const account = await Account.retrieve({_id: user.accountId })
+    throw new httpError(404, 'user doesn\'t exist');
+  } else {
+    const account = await Account.retrieve({ _id: user.accountId });
     if (!account) {
       throw new httpError(404, `account of user ${user.email} doesn't exist`);
     }
     const assets = await getAssetsByAccountId(user.accountId);
     let result;
-    result = { status: 200, message: `OK, details were sent`, data: { accountId : account._id, credit: account.assets.credits , plan: account.plan,type: user.type} };
+    result = {
+      status: 200,
+      message: 'OK, details were sent',
+      data: {
+        accountId: account._id, credit: account.assets.credits, plan: account.plan, type: user.type,
+      },
+    };
   }
   return result;
-}
+};
 
 module.exports = {
-  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature,coreDetails,};
+  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature, coreDetails,
+};

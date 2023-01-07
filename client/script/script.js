@@ -1,5 +1,7 @@
 const runningPath = window.location.origin;
 
+// const Logout = document.getElementById('logout');
+
 const alert = (message, type, id) => {
   const alertPlaceholder = document.getElementById(id);
   const wrapper = document.createElement('div');
@@ -112,7 +114,7 @@ const buttonOption = (email, path, val, removeFunc, element) => {
   remove.setAttribute('value', email);
 
   list.appendChild(view);
-  if (getCookie('role') !== 'user') list.appendChild(remove);
+  if (getCookie('role') === 'admin') list.appendChild(remove);
   return list;
 };
 
@@ -270,7 +272,7 @@ const adminAddUser = async () => {
 };
 
 const getUsers = async () => {
-  const response = await fetch(`${runningPath}/users/`, {
+  const response = await fetch(`${runningPath}/users/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -285,7 +287,7 @@ const getUsers = async () => {
 };
 
 const getAccounts = async () => {
-  const response = await fetch(`${runningPath}/accounts`, {
+  const response = await fetch(`${runningPath}/accounts/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -294,7 +296,8 @@ const getAccounts = async () => {
 
   const body = await response.json();
   const table = document.querySelector('table');
-  const data = Object.keys(body[0]).splice(1, 6);
+  const data = Object.keys(body[0])
+    .splice(1, 6);
   generateTableHead(table, data);
   generateAccountTable(table, body);
 };
@@ -351,7 +354,11 @@ const userInvitation = async () => {
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
+  if (parts.length === 2) {
+    return parts.pop()
+      .split(';')
+      .shift();
+  }
 }
 
 const sideMenu = () => {
@@ -397,7 +404,6 @@ window.onload = () => {
     default:
       greeting = 'Good evening,';
   }
-  console.log(getCookie('name'));
   const name = (getCookie('name')).replaceAll('%20', ' ');
   const email = getCookie('email');
   document.getElementById('timeOfDay').innerHTML = `${greeting
@@ -408,24 +414,25 @@ window.onload = () => {
   userName.innerHTML = email.replace('%40', '&#064;');
 };
 
-const logout = async () => {
-  const data = {
-    email: decodeURIComponent(getCookie('email')),
-  };
-  console.log(data);
-  const response = await fetch(`${runningPath}/auth/logout`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  if (response.status !== 302) { console.log('redirect'); }
-  window.location.href = `${runningPath}/`;
-};
+// Logout.addEventListener('click', async () => {
+//   const data = {
+//     email: decodeURIComponent(getCookie('email')),
+//   };
+//   console.log(data);
+//   const response = await fetch(`${runningPath}/auth/logout`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(data),
+//   });
+//   // const body = await response.json();
+//   if (response.status !== 302) { console.log('redirect'); }
+//   window.location.href = `${runningPath}/`;
+// });
 
 const charts = async () => {
-  const responseUser = await fetch(`${runningPath}/users/`, {
+  const responseUser = await fetch(`${runningPath}/users/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -434,7 +441,7 @@ const charts = async () => {
   const users = await responseUser.json();
   typeChart(users);
 
-  const responseAccount = await fetch(`${runningPath}/accounts/`, {
+  const responseAccount = await fetch(`${runningPath}/accounts/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -509,7 +516,8 @@ const planChart = (accounts) => {
   for (const plan in plans) {
     plans[plan] = (plans[plan] / accounts.length) * 100;
   }
-  const ctx = document.getElementById('myPieChart').getContext('2d');
+  const ctx = document.getElementById('myPieChart')
+    .getContext('2d');
   const pieChart = new Chart(ctx, {
     type: 'pie',
     data: {
@@ -621,6 +629,7 @@ const updateDaysOfSuspension = () => {
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
 
+// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch(
     `${runningPath}/accounts/status/${accotnt}`,
@@ -631,6 +640,7 @@ const disableAccount = async (accotnt) => {
       },
     },
   );
+  // eslint-disable-next-line no-unused-vars
   const body = await response.json();
   if (response.status === 200) {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
@@ -655,6 +665,7 @@ const deleteUser = async (email) => {
       },
     },
   );
+<<<<<<< HEAD
 
   const body = await response.json();
   if (response.status === 200) {
@@ -662,27 +673,77 @@ const deleteUser = async (email) => {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
   } else {
     alert(`Cant delede ${email}- ${body.message} `, 'danger', 'liveAlertPlaceholder');
+=======
+  const body = await response.json();
+  if (body.status === 200) {
+    alert('account closed', 'primary', 'liveAlertPlaceholder');
+>>>>>>> 73af0f5083b460c201f619af295af3e502b6907c
   }
 };
 
 const dataArray = [
-  { date: 'January 1, 2023', users: 100 },
-  { date: 'January 2, 2023', users: 110 },
-  { date: 'January 3, 2023', users: 120 },
+  {
+    date: 'January 1, 2023',
+    users: 100,
+  },
+  {
+    date: 'January 2, 2023',
+    users: 110,
+  },
+  {
+    date: 'January 3, 2023',
+    users: 120,
+  },
 ];
 const monthArray = [
-  { date: 'January , 2022', users: 1000 },
-  { date: 'February, 2022', users: 1100 },
-  { date: 'March 2022', users: 1200 },
-  { date: 'April 2022', users: 1300 },
-  { date: 'May 2022', users: 1400 },
-  { date: 'June 2022', users: 1500 },
-  { date: 'July 2022', users: 1600 },
-  { date: 'August 2022', users: 1700 },
-  { date: 'September 2022', users: 1800 },
-  { date: 'October 2022', users: 1900 },
-  { date: 'November 2022', users: 2000 },
-  { date: 'December 2022', users: 2100 },
+  {
+    date: 'January , 2022',
+    users: 1000,
+  },
+  {
+    date: 'February, 2022',
+    users: 1100,
+  },
+  {
+    date: 'March 2022',
+    users: 1200,
+  },
+  {
+    date: 'April 2022',
+    users: 1300,
+  },
+  {
+    date: 'May 2022',
+    users: 1400,
+  },
+  {
+    date: 'June 2022',
+    users: 1500,
+  },
+  {
+    date: 'July 2022',
+    users: 1600,
+  },
+  {
+    date: 'August 2022',
+    users: 1700,
+  },
+  {
+    date: 'September 2022',
+    users: 1800,
+  },
+  {
+    date: 'October 2022',
+    users: 1900,
+  },
+  {
+    date: 'November 2022',
+    users: 2000,
+  },
+  {
+    date: 'December 2022',
+    users: 2100,
+  },
 ];
 
 const buildTablePerDayAndMonth = (dataArray, monthArray) => {
@@ -808,25 +869,246 @@ const buildTableForCredits = (dataArray1, dataArry2) => {
 
 // Define the data array for total credits usage per day per user
 const dataArray1 = [
-  { name: 'Alice', date: 'January 1, 2021', credits: 10 },
-  { name: 'Bob', date: 'January 1, 2021', credits: 20 },
-  { name: 'Charlie', date: 'January 1, 2021', credits: 30 },
-  { name: 'Alice', date: 'January 2, 2021', credits: 15 },
-  { name: 'Bob', date: 'January 2, 2021', credits: 25 },
-  { name: 'Charlie', date: 'January 2, 2021', credits: 35 },
+  {
+    name: 'Alice',
+    date: 'January 1, 2021',
+    credits: 10,
+  },
+  {
+    name: 'Bob',
+    date: 'January 1, 2021',
+    credits: 20,
+  },
+  {
+    name: 'Charlie',
+    date: 'January 1, 2021',
+    credits: 30,
+  },
+  {
+    name: 'Alice',
+    date: 'January 2, 2021',
+    credits: 15,
+  },
+  {
+    name: 'Bob',
+    date: 'January 2, 2021',
+    credits: 25,
+  },
+  {
+    name: 'Charlie',
+    date: 'January 2, 2021',
+    credits: 35,
+  },
   // ...
 ];
 const dataArray2 = [
-  { name: 'Alice', date: 'January 2021', credits: 100 },
-  { name: 'Bob', date: 'January 2021', credits: 200 },
-  { name: 'Charlie', date: 'January 2021', credits: 300 },
-  { name: 'Alice', date: 'February 2021', credits: 150 },
-  { name: 'Bob', date: 'February 2021', credits: 250 },
-  { name: 'Charlie', date: 'February 2021', credits: 350 },
+  {
+    name: 'Alice',
+    date: 'January 2021',
+    credits: 100,
+  },
+  {
+    name: 'Bob',
+    date: 'January 2021',
+    credits: 200,
+  },
+  {
+    name: 'Charlie',
+    date: 'January 2021',
+    credits: 300,
+  },
+  {
+    name: 'Alice',
+    date: 'February 2021',
+    credits: 150,
+  },
+  {
+    name: 'Bob',
+    date: 'February 2021',
+    credits: 250,
+  },
+  {
+    name: 'Charlie',
+    date: 'February 2021',
+    credits: 350,
+  },
   // ...
 ];
 
 // Build the table for total credits usage per day per user
 buildTableForCredits(dataArray1, dataArray2);
 
-// Define the data array for total credits usage per month per user
+async function getMonthlyExperiments(month, year) {
+  const months = {
+    Jan: 1,
+    Feb: 2,
+    Mar: 3,
+    Apr: 4,
+    May: 5,
+    Jun: 6,
+    Jul: 7,
+    Aug: 8,
+    Sep: 9,
+    Oct: 10,
+    Nov: 11,
+    Dec: 12,
+  };
+  const url = `https://core-team-final-assignment.onrender.com/bi/experiments/${months[month]}/${year}`;
+  try {
+    const response = await fetch(url);
+    const dataExperiments = await response.json();
+    console.log('in Fetch: ', dataExperiments);
+    return dataExperiments;
+  } catch (error) {
+    console.error(error);
+  }
+
+  const printMonthAndYear = async () => {
+    const MandY = [{
+      type: '',
+      value: await getMonthlyExperiments(),
+    }, {
+      type: 'ARR',
+      value: await getARR(),
+    }];
+    const generateMonthAndyearExperiment = (data) => {
+      let html = '';
+      html += '<div id="mrr-arr">';
+      html += '<table>';
+      html += '<tr>';
+      html += '<th>Month</th>';
+      html += '<th>Year</th>';
+      html += '</tr>';
+      for (const datum of data) {
+        html += '<tr>';
+        html += `<td>${datum.value}</td>`;
+        html += `<td>${datum.value}</td>`;
+        html += '</tr>';
+      }
+      html += '</table>';
+      html += '</div>';
+      return html;
+    };
+    const container = document.getElementById('container');
+    container.innerHTML = generateMARR(MArr);
+  };
+}
+
+const requestData = {
+  deviceDistribution: {
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36': 10,
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15': 5,
+    'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Mobile Safari/537.36': 3,
+  },
+  geoDistribution: {
+    'United States': 7,
+    'United Kingdom': 4,
+    India: 3,
+  },
+};
+
+document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
+document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
+
+async function getMRR() {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1; // months are zero-indexed, so we need to add 1
+  const currentYear = currentDate.getFullYear();
+  const url = `https://core-team-final-assignment.onrender.com/bi/MRR/${currentMonth}/${currentYear}`;
+  try {
+    const response = await fetch(url);
+    const dataMRR = await response.json();
+    return dataMRR;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getARR() {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const url = `https://core-team-final-assignment.onrender.com/bi/ARR/${currentYear}`;
+  try {
+    const response = await fetch(url);
+    const dataARR = await response.json();
+    return dataARR;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const printMRR = async () => {
+  const MArr = [{
+    type: 'MRR',
+    value: await getMRR(),
+  }, {
+    type: 'ARR',
+    value: await getARR(),
+  }];
+
+  const generateMARR = (data) => {
+    let html = '';
+    html += '<div id="mrr-arr">';
+    html += '<table>';
+    html += '<tr>';
+    html += '<th>Type</th>';
+    html += '<th>Value</th>';
+    html += '</tr>';
+    for (const datum of data) {
+      html += '<tr>';
+      html += `<td>${datum.type}</td>`;
+      html += `<td>${datum.value}</td>`;
+      html += '</tr>';
+    }
+    html += '</table>';
+    html += '</div>';
+    return html;
+  };
+  const container = document.getElementById('container');
+  container.innerHTML = generateMARR(MArr);
+};
+printMRR();
+
+async function getPayments() {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1; // months are zero-indexed, so we need to add 1
+  const currentYear = currentDate.getFullYear();
+  const url = `https://core-team-final-assignment.onrender.com/bi/payments/${currentMonth}/${currentYear}`;
+  try {
+    const response = await fetch(url);
+    const dataPayments = await response.json();
+    return dataPayments;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const printSuccessAndFailed = async () => {
+  const payments = await getPayments();
+  const paymentData = {
+    succeeded: payments.success,
+    failed: payments.fail,
+  };
+
+  const generatePaymentView = (paymentData) => {
+    let html = '';
+    html += '<div id="payment-data">';
+    html += '<table>';
+    html += '<tr>';
+    html += '<th>Type</th>';
+    html += '<th>Count</th>';
+    html += '</tr>';
+    for (const key in paymentData) {
+      html += '<tr>';
+      html += `<td>${key}</td>`;
+      html += `<td>${paymentData[key]}</td>`;
+      html += '</tr>';
+    }
+    html += '</table>';
+    html += '</div>';
+    return html;
+  };
+  const wrapper = document.getElementById('wrapper');
+  wrapper.innerHTML = generatePaymentView(paymentData);
+};
+printSuccessAndFailed();

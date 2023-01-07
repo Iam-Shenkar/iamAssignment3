@@ -6,9 +6,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
           rel="stylesheet"/>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <title>IAM TEAM</title>
 </head>
 
@@ -22,7 +22,7 @@
             <select id="gender" name="gender" class="gender">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
-                <option value="female">ader</option>
+                <option value="Other">Other</option>
             </select>
             <input id="pass" name="pass" placeholder="Password" required type="password"/>
             <input id='repass' name="repass" placeholder="Retype your password" required type="password"/>
@@ -36,7 +36,10 @@
             <input id="userEmail" placeholder="Email" required type="email"/>
             <input id="userPass" placeholder="Password" required type="password"/>
             <a href="#" id="forgot">Forgot your password?</a>
-            <button type="button" onclick="login()">Log In</button>
+            <button class="btnLogin" type="button" onclick="login()">Log In</button>
+            <div class="lineInLogin"></div>
+            <h5 class="secOptionlogin">or Log In with </h5>
+            <button class="btnGoogle" type="button"><img src="images/google.png" alt="googleIcon"></button>
         </form>
     </div>
     <div class="overlay-container">
@@ -44,12 +47,12 @@
             <div class="overlay-panel overlay-left">
                 <h1>Welcome Back!</h1>
                 <p>To keep connected with us please login with your personal info</p>
-                <button id="logIn">Log In</button>
+                <button id="logIn" class="logIn">Log In</button>
             </div>
             <div class="overlay-panel overlay-right">
                 <h1>Hello, Friend!</h1>
                 <p>Enter your personal details and start journey with us</p>
-                <button id="signUp">Sign Up</button>
+                <button id="signUp" class="signUp">Sign Up</button>
             </div>
         </div>
     </div>

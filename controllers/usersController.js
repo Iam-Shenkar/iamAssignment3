@@ -1,4 +1,5 @@
 const { hash } = require('bcrypt');
+const bcrypt = require('bcrypt');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
 const { updateName, adminUpdateUser } = require('../services/userService');
@@ -80,17 +81,18 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-const updatePass = async (req, res) => {
-  const user = await User.retrieve({ email: req.body.email });
+const updatePass = async (req, res, next) => {
   try {
+    const user = await User.retrieve({ email: req.body.email });
     await validPassword(req.body.password, user.password);
+    const newPass = await bcrypt.hash(req.body.password, 12);
+    await User.update({ email: user.email }, { password: newPass });
+    console.log('password changed for ', user.email);
+    console.log('new password is: ', req.body.newPassword);
+    res.status(200).json('Password Updated');
   } catch (e) {
-    res.status(401).json(e.message);
-    return;
+    res.status(403).json(e.message);
   }
-  await User.update({ password: req.body.newPassword });
-  console.log('password changed for ', user.email);
-  res.status(200).json('Password Updated');
 };
 module.exports = {
   getUsers, getUser, deleteUser, updateUser, updatePass,

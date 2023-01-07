@@ -7,7 +7,7 @@ const { validation } = require('../middleware/validator');
 
 usersRouter.get('/', usersController.getUsers);
 usersRouter.get('/:email', usersController.getUser);
-usersRouter.put('/pass', validation, usersController.updatePass);
+usersRouter.put('/pass', /* validation, */ usersController.updatePass);
 usersRouter.put('/:email', checkPermission, usersController.updateUser);
 usersRouter.delete('/:email', checkPermissionAdmin, usersController.deleteUser);
 

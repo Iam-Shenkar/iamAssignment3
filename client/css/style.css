@@ -57,3 +57,49 @@
     margin-left: 30px
 }
 
+#homePage{
+    height: 600px;
+    text-align: center;
+    padding: 50px;
+}
+
+.nav-link{
+    font-size: 16px ;!important;
+}
+
+#userAddedSuccessfully{
+    display: none;
+}
+
+table {
+    border-collapse: revert;
+    width: 75%;
+    margin: auto;
+}
+
+th, td {
+    text-align: center;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.28);
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    border-bottom: 1px solid rgba(128, 128, 128, 0.28);
+}
+
+th {
+    /*background-color: cornflowerblue;*/
+    border-bottom: 1px solid rgba(128, 128, 128, 0.43);
+    color: black;
+}
+
+h2, h3 {
+    text-align: center;
+    color: #001113;
+    margin-bottom: 25px;
+    font-size: 35px;
+}
+
+/*.card {margin-bottom: 3rem;}*/
+
+

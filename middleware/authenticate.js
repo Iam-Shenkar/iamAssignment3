@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../services/authService');
+const { User } = require('../repositories/repositories.init');
 
 const generateToken = (req, res, next) => {
   try {
     const accessToken = jwt.sign({
       email: req.body.email,
     }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '5s',
+      expiresIn: '15m',
     });
 
     const refreshToken = jwt.sign({
@@ -18,7 +18,6 @@ const generateToken = (req, res, next) => {
       secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-
     res.set({ authorization: `Bearer ${accessToken}` });
     req.token = { refreshToken, accessToken: `Bearer ${accessToken}` };
     next();
@@ -33,12 +32,12 @@ function generateAccessToken(user) {
 
 const refreshTokenVerify = async (req, res) => {
   const refreshToken = req.cookies.jwt;
-  if (refreshToken == null) return res.status(403).json({ message: 'Unauthorized' });
+  if (refreshToken === undefined) { return res.redirect('/login'); }
 
   const user = await User.retrieve({ refreshToken });
-  if (!user) return res.status(403).json({ message: 'Unauthorized' });
+  if (!user) return res.redirect('/login');
   await jwt.verify(user.refreshToken, process.env.REFRESH_TOKEN_SECRET, (err) => {
-    if (err) return res.status(403).json({ message: err.message });
+    if (err) return res.redirect('/login');
     const accessToken = generateAccessToken({ email: user.email });
 
     res.set('authorization', accessToken);
@@ -49,15 +48,14 @@ const refreshTokenVerify = async (req, res) => {
 };
 
 const authenticateToken = async (req, res, next) => {
-  console.log(req.cookies.jwt);
-
+  console.log('checked token');
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
-  if (token == null) return res.sendStatus(401);
+  // if (token == null) return res.redirect('/');
   await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err) => {
     if (err) {
       await refreshTokenVerify(req, res);
-      if (res.statusCode !== 200) return res.send();
+      if (res.statusCode === 302) { return res.end(); }
       next();
     } else {
       const user = await User.retrieve({ refreshToken: req.cookies.jwt });

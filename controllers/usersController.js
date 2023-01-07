@@ -1,72 +1,81 @@
-const { User } = require('../services/authService');
-const { Account } = require('../services/accountService');
-const { oneTimePass, createAccount, createUser } = require('../services/registerService');
+const { Account, User } = require('../repositories/repositories.init');
+const { httpError } = require('../class/httpError');
+const { updateName, adminUpdateUser } = require('../services/userService');
 
-async function handleAddUser(req, res) {
+const getUsers = async (req, res, next) => {
   try {
-    const accountID = await createAccount(req.body.email);
-    await createUser(req.body, accountID);
-    return res.status(200)
-      .json({ message: 'User was added' });
-  } catch (e) {
-    return res.status(401)
-      .json({ message: e.message });
+    const users = await User.find({});
+    const outputArray = users.reduce((accumulator, currentValue) => [
+      ...accumulator,
+      {
+        Name: currentValue.name,
+        email: currentValue.email,
+        Role: currentValue.type,
+        Status: currentValue.status,
+        Edit: '',
+      },
+    ], []);
+    res.status(200).json(outputArray);
+  } catch (err) {
+    next(err);
   }
-}
+};
 
-async function handleGetUsers(req, res) {
-
-  // const showAllUser = await User.find({});
-  //
-  const users = await User.find({});
-
-  const outputArray = users.reduce((accumulator, currentValue) => [
-    ...accumulator,
-    {
-      Name: currentValue.name,
-      email: currentValue.email,
-      Role: currentValue.type,
-      Status: currentValue.status,
-      Edit: '',
-    },
-  ], []);
-  res.status(200).json(outputArray);
-}
-
-async function handleGetUser(req, res) {
-  const user = await User.retrieve({ email: req.params.email });
-  return res.send(JSON.stringify(user));
-}
-
-async function handleUpdateUser(req, res) {
+const getUser = async (req, res, next) => {
   try {
-    const userType = await User.retrieve({ email: req.body.email });
-    if (userType.type === 'admin' && req.body.status !== 'active') {
-      await User.update({ email: req.body.email }, { data: req.body, loginDate: new Date() });
-    } else if (userType.type === 'admin' && req.body.status === 'active') {
-      await User.update({ email: req.body.email }, { data: req.body });
+    let accountName = 'none';
+    const user = await User.retrieve({ email: req.params.email });
+    if (user.type !== 'admin') {
+      const account = await Account.retrieve({ _id: user.accountId });
+      accountName = account.name;
+    }
+    const del = {
+      name: user.name,
+      email: user.email,
+      role: user.type,
+      gender: user.gender,
+      account: accountName,
+    };
+    res.status(200).json(del);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateUser = async (req, res, next) => {
+  try {
+    const { user } = req;
+    const data = req.body;
+    if (user.type !== 'admin') {
+      await updateName(user, data);
     } else {
-      await User.update({ email: req.body.email }, { name: req.body.name });
+      await adminUpdateUser(data);
     }
     return res.status(200).json({ message: 'user update' });
   } catch (err) {
-    return res.status(401).json({ message: err.message });
+    next(err);
   }
-}
+};
 
-async function handleDeleteUser(req, res) {
+const deleteUser = async (req, res, next) => {
   try {
-    const planCheck = await Account.retrieve({ email: req.body.email });
-    if (planCheck.plan === 'free') {
-      await Account.delete({ email: req.body.email });
+    const user = await User.retrieve({ email: req.params.email });
+    const account = await Account.retrieve({ _id: user.accountId });
+    if (!account) throw new httpError(400, 'Cant delete this user');
+    if (account.plan === 'free') {
+      await Account.update({ _id: account._id }, { status: 'closed' });
+      await User.update({ email: user.email }, { status: 'closed' });
+    } else if (user.role !== 'user') {
+      throw new Error('Unable to delete this user');
+    } else {
+      await User.delete({ email: user.email });
     }
-    await oneTimePass.delete({ email: req.body.email });
     return res.status(200).json({ message: 'The user has been deleted' });
   } catch (e) {
-    return res.status(401).json({ message: e.message });
+    next(e);
   }
-}
+};
 
 module.exports = {
-  handleAddUser, handleGetUsers, handleGetUser, handleDeleteUser, handleUpdateUser,
+  getUsers, getUser, deleteUser, updateUser,
 };

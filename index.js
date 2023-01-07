@@ -10,35 +10,47 @@ const cors = require('cors');
 const passport = require('passport');
 
 const path = require('path');
+const fs = require('fs');
 const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');
 const assets = require('./routes/assetsRoute');
-
+const dashboard = require('./routes/dashboardRoute');
 const accounts = require('./routes/accountsRouter');
+
 const { validation } = require('./middleware/validator');
 const { authenticateToken } = require('./middleware/authenticate');
 
+const { morgan } = require('./middleware/logger');
+
+const logPath = path.join(__dirname, '/log', 'access.log');
+const errorHandler = require('./middleware/errorHandler');
+
 const app = express();
 const port = process.env.PORT || 5000;
+app.use(cors('*'));
+app.use(express.static(path.join(__dirname, 'client')));
 
-app.use(express.static(path.join('client')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 
 app.use(express.json());
-app.use(cors());
 
 app.use(session({ secret: process.env.secret, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(
+  morgan(':date --> :method :url :status :response-time ms', {
+    stream: fs.createWriteStream(logPath, { flags: 'a' }),
+  }),
+);
+
 app.use('/auth', validation, auth.authRouter);
-app.use('/assets'/* , authenticateToken*/, assets.assetsRoute);
-app.use('/users', users.usersRouter);
-app.use('/accounts'/* ,  authenticateToken */, accounts.accountsRouter);
+app.use('/assets', authenticateToken, assets.assetsRoute);
+app.use('/users', authenticateToken, users.usersRouter);
+app.use('/accounts', authenticateToken, accounts.accountsRouter);
+app.use('/', dashboard.dashboardRouter);
 
-app.all('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/index.html'));
-}); // res.redirect('homePage.html')
+app.use(errorHandler);
 
-app.listen(port, () => console.log(`Express server is running on port ${port}`));
+app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));

@@ -1,13 +1,11 @@
 const otpGenerator = require('otp-generator');
 const bcrypt = require('bcrypt');
-const OTPRepository = require('../repositories/oneTimePass.repositories');
-const { typeUser } = require('../middleware/validatorService');
+
+const { userRole } = require('../middleware/validatorService');
 const { sendEmail } = require('../sendEmail/sendEmail');
+const { httpError } = require('../class/httpError');
 
-const { User } = require('./authService');
-const { Account } = require('./accountService');
-
-const oneTimePass = new OTPRepository();
+const { User, oneTimePass } = require('../repositories/repositories.init');
 
 const createOneTimePass = async (email) => {
   const sendCode = otpGenerator.generate(6, {
@@ -16,6 +14,7 @@ const createOneTimePass = async (email) => {
     specialChars: false,
   });
   const newOneTimePass = { email, code: sendCode, creationDate: new Date() };
+  if (!newOneTimePass) throw new httpError(400, 'No new OTP created');
   await oneTimePass.create(newOneTimePass);
   return newOneTimePass;
 };
@@ -23,7 +22,8 @@ const createOneTimePass = async (email) => {
 const deleteFormOTP = async (data) => {
   const email = data.toLowerCase();
   if (await existCode(email)) {
-    await oneTimePass.delete({ email });
+    const deletedOTP = await oneTimePass.delete({ email });
+    if (!deletedOTP) throw new httpError(400, 'Failed to delete OTP');
   }
 };
 
@@ -34,7 +34,7 @@ const existCode = async (email) => {
 };
 
 const otpCompare = async (UserCode, userCode) => {
-  if (userCode !== UserCode) throw new Error('Incorrect code');
+  if (userCode !== UserCode) if (userCode !== UserCode) throw new httpError(400, 'Incorrect code');
 };
 
 const sendEmailOneTimePass = async (user, newCode) => {
@@ -50,13 +50,14 @@ const sendEmailOneTimePass = async (user, newCode) => {
   await sendEmail(mailData, details);
 };
 
-const createUser = async (user, accountID) => {
-  user.password = await bcrypt.hash(user.password, 12);
+const createUser = async (user) => {
+  const hashPassword = await bcrypt.hash(user.password, 12);
   const newUser = {
     name: user.name,
     email: user.email,
-    password: user.password,
-    accountId: accountID,
+    gender: user.gender,
+    accountId: 'none',
+    password: hashPassword,
   };
   await User.create(newUser);
 };
@@ -64,13 +65,6 @@ const createUser = async (user, accountID) => {
 const codeTime = async (user, timeCode) => {
   const time = Math.abs(new Date().getMinutes() - user.creationDate.getMinutes());
   if (time < timeCode) return true;
-};
-
-const createAccount = async (email) => {
-  await Account.create({ name: email });
-  const account = await Account.retrieve({ name: email });
-  const accountId = account._id.toString();
-  return accountId;
 };
 
 module.exports = {
@@ -81,5 +75,4 @@ module.exports = {
   deleteFormOTP,
   existCode,
   createOneTimePass,
-  createAccount,
 };

@@ -4,8 +4,8 @@
   "description": "IAM Assignment 3",
   "main": "index.js",
   "scripts": {
-    "test": "npm dev",
     "start": "npm start",
+    "test": "nodemon index.js",
     "dev": "nodemon index.js"
   },
   "repository": {
@@ -22,15 +22,17 @@
   },
   "homepage": "https://github.com/Iam-Shenkar/iamAssignment3#readme",
   "dependencies": {
+    "amqplib": "^0.10.3",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
+    "bootstrap": "^5.2.3",
+    "bootstrap-vue": "^2.23.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "deep-email-validator": "^0.1.21",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "email-validator": "^2.0.4",
-    "eslint": "^8.30.0",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
@@ -38,6 +40,7 @@
     "googlemaps": "^1.12.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.8.0",
+    "morgan": "^1.10.0",
     "nodemailer": "^6.8.0",
     "nodemailer-smtp-transport": "^2.4.2",
     "nodemon": "^2.0.20",
@@ -45,11 +48,15 @@
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
     "password-validator": "^5.3.0",
+    "sleep-promise": "^9.1.0",
     "string-validator": "^1.0.5",
-    "validator": "^13.7.0"
+    "thread-sleep": "^2.2.0",
+    "validator": "^13.7.0",
+    "vue": "^2.7.14",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
-    "eslint": "^8.30.0",
+    "eslint": "8.22.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0"
   }

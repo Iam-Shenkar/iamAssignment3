@@ -2,12 +2,12 @@ const express = require('express');
 
 const accountsRouter = new express.Router();
 const accountController = require('../controllers/accountsController');
-const { checkPermission, checkPermissionAdmin } = require('../middleware/validatorService');
+const { checkPermissionAdmin } = require('../middleware/validatorService');
 
-accountsRouter.get('/invite/:email', accountController.inviteUser); // done
-accountsRouter.get('/getAll/'/* , checkPermissionAdmin*/, accountController.getAccounts); // done
-accountsRouter.get('/:email/', accountController.getAccount); // done
-accountsRouter.put('/edit/'/* , checkPermission */, accountController.editAccount); // done
-accountsRouter.put('/disable/'/* , checkPermission */, accountController.disableAccount);
+accountsRouter.get('/', checkPermissionAdmin, accountController.getAccounts); // done
+accountsRouter.get('/:account/link/:email', accountController.inviteUser); // done
+accountsRouter.get('/:id/', accountController.getAccount); // done
+accountsRouter.put('/:id', checkPermissionAdmin, accountController.editAccount); // done
+accountsRouter.put('/status/:id', checkPermissionAdmin, accountController.disableAccount);
 
 module.exports = { accountsRouter };

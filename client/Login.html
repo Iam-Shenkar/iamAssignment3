@@ -6,9 +6,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
           rel="stylesheet"/>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="style.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <title>IAM TEAM</title>
 </head>
 
@@ -19,9 +19,13 @@
             <h1>Create Account</h1>
             <input id="newUsername" name="name" placeholder="Name" required type="text"/>
             <input id="newUserEmail" name="email" placeholder="Email" required type="email"/>
+            <select id="gender" name="gender" class="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
             <input id="pass" name="pass" placeholder="Password" required type="password"/>
             <input id='repass' name="repass" placeholder="Retype your password" required type="password"/>
-            <button id="openEmailConfirmation" onclick="signUpData()">Sign Up</button>
+            <button type="button" id="openEmailConfirmation" onclick="register()">Sign Up</button>
             <span id="message"></span>
         </form>
     </div>
@@ -31,7 +35,10 @@
             <input id="userEmail" placeholder="Email" required type="email"/>
             <input id="userPass" placeholder="Password" required type="password"/>
             <a href="#" id="forgot">Forgot your password?</a>
-            <button onclick="loginData()">Log In</button>
+            <button class="btnLogin" type="button" onclick="login()">Log In</button>
+            <div class="lineInLogin"></div>
+            <h5 class="secOptionlogin">or Log In with </h5>
+            <button class="btnGoogle" type="button"><img src="images/google.png" alt="googleIcon"></button>
         </form>
     </div>
     <div class="overlay-container">
@@ -39,12 +46,12 @@
             <div class="overlay-panel overlay-left">
                 <h1>Welcome Back!</h1>
                 <p>To keep connected with us please login with your personal info</p>
-                <button id="logIn">Log In</button>
+                <button id="logIn" class="logIn">Log In</button>
             </div>
             <div class="overlay-panel overlay-right">
                 <h1>Hello, Friend!</h1>
                 <p>Enter your personal details and start journey with us</p>
-                <button id="signUp">Sign Up</button>
+                <button id="signUp" class="signUp">Sign Up</button>
             </div>
         </div>
     </div>
@@ -55,8 +62,8 @@
                 close
                 </span>
         <h1>FORGOT PASSWORD ?</h1>
-        <input id="emailPorgetPass" placeholder="Email" type="email"/>
-        <button onclick="forgotPassweord()">Reset My Password</button>
+        <input id="emailResetPassword" placeholder="Email" type="email"/>
+        <button onclick="ResetPassweord()">Reset My Password</button>
     </div>
 </div>
 <div class="emailConfirmation" id="emailConfirmation">
@@ -66,14 +73,14 @@
                 </span>
         <form id="OTP">
             <h1>Email Confirmation </h1>
-            <input id="OTPtext" name="OTP" placeholder="Enter Code" type="text"/>
-            <button onclick="emailConfirmation()">Confirm</button>
+            <input id="oneTimePassword" name="OTP" placeholder="Enter Code" type="text"/>
+            <button type="button" onclick="confirmationCode()">Confirm</button>
         </form>
     </div>
 </div>
 
 
-<script src="script.js"></script>
+<script src="./script/script-auth.js"></script>
 </body>
 
 </html>

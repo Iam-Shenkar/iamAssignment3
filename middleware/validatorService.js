@@ -1,7 +1,6 @@
 const mailValidator = require('email-validator');
 const passwordValidator = require('password-validator');
-const jwt = require('jsonwebtoken');
-const { User } = require('../services/authService');
+const { User } = require('../repositories/repositories.init');
 
 const schema = new passwordValidator();
 
@@ -33,34 +32,28 @@ const nameValidator = (name) => {
   if (name === '') throw new Error('name not valid');
 };
 
-const typeUser = (email) => {
+const userRole = (email) => {
   let domain = email.split('@');
   domain = domain[1].split('.');
   if (domain.find((element) => element === process.env.adminEmail)) {
     return 'admin';
   }
-  return 'user';
+  return 'manager';
 };
 
 const codeValidator = (code) => {
   if (code.length !== 6) throw new Error('code not valid');
 };
 
-const generateAccessToken = (email) => jwt.sign(email, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-
-const generateRefreshToken = (email) => jwt.sign(email, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
-
 const checkPermission = async (req, res, next) => {
-  const user = await User.retrieve(req.body.mail);
-  if (user.type === 'user') throw new Error('Not authorized');
-  // check sit
+  const { user } = req;
+  if (user.type === 'user') res.status(401);
   next();
 };
 
 const checkPermissionAdmin = async (req, res, next) => {
-  const user = await User.retrieve(req.body.mail);
-  if (user.type === 'user' || user.type === 'manager') throw new Error('Not authorized');
-  // check sit
+  const { user } = req;
+  if (user.type === 'user' || user.type === 'manager') res.status(401);
   next();
 };
 
@@ -85,7 +78,7 @@ module.exports = {
   nameValidator,
   emailValidator,
   PasswordValidator,
-  typeUser,
+  userRole,
   checkPermission,
   checkPermissionAdmin,
 };

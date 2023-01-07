@@ -6,11 +6,10 @@ const passport = require('passport');
 const loginController = require('../controllers/loginController');
 const { generateToken } = require('../middleware/authenticate');
 const registerController = require('../controllers/registerController');
+const logoutController = require('../controllers/logoutController');
 const googleController = require('../controllers/googleController');
 
-authRouter.all('/', (req, res) => {
-  res.sendFile('POC.html');
-}); // sendFile('Login.html')
+authRouter.post('/logout', logoutController.logout);
 
 authRouter.post('/login', generateToken, loginController.loginControl);
 authRouter.put('/login/password/:email', loginController.forgotPassControl);

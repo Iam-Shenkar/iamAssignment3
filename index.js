@@ -1,5 +1,6 @@
 require('dotenv').config({ path: '.env' });
 require('./services/googleStrategy');
+const constants = require('./utiles/constants');
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -21,6 +22,8 @@ const { validation } = require('./middleware/validator');
 const { authenticateToken } = require('./middleware/authenticate');
 
 const { morgan } = require('./middleware/logger');
+const { listenToQ } = require("./Q/reciever");
+listenToQ();
 
 const logPath = path.join(__dirname, '/log', 'access.log');
 const errorHandler = require('./middleware/errorHandler');
@@ -52,5 +55,7 @@ app.use('/accounts', authenticateToken, accounts.accountsRouter);
 app.use('/', dashboard.dashboardRouter);
 
 app.use(errorHandler);
+
+
 
 app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));

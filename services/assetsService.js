@@ -3,25 +3,22 @@ const accountService = require('./accountService');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
 
-const getAccountByUser = async (email) => {
-  const user = await authService.userExist(email);
-  if (!user) {
-    throw new httpError(404, "user doesn't exist");
+const getAccountByaccountId = async (accountId) => {
+  if (!accountId) {
+    throw new httpError(400, "accountId doesn't exist");
   }
-  const { accountId } = user;
   const account = await Account.retrieve({ _id: accountId });
   if (!account) throw new httpError(400, "couldn't find account");
   return account;
 };
 
-const getAssetsByUser = async (email) => {
-  const account = await getAccountByUser(email);
+const getAssetsByAccountId= async (accountId) => {
+  const account = await getAccountByaccountId(accountId);
   return account.assets;
 };
 
-const getFeatures = async (mail) => {
-  const email = mail;
-  const assets = await getAssetsByUser(email);
+const getFeatures = async (accountId) => {
+  const assets = await getAssetsByAccountId(accountId);
   const currentFeatures = assets.features;
   let result;
 
@@ -33,9 +30,8 @@ const getFeatures = async (mail) => {
   return result;
 };
 
-const getSeats = async (mail) => {
-  const email = mail;
-  const assets = await getAssetsByUser(email);
+const getSeats = async (accountId) => {
+  const assets = await getAssetsByAccountId(accountId);
   const { usedSeats, seats } = assets;
   const remainSeats = seats - usedSeats;
   let result;
@@ -47,8 +43,8 @@ const getSeats = async (mail) => {
   return result;
 };
 
-const getCredit = async (mail) => {
-  const assetsAccount = await getAssetsByUser(mail);
+const getCredit = async (accountId) => {
+  const assetsAccount = await getAssetsByAccountId(accountId);
   const currentCredit = assetsAccount.credits;
   let result;
   if (currentCredit <= 0) {
@@ -59,12 +55,13 @@ const getCredit = async (mail) => {
   return result;
 };
 
-const setSeats = async (mail, count = 1) => {
-  const assets = await getAssetsByUser(mail);
-  const accountID = await getAccountByUser(mail);
+const setSeats = async (accountId, count = 1) => {
+  const assets = await getAssetsByAccountId(accountId);
   const { usedSeats, seats } = assets;
   let result;
-  if (getSeats(mail).data.seats >= count) {
+  const remainSeats = await getSeats(accountId);
+  const currentSeat= remainSeats.data.seats;
+  if (currentSeat >= count) {
     const newSeats = usedSeats + count;
     await accountService.Account.update({ _id: accountID._id }, { 'assets.usedSeats': newSeats });
 
@@ -75,12 +72,13 @@ const setSeats = async (mail, count = 1) => {
   return result;
 };
 
-const setCredit = async (mail, count = 1) => {
-  const assets = await getAssetsByUser(mail);
-  const accountID = await getAccountByUser(mail);
+const setCredit = async (accountId, count = 1) => {
+  const assets = await getAssetsByAccountId(accountId);
   const { credits } = assets;
   let result;
-  if (getCredit(mail).data.credit >= count) {
+  const remainCredits = await getCredit(accountId);
+  const currentCredit= remainCredits.data.credit;
+  if (currentCredit >= count) {
     const newCredit = parseInt(credits - count);
     await accountService.Account.update({ _id: accountID._id }, { 'assets.credits': newCredit });
     result = { status: 200, message: `OK, used seats has been updated: ${newCredit}`, data: { credit: newCredit } };
@@ -90,9 +88,8 @@ const setCredit = async (mail, count = 1) => {
   return result;
 };
 
-const setFeature = async (mail, feature) => {
-  const assets = await getAssetsByUser(mail);
-  const accountID = await getAccountByUser(mail);
+const setFeature = async (accountId, feature) => {
+  const assets = await getAssetsByAccountId(accountId);
   const currentFeatures = assets.features;
   const isFeatureExists = currentFeatures.includes(feature);
   let result;
@@ -106,17 +103,20 @@ const setFeature = async (mail, feature) => {
   return result;
 };
 
-const coreDetails = async (mail) => {
-  const assets = await getAssetsByUser(mail);
-  const user = await authService.userExist(email);
-  const account = await getAccountByUser(mail);
+const coreDetails = async (user) => {
   if (!user) {
-    throw new httpError(404, "user doesn't exist");
-  } else {
-    result = { status: 200, message: 'OK, details were sent', data: { credit: account.credits, plan: account.plan, type: user.type } };
+    throw new httpError(404, `user doesn't exist`);
+  }else {
+    const account = await Account.retrieve({_id: user.accountId })
+    if (!account) {
+      throw new httpError(404, `account of user ${user.email} doesn't exist`);
+    }
+    const assets = await getAssetsByAccountId(user.accountId);
+    let result;
+    result = { status: 200, message: `OK, details were sent`, data: { accountId : account._id, credit: account.assets.credits , plan: account.plan,type: user.type} };
   }
-};
+  return result;
+}
 
 module.exports = {
-  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature, coreDetails,
-};
+  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature,coreDetails,};

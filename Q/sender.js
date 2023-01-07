@@ -1,5 +1,5 @@
-// eslint-disable-next-line import/no-unresolved
 const amqp = require('amqplib/callback_api');
+const { QUpdateAccount } = require('../services/accountService');
 
 const { amqpCreateFreePlan } = process.env;
 const { amqpSuspendedAccount } = process.env;
@@ -11,7 +11,7 @@ const freePlan2Q = async (accountId) => {
     conn.createChannel(async (err, ch) => {
       const q = 'CloudAMQP';
       const freePlan = {
-        accountId: { accountId },
+        accountId,
       };
       const stringMsg = JSON.stringify(freePlan);
       ch.assertQueue(q, { durable: false });
@@ -27,20 +27,14 @@ const newStatus2Q = async (accountId, status) => {
     conn.createChannel(async (err, ch) => {
       const q = 'CloudAMQP';
       const suspendedAccount = {
-        accountId: { accountId },
-        status: { status },
+        accountId,
+        status,
       };
       const stringMsg = JSON.stringify(suspendedAccount);
       ch.assertQueue(q, { durable: false });
       await ch.sendToQueue(q, Buffer.from(stringMsg));
     });
   });
-
-
-// newStatus2Q("17774","suspended");
-//
-// freePlan2Q("1234");
-
-freePlan2Q('1234');
+};
 
 module.exports = { freePlan2Q, newStatus2Q };

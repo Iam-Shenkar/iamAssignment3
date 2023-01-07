@@ -93,7 +93,9 @@ const editAccount = async (req, res, next) => {
       await unSuspendAccount(acc, body);
     }
 
-    await isFeatureExists(acc, body.features); // if toAddFeature is already exists
+    // eslint-disable-next-line max-len
+    const result = await isFeatureExists(acc._id, body.features);
+    if (result) throw new httpError(400, `${body.features}' already exists`);
     const data = {
       'assets.credits': body.credits,
       'assets.seats': body.seats,

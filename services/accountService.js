@@ -94,20 +94,24 @@ const createUserToAccount = async (email, account) => {
 };
 
 const QUpdateAccount = async (msg) => {
-  const isExists = await isFeatureExists(msg.accountId, msg.features); // if toAddFeature is already exists
-  if (isExists) throw new Error('feature already exists');
+  const isExists = await isFeatureExists(msg.accountId, msg.features);
   const data = {
     'assets.credits': msg.credits,
     'assets.seats': msg.seats,
     status: 'active',
   };
 
-  const updatedAccount = await Account.update({ _id: msg.accountId }, {
-    ...data,
-    $push: { 'assets.features': msg.features },
-  });
-  await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
-  if (!updatedAccount) throw new Error('update failed');
+  if (isExists) {
+    const updatedAccount = await Account.update({ _id: msg.accountId }, { ...data });
+    if (!updatedAccount) throw new Error('update failed');
+  } else {
+    const updatedAccount = await Account.update({ _id: msg.accountId }, {
+      ...data,
+      $push: { 'assets.features': msg.features },
+    });
+    await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
+    if (!updatedAccount) throw new Error('update failed');
+  }
 };
 
 const QSuspendAccount = async (msg) => {

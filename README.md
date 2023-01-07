@@ -40,10 +40,10 @@ Accounts and users have the life cycle of: none → active → suspended → clo
 ## Communication with other teams
 * Core - we recieve GET and PUT requests from the Core team to get or update features of certain account. <br>Idenitification of the user is beeing by the cookies the Core will recieve after login through our API.
 * Billing - communication through 2 RabbitMq queues to perform: 
-- When creating a new account (free plan) we send them the account details through the queue and they set up the account with the plan.
-- As soon as account makes an upgrade to its plan, we send the Billing the account details and they return the details of the updated plan.
-- Once an account has been set to suspended, we update the Billing that the account is no longer available.
-- If the Billing are unable to charge a certain account, they have the option to set it to suspended and updated us through the queue.
+    - When creating a new account (free plan) we send them the account details through the queue and they set up the account with the plan.
+    - As soon as account makes an upgrade to its plan, we send the Billing the account details and they return the details of the updated plan.
+    - Once an account has been set to suspended, we update the Billing that the account is no longer available.
+    - If the Billing are unable to charge a certain account, they have the option to set it to suspended and updated us through the queue.
 ## Prerequisites
 ```bash
   Node.js 16v
@@ -74,7 +74,7 @@ type in url borwser: http://localhost:5000
 ```
 ## API documantion
 ```bash
-https://documenter.getpostman.com/view/24057770/2s8YzTTMkM
+https://documenter.getpostman.com/view/24057770/2s8Z6u4ETe
 ```
 ## Built with
 * nodejs

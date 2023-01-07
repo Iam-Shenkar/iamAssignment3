@@ -70,6 +70,7 @@ const deleteUser = async (req, res, next) => {
       throw new Error('Unable to delete this user');
     } else {
       await User.delete({ email: user.email });
+      await setSeats(user.accountId,-1);
     }
     return res.status(200).json({ message: 'The user has been deleted' });
   } catch (e) {

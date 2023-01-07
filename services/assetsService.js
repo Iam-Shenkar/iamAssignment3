@@ -57,14 +57,15 @@ const getCredit = async (accountId) => {
 
 const setSeats = async (accountId, count = 1) => {
   const assets = await getAssetsByAccountId(accountId);
+  const account = await getAccountByaccountId(accountId);
   const { usedSeats, seats } = assets;
   let result;
   const remainSeats = await getSeats(accountId);
   const currentSeat= remainSeats.data.seats;
   if (currentSeat >= count) {
-    const newSeats = parseInt(usedSeats + count);
-    const remain = parseInt(seats - newSeats);
-    await accountService.Account.update({ _id: accountId._id }, { 'assets.usedSeats': newSeats });
+    const newSeats = parseInt(usedSeats) + parseInt(count);
+    const remain = seats - newSeats;
+    await accountService.Account.update({ _id: account._id }, { 'assets.usedSeats': newSeats });
     result = { status: 200, message: `OK, used seats has been updated: ${newSeats}`, data: { seats: remain } };
   } else {
     result = { status: 400, message: 'ERROR, no available seats', data: { seats: -1 } };
@@ -74,13 +75,14 @@ const setSeats = async (accountId, count = 1) => {
 
 const setCredit = async (accountId, count = 1) => {
   const assets = await getAssetsByAccountId(accountId);
+  const account = await getAccountByaccountId(accountId);
   const { credits } = assets;
   let result;
   const remainCredits = await getCredit(accountId);
   const currentCredit= remainCredits.data.credit;
   if (currentCredit >= count) {
     const newCredit = parseInt(credits - count);
-    await accountService.Account.update({ _id: accountId._id }, { 'assets.credits': newCredit });
+    await accountService.Account.update({ _id: account._id }, { 'assets.credits': newCredit });
     result = { status: 200, message: `OK, used seats has been updated: ${newCredit}`, data: { credit: newCredit } };
   } else {
     result = { status: 400, message: 'ERROR, no available credit', data: { credit: -1 } };
@@ -90,13 +92,14 @@ const setCredit = async (accountId, count = 1) => {
 
 const setFeature = async (accountId, feature) => {
   const assets = await getAssetsByAccountId(accountId);
+  const account = await getAccountByaccountId(accountId);
   const currentFeatures = assets.features;
   const isFeatureExists = currentFeatures.includes(feature);
   let result;
   if (isFeatureExists) {
     result = { status: 400, message: `ERROR, feature ${feature} already exists`, data: { feature: -1 } };
   } else {
-    await accountService.Account.update({ _id: accountId._id }, { $push: { 'assets.features': feature } });
+    await accountService.Account.update({ _id: account._id }, { $push: { 'assets.features': feature } });
 
     result = { status: 200, message: `OK, feature ${feature} has been added`, data: { feature } };
   }

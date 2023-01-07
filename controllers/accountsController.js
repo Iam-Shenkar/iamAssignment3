@@ -85,14 +85,16 @@ const editAccount = async (req, res, next) => {
     if (body.status === 'suspended' && acc.status !== 'suspended') {
       await suspendAccount(acc, body);
       return res.status(200)
-        .json({ message: 'account suspended!' });
+          .json({ message: 'account suspended!' });
     }
 
     if (body.status === 'active' && acc.status !== 'active') {
       await unSuspendAccount(acc, body);
     }
 
-    await isFeatureExists(acc, body.features); // if toAddFeature is already exists
+    // eslint-disable-next-line max-len
+    const result = await isFeatureExists(acc._id, body.features);
+    if (result) throw new httpError(400, `${body.features}' already exists`);
     const data = {
       'assets.credits': body.credits,
       'assets.seats': body.seats,
@@ -104,7 +106,7 @@ const editAccount = async (req, res, next) => {
     if (!updatedAccount) throw new httpError(400, 'Not updated');
 
     return res.status(200)
-      .json({ message: 'account updated!' });
+        .json({ message: 'account updated!' });
   } catch (err) {
     next(err);
   }

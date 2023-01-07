@@ -296,8 +296,7 @@ const getAccounts = async () => {
 
   const body = await response.json();
   const table = document.querySelector('table');
-  const data = Object.keys(body[0])
-    .splice(1, 6);
+  const data = Object.keys(body[0]).splice(1, 6);
   generateTableHead(table, data);
   generateAccountTable(table, body);
 };
@@ -516,8 +515,7 @@ const planChart = (accounts) => {
   for (const plan in plans) {
     plans[plan] = (plans[plan] / accounts.length) * 100;
   }
-  const ctx = document.getElementById('myPieChart')
-    .getContext('2d');
+  const ctx = document.getElementById('myPieChart').getContext('2d');
   const pieChart = new Chart(ctx, {
     type: 'pie',
     data: {
@@ -629,7 +627,6 @@ const updateDaysOfSuspension = () => {
   exampleAmountOfDays.readOnly = select.value !== 'Suspend';
 };
 
-// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch(
     `${runningPath}/accounts/status/${accotnt}`,
@@ -640,7 +637,6 @@ const disableAccount = async (accotnt) => {
       },
     },
   );
-  // eslint-disable-next-line no-unused-vars
   const body = await response.json();
   if (response.status === 200) {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
@@ -665,7 +661,6 @@ const deleteUser = async (email) => {
       },
     },
   );
-<<<<<<< HEAD
 
   const body = await response.json();
   if (response.status === 200) {
@@ -673,11 +668,6 @@ const deleteUser = async (email) => {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
   } else {
     alert(`Cant delede ${email}- ${body.message} `, 'danger', 'liveAlertPlaceholder');
-=======
-  const body = await response.json();
-  if (body.status === 200) {
-    alert('account closed', 'primary', 'liveAlertPlaceholder');
->>>>>>> 73af0f5083b460c201f619af295af3e502b6907c
   }
 };
 

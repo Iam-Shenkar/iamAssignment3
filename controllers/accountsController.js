@@ -12,12 +12,13 @@ const inviteUser = async (req, res, next) => {
     const { accountId, email } = req.params;
     const account = await Account.retrieve({ _id: accountId });
     const invitedUser = await User.retrieve({ email });
-    if ((await getSeats(account._id)).data < 1) throw new httpError(400, 'There is not enough seats');
+    const seats = await getSeats(account._id);
+    if (seats.data.seats < 1) throw new httpError(400, 'There is not enough seats');
     if (invitedUser) {
       inviteAuthorization(account, invitedUser);
       await sendInvitation(manager, invitedUser);
     } else {
-      await inviteNewUser(manager, email);
+      await inviteNewUser(req.user.name, accountId, email);
     }
     await setSeats(account._id, 1);
     res.status(200).json({ message: 'user invited' });
@@ -28,7 +29,7 @@ const inviteUser = async (req, res, next) => {
 
 const getAccount = async (req, res, next) => {
   try {
-    if (req.params.accountId === 'none') throw new httpError(404, 'The admin does not have an account');
+    if (req.params.id === 'none') throw new httpError(404, 'The admin does not have an account');
     const acc = await Account.retrieve({ _id: req.params.id });
     if (!acc) throw new httpError(404, 'account doesnt exist');
     if (acc.status === 'closed') throw new httpError(400, 'account disabled');
@@ -45,7 +46,7 @@ const getAccount = async (req, res, next) => {
       }], []);
     const { features } = acc.assets;
     outputArray.unshift({
-      Plan: acc.plan, Seats: acc.assets.seats, Credits: acc.assets.credits, Features: features,
+      Plan: acc.plan, Seats: acc.assets.seats - acc.assets.usedSeats, Credits: acc.assets.credits, Features: features, accountId: req.params.id, name: acc.name, status: acc.status,
     });
     res.status(200).json(outputArray);
   } catch (err) {
@@ -93,17 +94,18 @@ const editAccount = async (req, res, next) => {
       await unSuspendAccount(acc, body);
     }
 
-    // eslint-disable-next-line max-len
     const result = await isFeatureExists(acc._id, body.features);
-    if (result) throw new httpError(400, `${body.features}' already exists`);
+
     const data = {
-      'assets.credits': body.credits,
-      'assets.seats': body.seats,
+      'assets.credits': parseInt(acc.assets.credits) + parseInt(body.credits),
+      'assets.seats': parseInt(acc.assets.seats) + parseInt(body.seats),
       plan: body.plan,
       status: body.status,
     };
-
-    const updatedAccount = await Account.update({ _id: id }, { ...data, $push: { 'assets.features': body.features } });
+    let updatedAccount;
+    if (!result) {
+      updatedAccount = await Account.update({ _id: id }, { ...data, $push: { 'assets.features': body.features } });
+    } else { updatedAccount = await Account.update({ _id: id }, { ...data }); }
     if (!updatedAccount) throw new httpError(400, 'Not updated');
 
     return res.status(200)

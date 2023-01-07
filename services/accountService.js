@@ -1,7 +1,8 @@
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
-const {newStatus2Q} = require("../Q/sender")
+const { newStatus2Q } = require('../Q/sender');
+const { setSeats } = require('./assetsService');
 
 const sendInvitation = async (manager, user) => {
   const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
@@ -18,17 +19,17 @@ const sendInvitation = async (manager, user) => {
   await sendEmail(mailData, details);
 };
 
-const inviteNewUser = async (account, mail) => {
+const inviteNewUser = async (name, accountId, mail) => {
   try {
     const newUser = {
       email: mail,
       name: 'stranger',
       type: 'user',
       status: 'pending',
-      accountId: account._id.toString(),
+      accountId,
     };
     await User.create(newUser);
-    await sendInvitation(account.name, newUser);
+    await sendInvitation(name, newUser);
   } catch (err) {
     throw new httpError(400, 'failed to invite user');
   }
@@ -129,5 +130,4 @@ module.exports = {
   unSuspendAccount,
   QUpdateAccount,
   QSuspendAccount,
-
 };

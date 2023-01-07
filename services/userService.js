@@ -29,7 +29,7 @@ const adminUpdateUser = async (data) => {
 const deleteAuthorization = (user, account, data) => {
   if (user.email === data.email) throw new httpError(400, 'Cant delete yourself');
   if (!account) throw new httpError(400, 'Account not exist');
-  if (user.accountId !== data.accountId && data.type !== 'admin') throw new httpError(400, 'It is not possible to delete a user who is not in your account');
+  if (user.accountId === data.accountId || data.type !== 'admin') throw new httpError(400, 'It is not possible to delete a user who is not in your account');
   if (user.type !== 'user') throw new httpError(400, 'Unable to delete this user');
 };
 

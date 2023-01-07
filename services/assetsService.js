@@ -126,6 +126,11 @@ const coreDetails = async (user) => {
   return result;
 };
 
+const setSeatsAdmin = async (accountId, count) => {
+  const result = await setSeats(accountId, count);
+  return result.data;
+};
+
 module.exports = {
-  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature, coreDetails,
+  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature, coreDetails, setSeatsAdmin,
 };

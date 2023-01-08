@@ -71,7 +71,6 @@ const getAccounts = async (req, res, next) => {
       };
       outputArray.push(account);
     }
-    console.log(outputArray);
     res.status(200)
       .json(outputArray);
   } catch (err) {

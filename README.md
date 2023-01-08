@@ -20,9 +20,10 @@ Accounts and users have the life cycle of: none → active → suspended → clo
     After registration you will be asked to log in.
 2.  Information and features will be displayed according to user type:
     * admin- internal system permissions: CRUD on all users and accounts in the system, and their properties. Admin pages: 
-      - Users - details and statistics 
-      - Accounts - details and statistics
+      - Users - all users 
+      - Accounts - all accounts
       - My Profile - rw
+      - Dashboard - statistics
     * manager- account permissions: CRUD on all properties (and users) of account. Manager pages:
       - My Account - rw
       - My Profile - rw

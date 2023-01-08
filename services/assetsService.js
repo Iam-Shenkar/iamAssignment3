@@ -115,7 +115,6 @@ const coreDetails = async (user) => {
     if (!account) {
       throw new httpError(404, `account of user ${user.email} doesn't exist`);
     }
-    const assets = await getAssetsByAccountId(user.accountId);
     result = {
       status: 200,
       message: 'OK, details were sent',
@@ -127,6 +126,11 @@ const coreDetails = async (user) => {
   return result;
 };
 
+const setSeatsAdmin = async (accountId, count) => {
+  const result = await setSeats(accountId, count);
+  return result.data;
+};
+
 module.exports = {
-  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature, coreDetails,
+  getFeatures, getSeats, getCredit, setCredit, setSeats, setFeature, coreDetails, setSeatsAdmin,
 };

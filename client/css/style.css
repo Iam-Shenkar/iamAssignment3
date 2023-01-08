@@ -78,7 +78,6 @@ table {
 }
 
 th, td {
-    text-align: center;
     border-bottom: 1px solid rgba(128, 128, 128, 0.28);
     padding: 8px;
 }

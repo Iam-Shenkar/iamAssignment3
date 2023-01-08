@@ -1,33 +1,19 @@
 const express = require('express');
 const path = require('path');
-const axios = require('axios');
 const { authenticateToken } = require('../middleware/authenticate');
 
 const dashboardRouter = new express.Router();
-
-// dashboardRouter.get('/upgrade', (req, res) => {
-//   axios.get('https://billing-final-phase1-development.onrender.com/users/63af758d7d6c80ed3dabdd6a/plans', {
-//     headers: {
-//       cookie: `jwt=${req.cookies.jwt}`,
-//       'Content-Type': 'application/json',
-//     },
-//   })
-//     .then((result) => {
-//       console.log(result.data);
-//       return res.send(JSON.stringify(result.data));
-//     });
-// });
 
 dashboardRouter.get('/', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/homePage.html'));
 });
 
-dashboardRouter.all('/Users', authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/Users.html'));
+dashboardRouter.all('/EditAccount', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/EditAccount.html'));
 });
 
-dashboardRouter.all('/AddUser', authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/AddUser.html'));
+dashboardRouter.all('/Users', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/Users.html'));
 });
 
 dashboardRouter.all('/Accounts', authenticateToken, (req, res) => {

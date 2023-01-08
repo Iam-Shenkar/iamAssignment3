@@ -1,7 +1,5 @@
 const runningPath = window.location.origin;
 
-// const Logout = document.getElementById('logout');
-
 const alert = (message, type, id) => {
   const alertPlaceholder = document.getElementById(id);
   const wrapper = document.createElement('div');
@@ -144,13 +142,15 @@ const getUser = async () => {
 const editProfileAdmin = async (email) => {
   window.location.href = `${runningPath}/EditProfile?email=${email}`;
 };
+const editAccount = async (id) => {
+  window.location.href = `${runningPath}/EditAccount?id=${id}`;
+};
 // eslint-disable-next-line no-unused-vars
 const editProfile = () => {
   console.log('edit');
   const name = document.getElementById('exampleInputUsername1');
   name.removeAttribute('readonly');
 };
-
 
 const getUserAdmin = async () => {
   const url = new URL(window.location.href);
@@ -204,7 +204,6 @@ const updateUser = async () => {
     name,
     email,
   };
-  console.log(email);
   const response = await fetch(`${runningPath}/users/${email}`, {
     method: 'PUT',
     headers: {
@@ -234,7 +233,7 @@ const editAdmin = async () => {
     status,
     suspensionTime: document.getElementById('exampleAmountOfDays').value,
   };
-  console.log(`${runningPath}/users/${email}`);
+
   const response = await fetch(`${runningPath}/users/${email}`, {
     method: 'PUT',
     headers: {
@@ -246,17 +245,46 @@ const editAdmin = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  if (response.status === 200) {
+    alert(`user ${email} has been updated`, 'success', 'liveAlertEdit');
+  }
+};
+const AdmineditAccount = async () => {
+  const url = new URL(window.location.href);
+  const id = url.searchParams.get('id');
+  const response = await fetch(`${runningPath}/accounts/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.json();
+  console.log(body[0]);
+
+  document.getElementById('exampleInputUsername2').value = body[0].name;
+  document.getElementById('currPlan').innerText = body[0].Plan;
+  document.getElementById('currS').innerText = body[0].status;
+  document.getElementById('currPlan').setAttribute('value', body[0].Plan);
+  document.getElementById('currS').setAttribute('value', body[0].status);
 };
 
-const adminAddUser = async () => {
+const SaveditAccount = async () => {
+  const seats = 0 + document.getElementById('seats').value;
+  const credits = 0 + document.getElementById('credits').value;
+  const suspensionTime = 0 + document.getElementById('exampleAmountOfDaysAccount').value;
+  const url = new URL(window.location.href);
+  const id = url.searchParams.get('id');
   const data = {
-    name: document.getElementById('exampleInputName1').value,
-    email: document.getElementById('exampleInputEmail3').value,
-    password: document.getElementById('exampleInputPassword').value,
-    gender: document.getElementById('exampleSelectGender').value,
+    name: document.getElementById('exampleInputUsername2').value,
+    plan: document.getElementById('exampleSelectType').value,
+    suspensionTime,
+    status: document.getElementById('exampleUsersStatus').value,
+    features: document.getElementById('feature').value,
+    seats,
+    credits,
   };
-  const response = await fetch(`${runningPath}/users/invite`, {
-    method: 'POST',
+  const response = await fetch(`${runningPath}/accounts/${id}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -264,10 +292,7 @@ const adminAddUser = async () => {
   });
   const body = await response.json();
   if (response.status === 200) {
-    document.getElementById('userAddedSuccessfully').style.display = 'block';
-    document.getElementById('userAddText').innerText = `${data.name} added successfully`;
-  } else if (body.message) {
-    alert((body.message));
+    alert('user has been updated', 'success', 'liveAlertEdit');
   }
 };
 
@@ -296,8 +321,7 @@ const getAccounts = async () => {
 
   const body = await response.json();
   const table = document.querySelector('table');
-  const data = Object.keys(body[0])
-    .splice(1, 6);
+  const data = Object.keys(body[0]).splice(1, 6);
   generateTableHead(table, data);
   generateAccountTable(table, body);
 };
@@ -315,6 +339,9 @@ const getAccount = async () => {
   });
   const body = await response.json();
   if (response.status === 200) {
+    const editButton = document.getElementById('editButton');
+    editButton.setAttribute('onclick', `editAccount('${id}')`);
+
     const table = document.querySelector('table');
     const plan = body.shift();
 
@@ -337,17 +364,17 @@ const userInvitation = async () => {
   let account = url.searchParams.get('id');
   if (!account) account = getCookie('account');
   const email = document.getElementById('userEmail').value;
-  console.log(`${runningPath}/accounts/${account}link/${email}`);
   const response = await fetch(`${runningPath}/accounts/${account}/link/${email}`, {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
   });
   const body = await response.json();
   if (response.status === 200) {
-    document.getElementById('userEmail').value = body.message;
-    getAccount();
+    alert(body.message, 'success', 'accountAlert');
+  } else {
+    alert(body.message, 'danger', 'accountAlert');
   }
 };
 
@@ -414,22 +441,20 @@ window.onload = () => {
   userName.innerHTML = email.replace('%40', '&#064;');
 };
 
-// Logout.addEventListener('click', async () => {
-//   const data = {
-//     email: decodeURIComponent(getCookie('email')),
-//   };
-//   console.log(data);
-//   const response = await fetch(`${runningPath}/auth/logout`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   });
-//   // const body = await response.json();
-//   if (response.status !== 302) { console.log('redirect'); }
-//   window.location.href = `${runningPath}/`;
-// });
+const logout = async () => {
+  const data = {
+    email: decodeURIComponent(getCookie('email')),
+  };
+  const response = await fetch(`${runningPath}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (response.status !== 302) { console.log('redirect'); }
+  window.location.href = `${runningPath}/`;
+};
 
 const charts = async () => {
   const responseUser = await fetch(`${runningPath}/users/list`, {
@@ -516,8 +541,7 @@ const planChart = (accounts) => {
   for (const plan in plans) {
     plans[plan] = (plans[plan] / accounts.length) * 100;
   }
-  const ctx = document.getElementById('myPieChart')
-    .getContext('2d');
+  const ctx = document.getElementById('myPieChart').getContext('2d');
   const pieChart = new Chart(ctx, {
     type: 'pie',
     data: {
@@ -612,11 +636,18 @@ const planChartGender = (users) => {
 };
 
 const logo = document.getElementById('logo');
-logo.setAttribute('href', `${runningPath}/`);
-
+if (logo) {
+  logo.setAttribute('href', `${runningPath}/`);
+}
 // eslint-disable-next-line no-unused-vars
 const positiveNumber = () => {
   const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
+  if (exampleAmountOfDays.value < 0) {
+    exampleAmountOfDays.value *= -1;
+  }
+};
+const positiveNumberAccount = () => {
+  const exampleAmountOfDays = document.getElementById('exampleAmountOfDaysAccount');
   if (exampleAmountOfDays.value < 0) {
     exampleAmountOfDays.value *= -1;
   }
@@ -625,11 +656,11 @@ const positiveNumber = () => {
 // eslint-disable-next-line no-unused-vars
 const updateDaysOfSuspension = () => {
   const select = document.getElementById('exampleUsersStatus');
-  const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
-  exampleAmountOfDays.readOnly = select.value !== 'Suspend';
+  let exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
+  if (!exampleAmountOfDays) exampleAmountOfDays = document.getElementById('exampleAmountOfDaysAccount');
+  exampleAmountOfDays.readOnly = select.value !== 'suspended';
 };
 
-// eslint-disable-next-line no-unused-vars
 const disableAccount = async (accotnt) => {
   const response = await fetch(
     `${runningPath}/accounts/status/${accotnt}`,
@@ -640,7 +671,6 @@ const disableAccount = async (accotnt) => {
       },
     },
   );
-  // eslint-disable-next-line no-unused-vars
   const body = await response.json();
   if (response.status === 200) {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
@@ -665,7 +695,6 @@ const deleteUser = async (email) => {
       },
     },
   );
-<<<<<<< HEAD
 
   const body = await response.json();
   if (response.status === 200) {
@@ -673,11 +702,6 @@ const deleteUser = async (email) => {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
   } else {
     alert(`Cant delede ${email}- ${body.message} `, 'danger', 'liveAlertPlaceholder');
-=======
-  const body = await response.json();
-  if (body.status === 200) {
-    alert('account closed', 'primary', 'liveAlertPlaceholder');
->>>>>>> 73af0f5083b460c201f619af295af3e502b6907c
   }
 };
 
@@ -1007,8 +1031,8 @@ const requestData = {
   },
 };
 
-document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
-document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
+// document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
+// document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
 
 async function getMRR() {
   const currentDate = new Date();

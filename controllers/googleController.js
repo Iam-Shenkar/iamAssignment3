@@ -1,6 +1,15 @@
-const { User } = require('../repositories/repositories.init');
+const {
+  User,
+  Account,
+} = require('../repositories/repositories.init');
+const { freePlan2Q } = require('../Q/sender');
 
 const handleGoogleCallBack = async (req, res) => {
+  const findUser = await User.retrieve({ email: req.authInfo.email });
+  const account = await Account.retrieve({ name: findUser.email });
+  await Account.update({ accountId: account._id.toString() }, { status: 'active' });
+  await freePlan2Q(account._id.toString());
+  await User.update({ email: findUser.email }, { accountId: account._id.toString(), status: 'active' });
   // cookies
   res.cookie('jwt', req.authInfo.refToken, {
     httpOnly: true,
@@ -9,16 +18,16 @@ const handleGoogleCallBack = async (req, res) => {
     maxAge: 24 * 60 * 60 * 1000,
   });
   await User.update(
-    { email: req.authInfo.email },
+    { email: findUser.email },
     {
       loginDate: new Date(),
       refreshToken: req.authInfo.refToken,
     },
   );
-  res.cookie('email', req.authInfo.email);
-  res.cookie('name', req.authInfo.name);
-  res.cookie('role', req.authInfo.type);
-  res.cookie('account', req.authInfo.accountId);
+  res.cookie('email', findUser.email);
+  res.cookie('name', findUser.name);
+  res.cookie('role', findUser.type);
+  res.cookie('account', findUser.accountId);
   res.redirect('/');
 };
 

@@ -636,7 +636,6 @@ if (logo) {
   logo.setAttribute('href', `${runningPath}/`);
 }
 
-
 const positiveNumber = () => {
   const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
   if (exampleAmountOfDays.value < 0) {
@@ -672,7 +671,6 @@ const disableAccount = async (accotnt) => {
     alert('account closed', 'primary', 'liveAlertPlaceholder');
   }
 };
-
 
 function viewClose() {
   alert('It is not possible to view a closed account!', 'danger', 'liveAlertPlaceholder');
@@ -884,7 +882,6 @@ const buildTableForCredits = (dataArray1, dataArry2) => {
   month.appendChild(tableMonth);
 };
 
-
 const dataArray1 = [
   {
     name: 'Alice',
@@ -1031,12 +1028,12 @@ const requestData = {
   },
 };
 
-let deviceDistribution = document.getElementById('device-distribution');
-let geoDistribution = document.getElementById('geo-distribution');
+const deviceDistribution = document.getElementById('device-distribution');
+const geoDistribution = document.getElementById('geo-distribution');
 if (deviceDistribution) {
   document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
 }
-if(geoDistribution) {
+if (geoDistribution) {
   document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
 }
 
@@ -1044,7 +1041,7 @@ async function getMRR() {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1; // months are zero-indexed, so we need to add 1
   const currentYear = currentDate.getFullYear();
-  const url = `https://core-team-final-assignment.onrender.com/bi/MRR/${currentMonth}/${currentYear}`;
+  const url = `https://core-team-final-assignment.onrender.com/bi/MRR/${currentYear}/${currentMonth}`;
   try {
     const response = await fetch(url);
     const dataMRR = await response.json();

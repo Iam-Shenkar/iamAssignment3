@@ -1,10 +1,9 @@
-const { hash } = require('bcrypt');
 const bcrypt = require('bcrypt');
 const { Account, User } = require('../repositories/repositories.init');
-const { httpError } = require('../class/httpError');
 
-const { updateName, adminUpdateUser,  deleteAuthorization } = require('../services/userService');
+const { updateName, adminUpdateUser, deleteAuthorization } = require('../services/userService');
 const { validPassword } = require('../services/authService');
+const { setSeatsAdmin } = require('../services/assetsService');
 
 const getUsers = async (req, res, next) => {
   try {
@@ -73,7 +72,7 @@ const deleteUser = async (req, res, next) => {
       await User.update({ email: user.email }, { status: 'closed' });
     } else {
       await User.delete({ email: user.email });
-      await setSeats(user.accountId, -1);
+      await setSeatsAdmin(user.accountId, -1);
     }
     return res.status(200).json({ message: 'The user has been deleted' });
   } catch (e) {

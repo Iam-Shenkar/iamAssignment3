@@ -99,6 +99,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div id="liveAlertPlaceholder"></div>
+                                <div id="accountAlert"></div>
                                 <h4 class="card-title">Users:</h4>
                                 <div class="table-responsive">
                                     <table class="table" id="myAccountsTable">
@@ -122,13 +123,13 @@
                             <h4 class="card-title">Our Plan : </h4>
                             <section id="ourPlan">
                             <h5>Plan: <span id="plan"></span></h5>
-                            <h5>Seats: <span  id="seats"></span></h5>
                             <h5>Credits: <span id="credits"></span></h5>
+                            <h5>Available Seats: <span  id="seats"></span></h5>
                             <h5>Features: <span id="features">Free</span></h5>
                             </section>
                             <div class="btnUpgrade">
                                 <button type="button" class="btn btn-danger" id="upgeadButton">Upgrade</button>
-                                <button type="button" class="btn btn-warning" id="editButton">Edit</button>
+                                <button type="button" class="btn btn-warning" onclick="editAccount()" id="editButton">Edit</button>
                             </div>
                         </div>
                     </div>

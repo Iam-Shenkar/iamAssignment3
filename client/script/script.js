@@ -112,7 +112,7 @@ const buttonOption = (email, path, val, removeFunc, element) => {
   remove.setAttribute('value', email);
 
   list.appendChild(view);
-  if (getCookie('role') !== 'user') list.appendChild(remove);
+  if (getCookie('role') === 'admin') list.appendChild(remove);
   return list;
 };
 
@@ -141,6 +141,9 @@ const getUser = async () => {
 
 const editProfileAdmin = async (email) => {
   window.location.href = `${runningPath}/EditProfile?email=${email}`;
+};
+const editAccount = async (id) => {
+  window.location.href = `${runningPath}/EditAccount?id=${id}`;
 };
 // eslint-disable-next-line no-unused-vars
 const editProfile = () => {
@@ -201,7 +204,6 @@ const updateUser = async () => {
     name,
     email,
   };
-  console.log(email);
   const response = await fetch(`${runningPath}/users/${email}`, {
     method: 'PUT',
     headers: {
@@ -231,7 +233,7 @@ const editAdmin = async () => {
     status,
     suspensionTime: document.getElementById('exampleAmountOfDays').value,
   };
-  console.log(`${runningPath}/users/${email}`);
+
   const response = await fetch(`${runningPath}/users/${email}`, {
     method: 'PUT',
     headers: {
@@ -243,17 +245,46 @@ const editAdmin = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  if (response.status === 200) {
+    alert(`user ${email} has been updated`, 'success', 'liveAlertEdit');
+  }
+};
+const AdmineditAccount = async () => {
+  const url = new URL(window.location.href);
+  const id = url.searchParams.get('id');
+  const response = await fetch(`${runningPath}/accounts/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.json();
+  console.log(body[0]);
+
+  document.getElementById('exampleInputUsername2').value = body[0].name;
+  document.getElementById('currPlan').innerText = body[0].Plan;
+  document.getElementById('currS').innerText = body[0].status;
+  document.getElementById('currPlan').setAttribute('value', body[0].Plan);
+  document.getElementById('currS').setAttribute('value', body[0].status);
 };
 
-const adminAddUser = async () => {
+const SaveditAccount = async () => {
+  const seats = 0 + document.getElementById('seats').value;
+  const credits = 0 + document.getElementById('credits').value;
+  const suspensionTime = 0 + document.getElementById('exampleAmountOfDaysAccount').value;
+  const url = new URL(window.location.href);
+  const id = url.searchParams.get('id');
   const data = {
-    name: document.getElementById('exampleInputName1').value,
-    email: document.getElementById('exampleInputEmail3').value,
-    password: document.getElementById('exampleInputPassword').value,
-    gender: document.getElementById('exampleSelectGender').value,
+    name: document.getElementById('exampleInputUsername2').value,
+    plan: document.getElementById('exampleSelectType').value,
+    suspensionTime,
+    status: document.getElementById('exampleUsersStatus').value,
+    features: document.getElementById('feature').value,
+    seats,
+    credits,
   };
-  const response = await fetch(`${runningPath}/users/invite`, {
-    method: 'POST',
+  const response = await fetch(`${runningPath}/accounts/${id}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -261,15 +292,12 @@ const adminAddUser = async () => {
   });
   const body = await response.json();
   if (response.status === 200) {
-    document.getElementById('userAddedSuccessfully').style.display = 'block';
-    document.getElementById('userAddText').innerText = `${data.name} added successfully`;
-  } else if (body.message) {
-    alert((body.message));
+    alert('user has been updated', 'success', 'liveAlertEdit');
   }
 };
 
 const getUsers = async () => {
-  const response = await fetch(`${runningPath}/users/`, {
+  const response = await fetch(`${runningPath}/users/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -284,7 +312,7 @@ const getUsers = async () => {
 };
 
 const getAccounts = async () => {
-  const response = await fetch(`${runningPath}/accounts`, {
+  const response = await fetch(`${runningPath}/accounts/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -311,6 +339,9 @@ const getAccount = async () => {
   });
   const body = await response.json();
   if (response.status === 200) {
+    const editButton = document.getElementById('editButton');
+    editButton.setAttribute('onclick', `editAccount('${id}')`);
+
     const table = document.querySelector('table');
     const plan = body.shift();
 
@@ -333,17 +364,17 @@ const userInvitation = async () => {
   let account = url.searchParams.get('id');
   if (!account) account = getCookie('account');
   const email = document.getElementById('userEmail').value;
-  console.log(`${runningPath}/accounts/${account}link/${email}`);
   const response = await fetch(`${runningPath}/accounts/${account}/link/${email}`, {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
   });
   const body = await response.json();
   if (response.status === 200) {
-    document.getElementById('userEmail').value = body.message;
-    getAccount();
+    alert(body.message, 'success', 'accountAlert');
+  } else {
+    alert(body.message, 'danger', 'accountAlert');
   }
 };
 
@@ -410,25 +441,23 @@ window.onload = () => {
   userName.innerHTML = email.replace('%40', '&#064;');
 };
 
-// Logout.addEventListener('click', async () => {
-//   const data = {
-//     email: decodeURIComponent(getCookie('email')),
-//   };
-//   console.log(data);
-//   const response = await fetch(`${runningPath}/auth/logout`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   });
-//   // const body = await response.json();
-//   if (response.status !== 302) { console.log('redirect'); }
-//   window.location.href = `${runningPath}/`;
-// });
+const logout = async () => {
+  const data = {
+    email: decodeURIComponent(getCookie('email')),
+  };
+  const response = await fetch(`${runningPath}/auth/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  if (response.status !== 302) { console.log('redirect'); }
+  window.location.href = `${runningPath}/`;
+};
 
 const charts = async () => {
-  const responseUser = await fetch(`${runningPath}/users/`, {
+  const responseUser = await fetch(`${runningPath}/users/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -437,7 +466,7 @@ const charts = async () => {
   const users = await responseUser.json();
   typeChart(users);
 
-  const responseAccount = await fetch(`${runningPath}/accounts/`, {
+  const responseAccount = await fetch(`${runningPath}/accounts/list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -552,8 +581,65 @@ const planChart = (accounts) => {
   });
 };
 
-// const logo = document.getElementById('logo'); // or grab it by tagname etc
-// logo.setAttribute('href', `${runningPath}/`);
+const planChartGender = (users) => {
+  const genders = {};
+  for (let i = 0; i < users.length; i++) {
+    const gender = users[i].Gender;
+    if (genders[gender] == null) {
+      genders[gender] = 0;
+    }
+    genders[gender]++;
+  }
+  for (const gender in genders) {
+    genders[gender] = (genders[gender] / users.length) * 100;
+  }
+
+  const ctx = document.getElementById('genderPieChart')
+    .getContext('2d');
+  const pieChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: Object.keys(genders),
+      datasets: [{
+        data: Object.values(genders),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          fontSize: 14,
+        },
+      },
+      responsive: true,
+      aspectRatio: 1,
+    },
+  });
+};
+
+const logo = document.getElementById('logo');
+if (logo) {
+  logo.setAttribute('href', `${runningPath}/`);
+}
+
 
 // eslint-disable-next-line no-unused-vars
 const positiveNumber = () => {
@@ -562,12 +648,19 @@ const positiveNumber = () => {
     exampleAmountOfDays.value *= -1;
   }
 };
+const positiveNumberAccount = () => {
+  const exampleAmountOfDays = document.getElementById('exampleAmountOfDaysAccount');
+  if (exampleAmountOfDays.value < 0) {
+    exampleAmountOfDays.value *= -1;
+  }
+};
 
 // eslint-disable-next-line no-unused-vars
 const updateDaysOfSuspension = () => {
   const select = document.getElementById('exampleUsersStatus');
-  const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
-  exampleAmountOfDays.readOnly = select.value !== 'Suspend';
+  let exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
+  if (!exampleAmountOfDays) exampleAmountOfDays = document.getElementById('exampleAmountOfDaysAccount');
+  exampleAmountOfDays.readOnly = select.value !== 'suspended';
 };
 
 const disableAccount = async (accotnt) => {
@@ -950,8 +1043,8 @@ const requestData = {
   },
 };
 
-document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
-document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
+// document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
+// document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
 
 async function getMRR() {
   const currentDate = new Date();

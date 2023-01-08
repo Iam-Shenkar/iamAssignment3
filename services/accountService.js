@@ -1,8 +1,8 @@
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
-const { FOREVER } = require('../utiles/constants');
 const { newStatus2Q } = require('../Q/sender');
+const { setSeats } = require('./assetsService');
 
 const sendInvitation = async (manager, user) => {
   const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
@@ -19,17 +19,17 @@ const sendInvitation = async (manager, user) => {
   await sendEmail(mailData, details);
 };
 
-const inviteNewUser = async (account, mail) => {
+const inviteNewUser = async (name, accountId, mail) => {
   try {
     const newUser = {
       email: mail,
       name: 'stranger',
       type: 'user',
       status: 'pending',
-      accountId: account._id.toString(),
+      accountId,
     };
     await User.create(newUser);
-    await sendInvitation(account.name, newUser);
+    await sendInvitation(name, newUser);
   } catch (err) {
     throw new httpError(400, 'failed to invite user');
   }
@@ -91,27 +91,36 @@ const createUserToAccount = async (email, account) => {
   return newUser;
 };
 
+
+const updateWithFeatures = async (id, data, feature) => {
+  await Account.update(
+    { _id: id },
+    { ...data, $push: { 'assets.features': feature } },
+  );
+};
+
 const QUpdateAccount = async (msg) => {
-  await isFeatureExists(msg.accountId, msg.features); // if toAddFeature is already exists
+  let updatedAccount;
+  const isExists = await isFeatureExists(msg.accountId, msg.features);
   const data = {
     'assets.credits': msg.credits,
     'assets.seats': msg.seats,
     status: 'active',
   };
-
-  const updatedAccount = await Account.update({ _id: msg.accountId }, {
-    ...data,
-    $push: { 'assets.features': msg.features },
-  });
-  await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
-  if (!updatedAccount) throw new Error('update failed');
+  if (!isExists) {
+    await updateWithFeatures(msg.accountId, data, msg.features);
+  } else {
+    updatedAccount = await Account.update({ _id: msg.accountId }, { ...data });
+    await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
+    if (!updatedAccount) throw new Error('update failed');
+  }
 };
 
 const QSuspendAccount = async (msg) => {
   const data = {
     status: 'suspended',
     suspensionDate: new Date(),
-    suspensionTime: FOREVER,
+    suspensionTime: 10000,
   };
   const updatedAccount = await Account.update({ _id: msg.accountId }, { ...data });
   if (!updatedAccount) throw new Error('failed to suspend account');
@@ -130,5 +139,5 @@ module.exports = {
   unSuspendAccount,
   QUpdateAccount,
   QSuspendAccount,
-
+  updateWithFeatures
 };

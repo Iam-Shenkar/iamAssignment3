@@ -37,10 +37,4 @@ const newStatus2Q = async (accountId, status) => {
   });
 };
 
-// newStatus2Q("17774","suspended");
-//
-// freePlan2Q("1234");
-
-freePlan2Q('1234');
-
 module.exports = { freePlan2Q, newStatus2Q };

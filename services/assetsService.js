@@ -107,6 +107,7 @@ const setFeature = async (accountId, feature) => {
 };
 
 const coreDetails = async (user) => {
+  let result;
   if (!user) {
     throw new httpError(404, 'user doesn\'t exist');
   } else {
@@ -115,7 +116,6 @@ const coreDetails = async (user) => {
       throw new httpError(404, `account of user ${user.email} doesn't exist`);
     }
     const assets = await getAssetsByAccountId(user.accountId);
-    let result;
     result = {
       status: 200,
       message: 'OK, details were sent',

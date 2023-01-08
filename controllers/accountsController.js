@@ -1,6 +1,7 @@
 const {
   sendInvitation, inviteAuthorization,
   inviteNewUser, editAuthorization, isFeatureExists, suspendAccount, unSuspendAccount,
+  updateWithFeatures,
 } = require('../services/accountService');
 const { Account, User } = require('../repositories/repositories.init');
 const { getSeats, setSeats } = require('../services/assetsService');
@@ -83,37 +84,49 @@ const editAccount = async (req, res, next) => {
     if (!req.body || !req.params.id) throw new httpError(400, 'bad Request');
     const acc = await editAuthorization(req.params.id); // check account's status
     const { params: { id }, body } = req;
-
     if (body.status === 'suspended' && acc.status !== 'suspended') {
       await suspendAccount(acc, body);
       return res.status(200)
         .json({ message: 'account suspended!' });
     }
-
     if (body.status === 'active' && acc.status !== 'active') {
       await unSuspendAccount(acc, body);
     }
 
-    const result = await isFeatureExists(acc._id, body.features);
+const editAccount = async (req, res, next) => {
+  try {
+    if (!req.body || !req.params.id) throw new httpError(400, 'bad Request');
+    const acc = await editAuthorization(req.params.id); // check account's status
+    const { params: { id }, body } = req;
+    if (body.status === 'suspended' && acc.status !== 'suspended') {
+      await suspendAccount(acc, body);
+      return res.status(200)
+        .json({ message: 'account suspended!' });
+    }
+    if (body.status === 'active' && acc.status !== 'active') {
+      await unSuspendAccount(acc, body);
+    }
 
+    const isExist = await isFeatureExists(acc._id, body.features);
     const data = {
-      'assets.credits': parseInt(acc.assets.credits) + parseInt(body.credits),
-      'assets.seats': parseInt(acc.assets.seats) + parseInt(body.seats),
+      'assets.credits': parseInt(acc.assets.credits, 10) + parseInt(body.credits, 10),
+      'assets.seats': parseInt(acc.assets.seats, 10) + parseInt(body.seats, 10),
       plan: body.plan,
       status: body.status,
     };
+
     let updatedAccount;
-    if (!result) {
-      updatedAccount = await Account.update({ _id: id }, { ...data, $push: { 'assets.features': body.features } });
+    if (!isExist) {
+      updatedAccount = await updateWithFeatures(id, data, body.features);
     } else { updatedAccount = await Account.update({ _id: id }, { ...data }); }
     if (!updatedAccount) throw new httpError(400, 'Not updated');
-
     return res.status(200)
       .json({ message: 'account updated!' });
   } catch (err) {
     next(err);
   }
 };
+
 
 // change account status to closed
 const disableAccount = async (req, res, next) => {
@@ -132,5 +145,5 @@ const disableAccount = async (req, res, next) => {
 };
 
 module.exports = {
-  inviteUser, Account, getAccount, getAccounts, editAccount, disableAccount,
+  inviteUser, Account, getAccount, getAccounts, editAccount, disableAccount, isFeatureExists,
 };

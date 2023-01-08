@@ -1,7 +1,6 @@
 
 const amqp = require('amqplib/callback_api');
 
-
 const { QUpdateAccount } = require('../services/accountService');
 const { QSuspendAccount } = require('../services/accountService');
 
@@ -41,3 +40,4 @@ const listenToQ = () => {
 }
 
 module.exports = {listenToQ};
+

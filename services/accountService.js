@@ -91,27 +91,36 @@ const createUserToAccount = async (email, account) => {
   return newUser;
 };
 
+
+const updateWithFeatures = async (id, data, feature) => {
+  await Account.update(
+    { _id: id },
+    { ...data, $push: { 'assets.features': feature } },
+  );
+};
+
 const QUpdateAccount = async (msg) => {
-  await isFeatureExists(msg.accountId, msg.features); // if toAddFeature is already exists
+  let updatedAccount;
+  const isExists = await isFeatureExists(msg.accountId, msg.features);
   const data = {
     'assets.credits': msg.credits,
     'assets.seats': msg.seats,
     status: 'active',
   };
-
-  const updatedAccount = await Account.update({ _id: msg.accountId }, {
-    ...data,
-    $push: { 'assets.features': msg.features },
-  });
-  await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
-  if (!updatedAccount) throw new Error('update failed');
+  if (!isExists) {
+    await updateWithFeatures(msg.accountId, data, msg.features);
+  } else {
+    updatedAccount = await Account.update({ _id: msg.accountId }, { ...data });
+    await User.updateMany({ accountId: msg.accountId }, { status: 'active' });
+    if (!updatedAccount) throw new Error('update failed');
+  }
 };
 
 const QSuspendAccount = async (msg) => {
   const data = {
     status: 'suspended',
     suspensionDate: new Date(),
-    suspensionTime: FOREVER,
+    suspensionTime: 10000,
   };
   const updatedAccount = await Account.update({ _id: msg.accountId }, { ...data });
   if (!updatedAccount) throw new Error('failed to suspend account');
@@ -130,4 +139,5 @@ module.exports = {
   unSuspendAccount,
   QUpdateAccount,
   QSuspendAccount,
+  updateWithFeatures
 };

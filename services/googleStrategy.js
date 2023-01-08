@@ -22,7 +22,6 @@ passport.use(new GoogleStrategy(
       picture: photo,
       email,
     } = profile;
-
     let findUser = await User.retrieve({ email });
     if (!findUser) {
       User.create({
@@ -34,7 +33,12 @@ passport.use(new GoogleStrategy(
     const refToken = jwt.sign({ email: findUser.email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
     await User.update({ email: findUser.email }, { refreshToken: refToken });
     const data = {
-      token, refToken, email, type: findUser.type,
+      token,
+      refToken,
+      email,
+      type: findUser.type,
+      name: findUser.name,
+      accountId: findUser.accountId,
     };
     return done(null, findUser, data);
   },

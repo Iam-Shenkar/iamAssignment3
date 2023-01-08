@@ -1,7 +1,6 @@
 const { Account, User } = require('../repositories/repositories.init');
 
 const logout = async (req, res) => {
-  console.log('logging out user: ', req.body.email);
   await User.update({ email: req.body.email }, { refreshToken: 0 });
   res.set({ authorization: 'Bearer 0' });
   res.clearCookie('email');
@@ -9,7 +8,7 @@ const logout = async (req, res) => {
   res.clearCookie('role');
   res.clearCookie('account');
   res.clearCookie('jwt');
-  res.redirect('../');
+  res.status(200).redirect('../');
 };
 
 module.exports = { logout };

@@ -23,7 +23,6 @@ const sendEmail = async (dataMail, details) => {
     if (err) {
       throw new Error('transporter error: mail was not sent');
     } else {
-      console.log(`message sent to ${mainOptions.to}`);
     }
   });
 };

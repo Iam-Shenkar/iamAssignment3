@@ -420,6 +420,12 @@ footer a {
     font-weight: bolder;
     color: red;
 }
+
+.loginByGoogle{
+    padding: 8px;
+    margin: 5px;
+}
+
 .submitBtn{
     display: flex;
     justify-content: center;

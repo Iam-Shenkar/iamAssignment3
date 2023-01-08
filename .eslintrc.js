@@ -25,5 +25,7 @@ module.exports = {
     'consistent-return': 0,
     'no-case-declarations': 0,
     'no-underscore-dangle': 0,
+    'no-restricted-syntax': 0,
+    'no-unused-vars': 0,
   },
 };

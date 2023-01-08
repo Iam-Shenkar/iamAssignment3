@@ -80,6 +80,9 @@ const register = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  if (response.status === 200 && body.message === 'user update') {
+    window.location.reload();
+  }
 };
 
 const confirmationCode = async () => {
@@ -88,6 +91,7 @@ const confirmationCode = async () => {
     email: document.getElementById('newUserEmail').value,
     password: document.getElementById('pass').value,
     code: document.getElementById('oneTimePassword').value,
+    gender: document.getElementById('gender').value,
   };
   const response = await fetch(`${runningPath}/auth/register/code`, {
     method: 'POST',
@@ -100,6 +104,22 @@ const confirmationCode = async () => {
   if (response.status !== 200 && body.message) {
     alert((body.message));
   }
+  if (response.status === 200) {
+    const res = document.createElement('h3');
+    res.innerHTML = body.message;
+    document.getElementById('emailConfirmation-div').append(res);
+    const backButton = document.createElement('a');
+    backButton.innerHTML = 'back to log in';
+    backButton.setAttribute('href', '/login');
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.append(backButton);
+    document.getElementById('emailConfirmation-div').append(button);
+  }
+};
+
+const googleLogIn = async () => {
+  window.location.href = `${runningPath}/auth/google`;
 };
 
 const ResetPassweord = async () => {
@@ -107,7 +127,7 @@ const ResetPassweord = async () => {
     email: document.getElementById('emailResetPassword').value,
   };
   const response = await fetch(`${runningPath}/auth/login/password`, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },

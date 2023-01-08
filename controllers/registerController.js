@@ -1,17 +1,12 @@
 const bcrypt = require('bcrypt');
-// eslint-disable-next-line import/no-unresolved
 const register = require('../services/registerService');
 const { userExist } = require('../services/authService');
 const { existCode, sendEmailOneTimePass } = require('../services/registerService');
-
 const { userRole } = require('../middleware/validatorService');
 const { httpError } = require('../class/httpError');
-
 const { freePlan2Q } = require('../Q/sender');
-
-
 const { Account, User } = require('../repositories/repositories.init');
-
+const { setSeats } = require('../services/assetsService');
 
 const handleRegister = async (req, res, next) => {
   try {
@@ -60,8 +55,6 @@ const handleConfirmCode = async (req, res, next) => {
       await User.update({ email: userEmail }, { accountId: account._id.toString(), status: 'active' });
     }
 
-    console.log(`user ${userEmail} was added`);
-
     res.status(200)
       .json({ message: 'User was added' });
   } catch (e) {
@@ -74,12 +67,11 @@ const confirmationUser = async (req, res, next) => {
     const { email, accountId } = req.params;
     const user = await userExist(email);
 
-    if (user.status === 'pending') {
-      await User.update({ email }, { status: 'active' });
-    } else if (user.status === 'active') {
+    if (user.status === 'active') {
       await Account.delete({ _id: user.accountId });
       await User.update({ email }, { accountId });
-    } else {
+      await setSeats(accountId, 1);
+    } else if (user.status !== 'pending') {
       throw new httpError(401, 'Unable to confirm this user');
     }
 

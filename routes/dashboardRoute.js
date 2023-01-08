@@ -8,12 +8,12 @@ dashboardRouter.get('/', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/homePage.html'));
 });
 
-dashboardRouter.all('/Users', authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/Users.html'));
+dashboardRouter.all('/EditAccount', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/EditAccount.html'));
 });
 
-dashboardRouter.all('/AddUser', authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/AddUser.html'));
+dashboardRouter.all('/Users', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/Users.html'));
 });
 
 dashboardRouter.all('/Accounts', authenticateToken, (req, res) => {
@@ -34,6 +34,14 @@ dashboardRouter.all('/EditProfile', authenticateToken, (req, res) => {
 
 dashboardRouter.all('/MyProfile', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/MyProfile.html'));
+});
+
+dashboardRouter.all('/MyProfile', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/MyProfile.html'));
+});
+
+dashboardRouter.all('/Statistics', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/Statistics.html'));
 });
 
 dashboardRouter.get('/login', (req, res) => res.sendFile(path.join(__dirname, '../client/Login.html')));

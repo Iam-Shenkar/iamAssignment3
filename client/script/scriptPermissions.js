@@ -1,5 +1,3 @@
-// const runningPath = window.location.origin;
-
 const ChangePasswordPage = () => {
   const Role = getCookie('role');
   const changePassword = document.getElementById('changePassword');

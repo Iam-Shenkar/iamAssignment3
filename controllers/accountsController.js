@@ -93,20 +93,6 @@ const editAccount = async (req, res, next) => {
       await unSuspendAccount(acc, body);
     }
 
-const editAccount = async (req, res, next) => {
-  try {
-    if (!req.body || !req.params.id) throw new httpError(400, 'bad Request');
-    const acc = await editAuthorization(req.params.id); // check account's status
-    const { params: { id }, body } = req;
-    if (body.status === 'suspended' && acc.status !== 'suspended') {
-      await suspendAccount(acc, body);
-      return res.status(200)
-        .json({ message: 'account suspended!' });
-    }
-    if (body.status === 'active' && acc.status !== 'active') {
-      await unSuspendAccount(acc, body);
-    }
-
     const isExist = await isFeatureExists(acc._id, body.features);
     const data = {
       'assets.credits': parseInt(acc.assets.credits, 10) + parseInt(body.credits, 10),

@@ -16,10 +16,6 @@ const listenToQ = () => {
             ch.consume(q, (msg) => {
                 const qm = (JSON.parse(msg.content.toString()));
                 QUpdateAccount(qm);
-                console.log(qm.accountId);
-                console.log(qm.seats);
-                console.log(qm.features);
-                console.log(qm.credits);
             }, {noAck: true});
         })
     })
@@ -31,8 +27,6 @@ const listenToQ = () => {
             ch.consume(q, (msg) => {
                 const qm = (JSON.parse(msg.content.toString()));
                 QSuspendAccount(qm);
-                console.log("got account");
-                console.log(qm.accountId);
             }, {noAck: true});
         })
     })

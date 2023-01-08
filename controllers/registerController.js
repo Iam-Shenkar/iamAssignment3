@@ -55,8 +55,6 @@ const handleConfirmCode = async (req, res, next) => {
       await User.update({ email: userEmail }, { accountId: account._id.toString(), status: 'active' });
     }
 
-    console.log(`user ${userEmail} was added`);
-
     res.status(200)
       .json({ message: 'User was added' });
   } catch (e) {

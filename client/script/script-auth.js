@@ -119,7 +119,6 @@ const confirmationCode = async () => {
 };
 
 const googleLogIn = async () => {
-  console.log('google');
   window.location.href = `${runningPath}/auth/google`;
 };
 
@@ -127,7 +126,6 @@ const ResetPassweord = async () => {
   const data = {
     email: document.getElementById('emailResetPassword').value,
   };
-  console.log(`${runningPath}/auth/login/password`);
   const response = await fetch(`${runningPath}/auth/login/password`, {
     method: 'PUT',
     headers: {

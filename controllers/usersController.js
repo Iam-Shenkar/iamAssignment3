@@ -86,8 +86,6 @@ const updatePass = async (req, res, next) => {
     await validPassword(req.body.password, user.password);
     const newPass = await bcrypt.hash(req.body.newPassword, 12);
     await User.update({ email: user.email }, { password: newPass });
-    console.log('password changed for ', user.email);
-    console.log('new password is: ', req.body.newPassword);
     res.status(200).json('Password Updated');
   } catch (e) {
     res.status(403).json(e.message);

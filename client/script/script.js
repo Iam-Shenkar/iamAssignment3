@@ -145,9 +145,8 @@ const editProfileAdmin = async (email) => {
 const editAccount = async (id) => {
   window.location.href = `${runningPath}/EditAccount?id=${id}`;
 };
-// eslint-disable-next-line no-unused-vars
+
 const editProfile = () => {
-  console.log('edit');
   const name = document.getElementById('exampleInputUsername1');
   name.removeAttribute('readonly');
 };
@@ -222,7 +221,6 @@ const editAdmin = async () => {
   let name = document.getElementById('exampleInputUsername2').value;
   const email = document.getElementById('exampleInputEmail2').value;
   let status = document.getElementById('exampleUsersStatus').value;
-  console.log(document.getElementById('exampleUsersStatus').value);
   if (!name) {
     name = document.getElementById('exampleInputEmail1').value;
   }
@@ -259,7 +257,6 @@ const AdmineditAccount = async () => {
     },
   });
   const body = await response.json();
-  console.log(body[0]);
 
   document.getElementById('exampleInputUsername2').value = body[0].name;
   document.getElementById('currPlan').innerText = body[0].Plan;
@@ -330,7 +327,6 @@ const getAccount = async () => {
   const url = new URL(window.location.href);
   let id = url.searchParams.get('id');
   if (!id) id = getCookie('account');
-  console.log(`${runningPath}/accounts/${id}`);
   const response = await fetch(`${runningPath}/accounts/${id}`, {
     method: 'GET',
     headers: {
@@ -452,7 +448,7 @@ const logout = async () => {
     },
     body: JSON.stringify(data),
   });
-  if (response.status !== 302) { console.log('redirect'); }
+  if (response.status !== 302) { }
   window.location.href = `${runningPath}/`;
 };
 
@@ -683,8 +679,6 @@ function viewClose() {
 }
 
 const deleteUser = async (email) => {
-  // eslint-disable-next-line no-console
-  console.log('deleteF');
   const response = await fetch(
     `${runningPath}/users/${email}`,
     {
@@ -980,7 +974,6 @@ async function getMonthlyExperiments(month, year) {
   try {
     const response = await fetch(url);
     const dataExperiments = await response.json();
-    console.log('in Fetch: ', dataExperiments);
     return dataExperiments;
   } catch (error) {
     console.error(error);
@@ -992,8 +985,6 @@ const printMonthAndYear = async () => {
   const year = 2023;
 
   const experiments = await getMonthlyExperiments(month, year);
-  console.log(experiments);
-
   const MandY = [{
     type: 'Month',
     value: month,

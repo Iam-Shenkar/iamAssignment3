@@ -8,6 +8,10 @@ dashboardRouter.get('/', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/homePage.html'));
 });
 
+dashboardRouter.all('/EditAccount', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/EditAccount.html'));
+});
+
 dashboardRouter.all('/Users', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/Users.html'));
 });

@@ -21,7 +21,7 @@
           href="https://www.bootstrapdash.com/demo/star-admin2-free/template/css/vertical-layout-light/style.css">
     <link rel="shortcut icon" href="https://www.bootstrapdash.com/demo/star-admin2-free/template/images/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../client/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
 
@@ -96,22 +96,24 @@
                     <div class="col-8 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
+                                <div id="liveAlertEdit"></div>
                                 <h4 class="card-title">Edit Account</h4>
                                 <form class="forms-sample">
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Name</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" id="exampleInputUsername2"
-                                                   placeholder="Account Name">
+                                                   placeholder="Account Name" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="exampleSelectType" class="col-sm-3 col-form-label">Plan</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" id="exampleSelectType">
-                                                <option>free</option>
-                                                <option>pro</option>
-                                                <option>premium</option>
+                                                <option id="currPlan"></option>
+                                                <option value="free">free</option>
+                                                <option value="pro">pro</option>
+                                                <option value="premium">premium</option>
                                             </select>
                                         </div>
                                     </div>
@@ -119,37 +121,42 @@
                                         <label for="exampleUsersStatus" class="col-sm-3 col-form-label">Status</label>
                                         <div class="col-sm-9">
                                             <select class="form-control" id="exampleUsersStatus" onchange="updateDaysOfSuspension()">
+                                                <option id="currS"></option>
                                                 <option value="active">active</option>
                                                 <option value="suspended">suspended</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <h5>Assets</h5>
-                                        <label for="exampleSelectType" class="col-sm-3 col-form-label">add feature</label>
+                                        <label for="exampleAmountOfDaysAccount" class="col-sm-3 col-form-label">Amount Of Days</label>
                                         <div class="col-sm-9">
-                                            <select class="form-control">
-                                                <option>AB test</option>
-                                                <option>Flag test</option>
+                                            <input type="number" class="form-control" id="exampleAmountOfDaysAccount" min="0" onkeyup="positiveNumberAccount()" placeholder="0" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <h5>Assets</h5>
+                                        <label for="feature"  class="col-sm-3 col-form-label">Feature</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="feature">
+                                                <option value="AB">AB test</option>
+                                                <option value="flag">Flag test</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Seats</label>
+                                        <label for="seats" class="col-sm-3 col-form-label">Seats</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="Total Seats">
+                                            <input type="number" id="seats" class="form-control" placeholder="Add Seats" min="0" >
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Credit</label>
+                                        <label for="credits" class="col-sm-3 col-form-label">Credit</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="Credit">
+                                            <input type="number" id="credits" class="form-control" id="credit" placeholder="Credit" min="0">
                                         </div>
                                     </div>
                                     <div class="btnEditUser">
-                                    <button type="submit" class="btn btn-warning me-2">Edit</button>
-                                    <button class="btn btn-success">Save</button>
-                                    <button class="btn btn-danger">Delete</button>
+                                    <button type="button" class="btn btn-success" onclick="SaveditAccount()">Save</button>
                                     </div>
                                 </form>
                             </div>
@@ -173,6 +180,7 @@
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/settings.js"></script>
 <script src="https://www.bootstrapdash.com/demo/star-admin2-free/template/js/todolist.js"></script>
 <script src="./script/script.js"></script>
+<script>AdmineditAccount()</script>
 
 </body>
 </html>

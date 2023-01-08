@@ -142,6 +142,9 @@ const getUser = async () => {
 const editProfileAdmin = async (email) => {
   window.location.href = `${runningPath}/EditProfile?email=${email}`;
 };
+const editAccount = async (id) => {
+  window.location.href = `${runningPath}/EditAccount?id=${id}`;
+};
 // eslint-disable-next-line no-unused-vars
 const editProfile = () => {
   console.log('edit');
@@ -201,7 +204,6 @@ const updateUser = async () => {
     name,
     email,
   };
-  console.log(email);
   const response = await fetch(`${runningPath}/users/${email}`, {
     method: 'PUT',
     headers: {
@@ -231,7 +233,7 @@ const editAdmin = async () => {
     status,
     suspensionTime: document.getElementById('exampleAmountOfDays').value,
   };
-  console.log(`${runningPath}/users/${email}`);
+
   const response = await fetch(`${runningPath}/users/${email}`, {
     method: 'PUT',
     headers: {
@@ -247,16 +249,42 @@ const editAdmin = async () => {
     alert(`user ${email} has been updated`, 'success', 'liveAlertEdit');
   }
 };
+const AdmineditAccount = async () => {
+  const url = new URL(window.location.href);
+  const id = url.searchParams.get('id');
+  const response = await fetch(`${runningPath}/accounts/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const body = await response.json();
+  console.log(body[0]);
 
-const adminAddUser = async () => {
+  document.getElementById('exampleInputUsername2').value = body[0].name;
+  document.getElementById('currPlan').innerText = body[0].Plan;
+  document.getElementById('currS').innerText = body[0].status;
+  document.getElementById('currPlan').setAttribute('value', body[0].Plan);
+  document.getElementById('currS').setAttribute('value', body[0].status);
+};
+
+const SaveditAccount = async () => {
+  const seats = 0 + document.getElementById('seats').value;
+  const credits = 0 + document.getElementById('credits').value;
+  const suspensionTime = 0 + document.getElementById('exampleAmountOfDaysAccount').value;
+  const url = new URL(window.location.href);
+  const id = url.searchParams.get('id');
   const data = {
-    name: document.getElementById('exampleInputName1').value,
-    email: document.getElementById('exampleInputEmail3').value,
-    password: document.getElementById('exampleInputPassword').value,
-    gender: document.getElementById('exampleSelectGender').value,
+    name: document.getElementById('exampleInputUsername2').value,
+    plan: document.getElementById('exampleSelectType').value,
+    suspensionTime,
+    status: document.getElementById('exampleUsersStatus').value,
+    features: document.getElementById('feature').value,
+    seats,
+    credits,
   };
-  const response = await fetch(`${runningPath}/users/invite`, {
-    method: 'POST',
+  const response = await fetch(`${runningPath}/accounts/${id}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -264,10 +292,7 @@ const adminAddUser = async () => {
   });
   const body = await response.json();
   if (response.status === 200) {
-    document.getElementById('userAddedSuccessfully').style.display = 'block';
-    document.getElementById('userAddText').innerText = `${data.name} added successfully`;
-  } else if (body.message) {
-    alert((body.message));
+    alert('user has been updated', 'success', 'liveAlertEdit');
   }
 };
 
@@ -314,6 +339,9 @@ const getAccount = async () => {
   });
   const body = await response.json();
   if (response.status === 200) {
+    const editButton = document.getElementById('editButton');
+    editButton.setAttribute('onclick', `editAccount('${id}')`);
+
     const table = document.querySelector('table');
     const plan = body.shift();
 
@@ -344,8 +372,9 @@ const userInvitation = async () => {
   });
   const body = await response.json();
   if (response.status === 200) {
-    document.getElementById('userEmail').value = body.message;
-    getAccount();
+    alert(body.message, 'success', 'accountAlert');
+  } else {
+    alert(body.message, 'danger', 'accountAlert');
   }
 };
 
@@ -607,11 +636,18 @@ const planChartGender = (users) => {
 };
 
 const logo = document.getElementById('logo');
-logo.setAttribute('href', `${runningPath}/`);
-
+if (logo) {
+  logo.setAttribute('href', `${runningPath}/`);
+}
 // eslint-disable-next-line no-unused-vars
 const positiveNumber = () => {
   const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
+  if (exampleAmountOfDays.value < 0) {
+    exampleAmountOfDays.value *= -1;
+  }
+};
+const positiveNumberAccount = () => {
+  const exampleAmountOfDays = document.getElementById('exampleAmountOfDaysAccount');
   if (exampleAmountOfDays.value < 0) {
     exampleAmountOfDays.value *= -1;
   }
@@ -620,8 +656,9 @@ const positiveNumber = () => {
 // eslint-disable-next-line no-unused-vars
 const updateDaysOfSuspension = () => {
   const select = document.getElementById('exampleUsersStatus');
-  const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
-  exampleAmountOfDays.readOnly = select.value !== 'Suspend';
+  let exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
+  if (!exampleAmountOfDays) exampleAmountOfDays = document.getElementById('exampleAmountOfDaysAccount');
+  exampleAmountOfDays.readOnly = select.value !== 'suspended';
 };
 
 const disableAccount = async (accotnt) => {
@@ -994,8 +1031,8 @@ const requestData = {
   },
 };
 
-document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
-document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
+// document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
+// document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
 
 async function getMRR() {
   const currentDate = new Date();

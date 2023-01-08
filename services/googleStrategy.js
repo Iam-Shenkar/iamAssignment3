@@ -24,7 +24,7 @@ passport.use(new GoogleStrategy(
     } = profile;
     let findUser = await User.retrieve({ email });
     if (!findUser) {
-      User.create({
+      await User.create({
         name: username, googleId, email, password: 'null', loginDate: new Date(),status: 'active',
       });
       findUser = await User.retrieve({ email: email });

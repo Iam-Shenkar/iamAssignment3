@@ -36,6 +36,14 @@ dashboardRouter.all('/MyProfile', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/MyProfile.html'));
 });
 
+dashboardRouter.all('/MyProfile', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/MyProfile.html'));
+});
+
+dashboardRouter.all('/Statistics', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/Statistics.html'));
+});
+
 dashboardRouter.get('/login', (req, res) => res.sendFile(path.join(__dirname, '../client/Login.html')));
 
 module.exports = { dashboardRouter };

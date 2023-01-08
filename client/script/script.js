@@ -410,7 +410,7 @@ const sideMenu = () => {
 
 function MenuPermission() {
   const role = getCookie('role');
-  const titleNavAdmin = ['My Profile', 'Accounts', 'Users'];
+  const titleNavAdmin = ['My Profile', 'Accounts', 'Users', 'Statistics'];
   const titleNavUser = ['My Profile', 'My Account'];
   if (role !== 'admin') {
     return titleNavUser;
@@ -641,7 +641,6 @@ if (logo) {
 }
 
 
-// eslint-disable-next-line no-unused-vars
 const positiveNumber = () => {
   const exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
   if (exampleAmountOfDays.value < 0) {
@@ -655,7 +654,6 @@ const positiveNumberAccount = () => {
   }
 };
 
-// eslint-disable-next-line no-unused-vars
 const updateDaysOfSuspension = () => {
   const select = document.getElementById('exampleUsersStatus');
   let exampleAmountOfDays = document.getElementById('exampleAmountOfDays');
@@ -679,12 +677,11 @@ const disableAccount = async (accotnt) => {
   }
 };
 
-// eslint-disable-next-line no-unused-vars
+
 function viewClose() {
   alert('It is not possible to view a closed account!', 'danger', 'liveAlertPlaceholder');
 }
 
-// eslint-disable-next-line no-unused-vars
 const deleteUser = async (email) => {
   // eslint-disable-next-line no-console
   console.log('deleteF');
@@ -893,7 +890,7 @@ const buildTableForCredits = (dataArray1, dataArry2) => {
   month.appendChild(tableMonth);
 };
 
-// Define the data array for total credits usage per day per user
+
 const dataArray1 = [
   {
     name: 'Alice',
@@ -1043,8 +1040,14 @@ const requestData = {
   },
 };
 
-// document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
-// document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
+let deviceDistribution = document.getElementById('device-distribution');
+let geoDistribution = document.getElementById('geo-distribution');
+if (deviceDistribution) {
+  document.getElementById('device-distribution').textContent = JSON.stringify(requestData.deviceDistribution, null, 2);
+}
+if(geoDistribution) {
+  document.getElementById('geo-distribution').textContent = JSON.stringify(requestData.geoDistribution, null, 2);
+}
 
 async function getMRR() {
   const currentDate = new Date();

@@ -10,18 +10,18 @@ const { httpError } = require('../class/httpError');
 const inviteUser = async (req, res, next) => {
   try {
     const manager = req.user;
-    const { accountId, userEmail } = req.req.params;
+    const { accountId, email } = req.params;
     const account = await Account.retrieve({ _id: accountId });
-    const invitedUser = await User.retrieve({ email: userEmail });
-    if ((await getSeats(account.name)).data < 1) throw new httpError(400, 'There is not enough seats');
-
+    const invitedUser = await User.retrieve({ email });
+    const seats = await getSeats(account._id);
+    if (seats.data.seats < 1) throw new httpError(400, 'There is not enough seats');
     if (invitedUser) {
       inviteAuthorization(account, invitedUser);
       await sendInvitation(manager, invitedUser);
     } else {
-      await inviteNewUser(manager, userEmail);
+      await inviteNewUser(req.user.name, accountId, email);
     }
-    await setSeats(account.name, manager.type, 1);
+    await setSeats(account._id, 1);
     res.status(200).json({ message: 'user invited' });
   } catch (err) {
     next(err);
@@ -30,7 +30,7 @@ const inviteUser = async (req, res, next) => {
 
 const getAccount = async (req, res, next) => {
   try {
-    if (req.params.accountId === 'none') throw new httpError(404, 'The admin does not have an account');
+    if (req.params.id === 'none') throw new httpError(404, 'The admin does not have an account');
     const acc = await Account.retrieve({ _id: req.params.id });
     if (!acc) throw new httpError(404, 'account doesnt exist');
     if (acc.status === 'closed') throw new httpError(400, 'account disabled');
@@ -41,13 +41,13 @@ const getAccount = async (req, res, next) => {
         Name: currentValue.name,
         email: currentValue.email,
         Role: currentValue.type,
-        Status: currentValue.status,
         Gender: currentValue.gender,
+        Status: currentValue.status,
         Edit: '',
       }], []);
     const { features } = acc.assets;
     outputArray.unshift({
-      Plan: acc.plan, Seats: acc.assets.seats, Credits: acc.assets.credits, Features: features,
+      Plan: acc.plan, Seats: acc.assets.seats - acc.assets.usedSeats, Credits: acc.assets.credits, Features: features, accountId: req.params.id, name: acc.name, status: acc.status,
     });
     res.status(200).json(outputArray);
   } catch (err) {
@@ -65,18 +65,33 @@ const getAccounts = async (req, res, next) => {
         Name: accounts[i].name,
         Plan: accounts[i].plan,
         Credits: accounts[i].assets.credits,
-        Features: accounts[i].assets.features.length,
+        Users: accounts[i].assets.usedSeats,
         Status: accounts[i].status,
         Edit: '',
       };
       outputArray.push(account);
     }
+    console.log(outputArray);
     res.status(200)
       .json(outputArray);
   } catch (err) {
     next(err);
   }
 };
+
+const editAccount = async (req, res, next) => {
+  try {
+    if (!req.body || !req.params.id) throw new httpError(400, 'bad Request');
+    const acc = await editAuthorization(req.params.id); // check account's status
+    const { params: { id }, body } = req;
+    if (body.status === 'suspended' && acc.status !== 'suspended') {
+      await suspendAccount(acc, body);
+      return res.status(200)
+        .json({ message: 'account suspended!' });
+    }
+    if (body.status === 'active' && acc.status !== 'active') {
+      await unSuspendAccount(acc, body);
+    }
 
 const editAccount = async (req, res, next) => {
   try {
@@ -111,6 +126,7 @@ const editAccount = async (req, res, next) => {
     next(err);
   }
 };
+
 
 // change account status to closed
 const disableAccount = async (req, res, next) => {

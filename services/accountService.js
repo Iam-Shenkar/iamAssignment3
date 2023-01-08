@@ -1,8 +1,8 @@
 const { sendEmail } = require('../sendEmail/sendEmail');
 const { Account, User } = require('../repositories/repositories.init');
 const { httpError } = require('../class/httpError');
-const { FOREVER } = require('../utiles/constants');
 const { newStatus2Q } = require('../Q/sender');
+const { setSeats } = require('./assetsService');
 
 const sendInvitation = async (manager, user) => {
   const path = `${process.env.runningPath}/auth/${user.accountId}/users/${user.email}/confirmation`;
@@ -19,17 +19,17 @@ const sendInvitation = async (manager, user) => {
   await sendEmail(mailData, details);
 };
 
-const inviteNewUser = async (account, email) => {
+const inviteNewUser = async (name, accountId, mail) => {
   try {
     const newUser = {
-      email,
+      email: mail,
       name: 'stranger',
       type: 'user',
       status: 'pending',
-      accountId: account._id.toString(),
+      accountId,
     };
     await User.create(newUser);
-    await sendInvitation(account.name, newUser);
+    await sendInvitation(name, newUser);
   } catch (err) {
     throw new httpError(400, 'failed to invite user');
   }
@@ -37,9 +37,8 @@ const inviteNewUser = async (account, email) => {
 
 const inviteAuthorization = (account, invitedUser) => {
   if (account._id.toString() === invitedUser.accountId) throw new Error('User already in the account');
-  if (account.role === 'admin') throw new httpError(400, 'Cant add Admins to an account');
-  if (account.plan !== 'free') throw new httpError(400, 'User already in an Account');
-  if (account.role !== 'user') throw new httpError(400, 'User already in an Account');
+  if (account.type === 'admin') throw new httpError(400, 'Cant add Admins to an account');
+  if (account.type === 'user') throw new httpError(400, 'User already in an Account');
   if (invitedUser.status !== 'active') throw new httpError(400, 'User is not active');
   if (account === null) throw new httpError(404, 'Account not found');
 };
@@ -91,6 +90,7 @@ const createUserToAccount = async (email, account) => {
   await User.create(newUser);
   return newUser;
 };
+
 
 const updateWithFeatures = async (id, data, feature) => {
   await Account.update(

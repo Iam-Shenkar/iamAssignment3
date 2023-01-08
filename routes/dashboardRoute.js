@@ -8,12 +8,12 @@ dashboardRouter.get('/', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/homePage.html'));
 });
 
-dashboardRouter.all('/Users', authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/Users.html'));
+dashboardRouter.all('/EditAccount', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/EditAccount.html'));
 });
 
-dashboardRouter.all('/AddUser', authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/AddUser.html'));
+dashboardRouter.all('/Users', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/Users.html'));
 });
 
 dashboardRouter.all('/Accounts', authenticateToken, (req, res) => {

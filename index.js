@@ -11,6 +11,7 @@ const passport = require('passport');
 
 const path = require('path');
 const fs = require('fs');
+
 const auth = require('./routes/authRoute');
 const users = require('./routes/usersRoute');
 const assets = require('./routes/assetsRoute');
@@ -21,6 +22,7 @@ const { validation } = require('./middleware/validator');
 const { authenticateToken } = require('./middleware/authenticate');
 
 const { morgan } = require('./middleware/logger');
+const { listenToQ } = require('./Q/reciever');
 
 const logPath = path.join(__dirname, '/log', 'access.log');
 const errorHandler = require('./middleware/errorHandler');
@@ -52,5 +54,7 @@ app.use('/accounts', authenticateToken, accounts.accountsRouter);
 app.use('/', dashboard.dashboardRouter);
 
 app.use(errorHandler);
+
+listenToQ();
 
 app.listen(port, () => console.log(`Express server is running on port ${process.env.runningPath}`));

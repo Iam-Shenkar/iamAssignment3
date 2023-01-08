@@ -25,9 +25,15 @@ passport.use(new GoogleStrategy(
     let findUser = await User.retrieve({ email });
     if (!findUser) {
       User.create({
-        name: username, googleId, email, password: 'null', loginDate: new Date(),
+        name: username, googleId, email, password: 'null', loginDate: new Date(),status: 'active',
       });
       findUser = await User.retrieve({ email: email });
+      await Account.create({ name: findUser.email });
+      const account = await Account.retrieve({name: findUser.email});
+      await Account.update({ accountId: account._id.toString() }, { status: 'active' });
+      await freePlan2Q(account._id.toString());
+      await User.update({ email: findUser.email }, { accountId: account._id.toString(), status: 'active' });
+      
     }
     const token = jwt.sign({ email: findUser.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
     const refToken = jwt.sign({ email: findUser.email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });

@@ -27,7 +27,7 @@ passport.use(new GoogleStrategy(
       User.create({
         name: username, googleId, email, password: 'null', loginDate: new Date(),
       });
-      findUser = await User.retrieve(email);
+      findUser = await User.retrieve({ email: email });
     }
     const token = jwt.sign({ email: findUser.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
     const refToken = jwt.sign({ email: findUser.email }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
